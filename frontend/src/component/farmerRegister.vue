@@ -1346,6 +1346,7 @@ export default {
       try {
         // Prepare the data object
         const requestData = {
+          user_type: 'farmer',
           first_name: this.form.firstName,
           last_name: this.form.lastName,
           email: this.form.email,
@@ -1396,7 +1397,7 @@ export default {
 
         const data = await response.json()
 
-        if (data && data.message) {
+        if (data.status == 201 && data.message) {
           console.log('User Registration Success:', data.message)
           return data.message
         } else {

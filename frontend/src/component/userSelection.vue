@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!showSignupForm"
+    v-if="!showFarmerForm && !showBuyerForm"
     class="bg-green-50 flex items-center justify-center min-h-screen"
   >
     <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-3xl mb-40">
@@ -65,22 +65,28 @@
       @goBack="selectedUserType = ''"
     /> -->
   </div>
-  <farmerRegister v-if="showSignupForm" @goBack="showSignupForm = false" />
+  <farmerRegister v-if="showFarmerForm" @goBack="showFarmerForm = false" />
+  <buyersRegister v-if="showBuyerForm" @goBack="showBuyerForm = false" />
 </template>
 
 <script>
 import farmerRegister from '@/component/farmerRegister.vue' // Import the form component
+import buyersRegister from '@/component/buyersRegister.vue'
+
 export default {
   data() {
     return {
-      showSignupForm: false,
+      showFarmerForm: false,
+      showBuyerForm: false,
     }
   },
   methods: {
     selectUserType(userType) {
       if (userType === 'farmer') {
         // /this.selectedUserType = 'farmer' // Switch to multi-step form
-        this.showSignupForm = true
+        this.showFarmerForm = true
+      } else if (userType === 'buyer') {
+        this.showBuyerForm = true
       } else {
         alert('Signup for ' + userType + ' is under development!')
       }
@@ -88,6 +94,7 @@ export default {
   },
   components: {
     farmerRegister, // Register component
+    buyersRegister,
   },
 }
 </script>
