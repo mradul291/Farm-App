@@ -1,1 +1,7 @@
-# Farm-App
+## Farmer
+
+Farmer App
+
+#### License
+
+mit
