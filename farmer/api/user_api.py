@@ -1,10 +1,8 @@
 import frappe
 from frappe import _
-
-from frappe.model.document import Document
 from datetime import datetime, timedelta
 import math
-
+import json
 #Adding the Data into Farmer Master from Registration fields
 
 def create_farmer_for_user(user_email, phone, gender, location, id_type, id_number, bank_name, account_number, crops_processed, 
@@ -48,79 +46,194 @@ def create_farmer_for_user(user_email, phone, gender, location, id_type, id_numb
 
 @frappe.whitelist(allow_guest=True)
 def create_user():
-    import json
+    
     data = json.loads(frappe.request.data)
 
+    #user type based Create Users
+    user_type = data.get("user_type")
+
+    if user_type == "farmer":
+        return(create_user_farmer(data))
+    elif user_type == "buyer":
+        return(create_buyer_user(data))
+
+# Functions creates Buyers user
+def create_buyer_user(data):
     # Required Fields
-    first_name = data.get("first_name")
-    last_name = data.get("last_name")
-    email = data.get("email")
-    password = data.get("new_password")
-
-    # Ensure required fields are present
-    if not all([first_name, last_name, email, password]):
-        return {"message": "Missing required fields"}
-
-    # Optional Fields (Defaults to empty if not provided)
-    phone = data.get("phone", "")
-    gender = data.get("gender", "")
-    location = data.get("location", "")
+    required_fields = ["first_name", "last_name", "email", "new_password","phone", "gender"]
+    missing_fields = [field for field in required_fields if not data.get(field)]
     
-    # FARMER Fields (Optional)
-    site = data.get("site", "")
-    id_type = data.get("id_type", "")
-    id_number = data.get("id_number", "")
-    bank_name = data.get("bank_name", "")
-    account_number = data.get("account_number", "")
-    crops_processed = data.get("crops_processed", "")
-    qty_processed_daily = data.get("qty_processed_daily", "")
-    equipments_used = data.get("equipments_used", "")
-    unit = data.get("unit", "")
+    if missing_fields:
+        return {"message": "Missing required fields", "status": 400, "missing_fields": missing_fields}
+    
+    first_name = data["first_name"]
+    last_name = data["last_name"]
+    email = data["email"]
+    password = data["new_password"]
+    phone = data["phone"]
+    gender = data["gender"]
 
-    # Farm Fields (Optional)
-    farm_name = data.get("farm_name", "")
-    longitude = data.get("longitude", "")
-    latitude = data.get("latitude", "")
-    crops = data.get("crops", [])  # Default to empty list
-    actual_crops = data.get("actual_crops", [])  # Default to empty list
+     # Check if user already exists
+    if frappe.db.exists("User", email):
+        return {"message": f"User {email} already exists", "status": 400}
+    
+    try:
+        # Create User
+        user = frappe.get_doc({
+            "doctype": "User",
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "phone": phone,
+            "gender": gender,
+            "send_welcome_email": 0,
+            "enabled": 1,
+            "new_password": password,
+            "roles": [{"role": "Customer"}]
+        })
+        user.insert(ignore_permissions=True)
+        
+        # # Assign "Farmer" role
+        # user.append("roles", {"role": "Customer"})
+        # user.save(ignore_permissions=True)
+        
+        frappe.db.commit()
+        return {
+            "message": "User Created Successfully",
+            "status": 201,
+            "data": {
+                "user_id": user.name
+            }
+        }
+    
+    except Exception as e:
+        frappe.db.rollback()
+        return {"message": "Internal Server Error", "status": 500, "error": str(e)}
 
-    if not (first_name and last_name and email and password):
-        return {"message": "Missing required fields"}
 
+
+
+    
+# Functions creates user along with Farm and Farmer Type
+def create_user_farmer(data):
+    # Required Fields
+    required_fields = ["first_name", "last_name", "email", "new_password","phone", "gender","location","site", "farm_name"]
+    missing_fields = [field for field in required_fields if not data.get(field)]
+    
+    if missing_fields:
+        return {"message": "Missing required fields", "status": 400, "missing_fields": missing_fields}
+    
+    first_name = data["first_name"]
+    last_name = data["last_name"]
+    email = data["email"]
+    password = data["new_password"]
+    phone = data["phone"]
+    gender = data["gender"]
+    location = data["location"]
+    site = data["site"]
+    farm_name = data["farm_name"]
+
+
+    
+    "", "","","", ""
+    # Optional Fields
+    optional_fields = [  "id_type", "id_number", "bank_name", "account_number", 
+        "crops_processed", "qty_processed_daily", "equipments_used", "unit",  "longitude", 
+        "latitude", "crops", "actual_crops"
+    ]
+    
+    user_data = {field: data.get(field, "" if field not in ["crops", "actual_crops"] else []) for field in optional_fields}
+    
     # Check if user already exists
     if frappe.db.exists("User", email):
-        return {"message": f"User {email} already exists"}
-
-    # Create User
-    user = frappe.get_doc({
-        "doctype": "User",
-        "first_name": first_name,
-        "last_name": last_name,
-        "email": email,
-        "phone": phone,
-        "gender": gender,
-        "location": location,
-        "send_welcome_email": 1,
-        "enabled": 1,
-        "new_password": password
-    })
-    user.insert(ignore_permissions=True)
-
-    # **Assign "Farmer" role to the user**
-    user.append("roles", {"role": "Farmer"})
-    user.save(ignore_permissions=True)
-
-    # user_image
-
-    frappe.db.commit()  # Ensure changes are committed
-
-    farmer_id = create_farmer_for_user(email, phone, gender, location, id_type, id_number, bank_name, account_number, crops_processed, 
-                           qty_processed_daily, equipments_used, unit, site)
+        return {"message": f"User {email} already exists", "status": 400}
     
-    farm_id = create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site)
-
-    return {"message": "User Created Successfully", "data": {"user_id":user.name, "farmer_id": farmer_id, "farm_id": farm_id}}
+    try:
+        # Create User
+        user = frappe.get_doc({
+            "doctype": "User",
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "phone": phone,
+            "gender": gender,
+            "location": location,
+            "send_welcome_email": 1,
+            "enabled": 1,
+            "new_password": password
+        })
+        user.insert(ignore_permissions=True)
+        
+        # Assign "Farmer" role
+        user.append("roles", {"role": "Farmer"})
+        user.save(ignore_permissions=True)
+        
+        frappe.db.commit()
+        
+        # Create Farmer and Farm Records
+        farmer_id = create_farmer_for_user(
+            email, phone, gender, location, user_data["id_type"], 
+            user_data["id_number"], user_data["bank_name"], user_data["account_number"], user_data["crops_processed"], 
+            user_data["qty_processed_daily"], user_data["equipments_used"], user_data["unit"], site
+        )
+        
+        farm_id = create_farm(
+            farm_name, user_data["longitude"], user_data["latitude"], user_data["crops"], 
+            user_data["actual_crops"], farmer_id, site
+        )
+        
+        is_farm_updated = update_farm_in_farmer(farmer_id, farm_id)
+        
+        if not is_farm_updated:
+            return {"message": "Failed to create user", "status": 500}
+        
+        return {
+            "message": "User Created Successfully",
+            "status": 201,
+            "data": {
+                "user_id": user.name,
+                "farmer_id": farmer_id,
+                "farm_id": farm_id
+            }
+        }
     
+    except Exception as e:
+        frappe.db.rollback()
+        return {"message": "Internal Server Error", "status": 500, "error": str(e)}
+
+def update_farm_in_farmer(farmer_id, farm_id):
+    try:
+        # Fetch the farmer document
+        farmer_doc = frappe.get_doc("Farmer Master", farmer_id)
+        
+        # Check if the child table 'farms' exists
+        if not hasattr(farmer_doc, 'farms'):
+            return False
+
+        # Check if the farm is already present
+        farm_exists = any(farm.farm == farm_id for farm in farmer_doc.farms)
+
+        if not farm_exists:
+            farm_doc = frappe.get_doc("Farm Master", farm_id)
+            # Append new farm entry to the child table
+            farmer_doc.append("farms", {
+                "farm": farm_id,
+                "farm_name": farm_doc.farm_name,  # Example field
+                "longitude": farm_doc.longitude,          # Example field
+                "latitude": farm_doc.latitude, # Example field
+                "crops": farm_doc.crop_name,  # Example field
+                "document": farm_doc.documents,  # Example field
+
+            })
+            farmer_doc.save()
+            frappe.db.commit()
+            return True
+        else:
+            return False
+
+    except Exception as e:
+        frappe.log_error(f"Error updating farm in farmer: {str(e)}", "update_farm_in_farmer")
+        return False
 
 # @frappe.whitelist(allow_guest=True)
 def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site):
@@ -138,10 +251,10 @@ def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site):
         # Prepare Table MultiSelect entries (crop_name field)
         crop_table = []
         if crops and isinstance(crops, list):
-            for crop in crops:
-                crop_table.append({
-                    "crop_name": crop  # Link field to Crop Master
+            crop_table.append({
+                    "crop_name": list(set(crops))  # Link field to Crop Master
                 })
+                
 
         # Prepare Actual Crop child table entries
         actual_crop_table = []
@@ -541,4 +654,3 @@ def generate_installment_breakdown(loan_installment, loan_amount, interest_rate,
             "payment_link": payment_link, 
             "paid_status": "Unpaid"
         })
-
