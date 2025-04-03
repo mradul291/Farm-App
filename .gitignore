@@ -1,6 +1,7 @@
 # Ignore the entire farmer/public directory
 /farmer/public/
 /farmer/www/
+/farmer/public/frontend/
 
 # Ignore specific files and directories globally
 node_modules

@@ -307,11 +307,9 @@ def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site):
             return {"status": "Failed", "message": "Missing required fields."}
 
         # Prepare Table MultiSelect entries (crop_name field)
-        crop_table = []
+        crop_table = ''
         if crops and isinstance(crops, list):
-            crop_table.append({
-                    "crop_name": list(set(crops))  # Link field to Crop Master
-                })
+            crop_table = ",".join(set(crops))
                 
 
         # Prepare Actual Crop child table entries
