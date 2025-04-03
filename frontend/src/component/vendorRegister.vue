@@ -574,8 +574,8 @@ export default {
           gender: this.form.gender,
           location: this.form.address, // Mapping address field
           new_password: this.form.password, // Using password field
-          id_type: this.form.idType,
-          id_number: this.form.idNumber,
+          id_type: this.form.idType, // id_Type, id_number are not yet stored in DB as fields are not fixed yet in forms
+          id_number: this.form.idNumber, //
           account_type: this.form.account_type,
           company_name: this.form.company_name,
         }
