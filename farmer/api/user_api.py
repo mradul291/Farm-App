@@ -56,6 +56,8 @@ def create_user():
         return(create_user_farmer(data))
     elif user_type == "buyer":
         return(create_buyer_user(data))
+    elif user_type == "vendor":
+        return(create_vendor_user(data))
 
 # Functions creates Buyers user
 def create_buyer_user(data):
@@ -110,10 +112,65 @@ def create_buyer_user(data):
         frappe.db.rollback()
         return {"message": "Internal Server Error", "status": 500, "error": str(e)}
 
-
-
-
+def create_vendor_user(data):
+    required_fields = ["first_name", "last_name", "email", "new_password","phone", "gender","account_type"]
+    missing_fields = [field for field in required_fields if not data.get(field)]
     
+    if missing_fields:
+        return {"message": "Missing required fields", "status": 400, "missing_fields": missing_fields}
+    
+    first_name = data["first_name"]
+    last_name = data["last_name"]
+    email = data["email"]
+    password = data["new_password"]
+    phone = data["phone"]
+    gender = data["gender"]
+    account_type = data["account_type"]
+    supplier_name = data.get("company_name") if account_type == "Company" else f"{first_name} {last_name}"
+
+     # Check if user already exists
+    if frappe.db.exists("User", email):
+        return {"message": f"User {email} already exists", "status": 400}
+    
+    try:
+        # Create User
+        user = frappe.get_doc({
+            "doctype": "User",
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "phone": phone,
+            "gender": gender,
+            "send_welcome_email": 0,
+            "enabled": 1,
+            "new_password": password,
+            "roles": [{"role": "Supplier"}]
+        })
+        user.insert(ignore_permissions=True)
+
+        # Create Supplier 
+        supplier = frappe.get_doc({
+            "doctype": "Supplier",
+            "supplier_name": supplier_name,
+            "supplier_type": "Company" if account_type == "Company" else "Individual"
+        })
+        supplier.insert(ignore_permissions=True)
+
+        
+        frappe.db.commit()
+        return {
+            "message": "User Created Successfully",
+            "status": 201,
+            "data": {
+                "user_id": user.name,
+                "supplier_id": supplier.name
+            }
+        }
+    
+    except Exception as e:
+        frappe.db.rollback()
+        return {"message": "Internal Server Error", "status": 500, "error": str(e)}
+       
 # Functions creates user along with Farm and Farmer Type
 def create_user_farmer(data):
     # Required Fields
@@ -160,13 +217,14 @@ def create_user_farmer(data):
             "location": location,
             "send_welcome_email": 1,
             "enabled": 1,
-            "new_password": password
+            "new_password": password,
+            "roles": [{"role": "Farmer"}]
         })
         user.insert(ignore_permissions=True)
         
-        # Assign "Farmer" role
-        user.append("roles", {"role": "Farmer"})
-        user.save(ignore_permissions=True)
+        # # Assign "Farmer" role
+        # user.append("roles", {"role": "Farmer"})
+        # user.save(ignore_permissions=True)
         
         frappe.db.commit()
         
@@ -452,7 +510,8 @@ def loan_application_permission_query_conditions(user):
 @frappe.whitelist(allow_guest=True)  # Requires user authentication
 def upload_profile_picture():
     """Upload an image and set it as the user's profile picture using File doctype"""
-    
+    user_type = frappe.form_dict.get("user_type")
+
     user_email = frappe.form_dict.get("user_email")  # Get the logged-in user
     farmer_name = frappe.form_dict.get("farmer_id")  # Add as attachment then add to field - documents - Doctype - Farm Master
     farm_name = frappe.form_dict.get("farm_name")  # Add in attachment () Doctype - Farmer Master
@@ -504,12 +563,14 @@ def upload_profile_picture():
             file_data = uploaded_farmer_id.read()
             filename = uploaded_farmer_id.filename
             file_path = f"/files/{filename}"
-
+            attached_doc = 'Farmer Master'
+            if user_type == "vendor":
+                attached_doc = "Supplier"
             # Save file in File doctype
             file_doc = frappe.get_doc({
                 'doctype': 'File',
                 'file_name': filename,
-                'attached_to_doctype': 'Farmer Master',  # Attach to User doctype
+                'attached_to_doctype': attached_doc,  # Attach to User doctype
                 'attached_to_name': farmer_name ,  # Attach to the logged-in user's document
                 'file_url': file_path,  # File storage path
                 'is_private': 0,  # Set to 1 if you want private file access
@@ -517,12 +578,7 @@ def upload_profile_picture():
             })
             file_doc.insert(ignore_permissions=True)
 
-            # Update the User profile with the uploaded image URL
-            # user_doc = frappe.get_doc("User", user_email)
-            # user_doc.user_image = file_doc.file_url
-            # user_doc.save(ignore_permissions=True)
             farmer_id_url = file_doc.file_url
-
             frappe.db.commit()
 
         except Exception as e:

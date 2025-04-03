@@ -1,7 +1,6 @@
 # Ignore the entire farmer/public directory
-../farmer/public/
-../farmer/www/
-
+/farmer/public/
+/farmer/www/
 
 # Ignore specific files and directories globally
 node_modules
@@ -10,3 +9,4 @@ dist
 dist-ssr
 *.local
 .env
+__pycache__/

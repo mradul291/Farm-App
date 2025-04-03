@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!showFarmerForm && !showBuyerForm"
+    v-if="!showFarmerForm && !showBuyerForm && !showVendorForm"
     class="bg-green-50 flex items-center justify-center min-h-screen"
   >
     <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-3xl mb-40">
@@ -67,17 +67,20 @@
   </div>
   <farmerRegister v-if="showFarmerForm" @goBack="showFarmerForm = false" />
   <buyersRegister v-if="showBuyerForm" @goBack="showBuyerForm = false" />
+  <VendorRegister v-if="showVendorForm" @goBack="showVendorForm = false" />
 </template>
 
 <script>
 import farmerRegister from '@/component/farmerRegister.vue' // Import the form component
 import buyersRegister from '@/component/buyersRegister.vue'
+import VendorRegister from '@/component/vendorRegister.vue'
 
 export default {
   data() {
     return {
       showFarmerForm: false,
       showBuyerForm: false,
+      showVendorForm: false,
     }
   },
   methods: {
@@ -87,6 +90,8 @@ export default {
         this.showFarmerForm = true
       } else if (userType === 'buyer') {
         this.showBuyerForm = true
+      } else if (userType === 'vendor') {
+        this.showVendorForm = true
       } else {
         alert('Signup for ' + userType + ' is under development!')
       }
@@ -95,6 +100,7 @@ export default {
   components: {
     farmerRegister, // Register component
     buyersRegister,
+    VendorRegister,
   },
 }
 </script>
