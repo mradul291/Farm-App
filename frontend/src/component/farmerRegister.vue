@@ -1393,11 +1393,11 @@ export default {
           }
         )
 
-        const data = await response.json()
+        const data = (await response.json()).message
 
         if (data.status == 201 && data.message) {
-          console.log('User Registration Success:', data.message)
-          return data.message
+          console.log('User Registration Success:', data)
+          return data
         } else {
           console.error('Unexpected API response format:', data)
           return data
