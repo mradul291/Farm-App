@@ -72,9 +72,7 @@
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label class="block text-gray-700" for="age-group"
-                >Age Group *</label
-              >
+              <label class="block text-gray-700" for="age-group">Age *</label>
               <select
                 class="w-full border border-gray-300 p-2 rounded mt-1"
                 id="age-group"

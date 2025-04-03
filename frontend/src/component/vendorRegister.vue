@@ -55,57 +55,57 @@
               </p>
             </div>
           </div>
-
-          <div class="mb-4">
-            <label class="block text-gray-700" for="email">Email</label>
-            <input
-              class="w-full border p-2 rounded mt-1"
-              :class="{
-                'border-red-500': errors.email,
-                'border-gray-300': !errors.email,
-              }"
-              id="email"
-              placeholder="Email"
-              type="email"
-              v-model="form.email"
-              required
-            />
-            <p v-if="errors.email" class="text-red-500 text-sm mt-1">
-              {{ errors.email }}
-            </p>
-          </div>
-
-          <div class="mb-4">
-            <label class="block text-gray-700" for="phone">Phone *</label>
-            <div class="flex">
-              <select
-                class="border p-2 rounded-l"
-                :class="{
-                  'border-red-500': errors.phone,
-                  'border-gray-300': !errors.phone,
-                }"
-                v-model="form.phoneCode"
-              >
-                <option value="+234">+234</option>
-              </select>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="mb-4">
+              <label class="block text-gray-700" for="email">Email</label>
               <input
-                class="w-full border p-2 rounded-r"
+                class="w-full border p-2 rounded mt-1"
                 :class="{
-                  'border-red-500': errors.phone,
-                  'border-gray-300': !errors.phone,
+                  'border-red-500': errors.email,
+                  'border-gray-300': !errors.email,
                 }"
-                id="phone"
-                placeholder="Phone Number"
-                type="text"
-                v-model="form.phone"
+                id="email"
+                placeholder="Email"
+                type="email"
+                v-model="form.email"
                 required
               />
+              <p v-if="errors.email" class="text-red-500 text-sm mt-1">
+                {{ errors.email }}
+              </p>
             </div>
-            <p v-if="errors.phone" class="text-red-500 text-sm mt-1">
-              {{ errors.phone }}
-            </p>
-          </div>
 
+            <div class="mb-4">
+              <label class="block text-gray-700" for="phone">Phone *</label>
+              <div class="flex">
+                <select
+                  class="border p-2 rounded-l"
+                  :class="{
+                    'border-red-500': errors.phone,
+                    'border-gray-300': !errors.phone,
+                  }"
+                  v-model="form.phoneCode"
+                >
+                  <option value="+234">+234</option>
+                </select>
+                <input
+                  class="w-full border p-2 rounded-r"
+                  :class="{
+                    'border-red-500': errors.phone,
+                    'border-gray-300': !errors.phone,
+                  }"
+                  id="phone"
+                  placeholder="Phone Number"
+                  type="text"
+                  v-model="form.phone"
+                  required
+                />
+              </div>
+              <p v-if="errors.phone" class="text-red-500 text-sm mt-1">
+                {{ errors.phone }}
+              </p>
+            </div>
+          </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
               <label class="block text-gray-700" for="age-group">Age *</label>
@@ -153,7 +153,134 @@
               </p>
             </div>
           </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="mb-4">
+              <label class="block text-gray-700">Account type *</label>
+              <div class="flex items-center mt-1">
+                <input
+                  class="mr-2"
+                  id="processor-yes"
+                  name="processor"
+                  type="radio"
+                  value="Individual"
+                  v-model="form.account_type"
+                  @change="toggleProcessorFields"
+                />
+                <label class="mr-4" for="processor-yes">Individual</label>
+                <input
+                  class="mr-2"
+                  id="processor-no"
+                  name="processor"
+                  type="radio"
+                  value="Company"
+                  v-model="form.account_type"
+                  @change="toggleProcessorFields"
+                />
+                <label for="processor-no">Company</label>
+              </div>
+              <p v-if="errors.account_type" class="text-red-500 text-sm mt-1">
+                {{ errors.account_type }}
+              </p>
+            </div>
+          </div>
 
+          <div class="mb-4" v-if="form.account_type === 'Company'">
+            <div class="mb-4">
+              <label class="block text-gray-700" for="crop-field"
+                >Company name *</label
+              >
+              <input
+                class="w-full border p-2 rounded mt-1"
+                :class="{
+                  'border-red-500': errors.company_name,
+                  'border-gray-300': !errors.company_name,
+                }"
+                id="last-name"
+                placeholder="Company Name"
+                type="text"
+                v-model="form.company_name"
+              />
+
+              <p v-if="errors.company_name" class="text-red-500 text-sm mt-1">
+                {{ errors.company_name }}
+              </p>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="block text-gray-700" for="address"
+              >Residential address *</label
+            >
+            <input
+              class="w-full border p-2 rounded mt-1"
+              :class="{
+                'border-red-500': errors.address,
+                'border-gray-300': !errors.address,
+              }"
+              id="address"
+              placeholder="Residential address"
+              type="text"
+              v-model="form.address"
+            />
+            <p v-if="errors.address" class="text-red-500 text-sm mt-1">
+              {{ errors.address }}
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="mb-4">
+              <label class="block text-gray-700" for="id-type">ID Type</label>
+              <select
+                class="w-full border border-gray-300 p-2 rounded mt-1"
+                id="id-type"
+                v-model="form.idType"
+              >
+                <option value="">Select...</option>
+                <option value="Driver's License">Driver's License</option>
+                <option value="National Identity Number">
+                  National Identity Number
+                </option>
+                <option value="International Passport">
+                  International Passport
+                </option>
+                <option value="Permanent Voter's Card">
+                  Permanent Voter's Card
+                </option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700" for="id-number"
+                >ID number</label
+              >
+              <input
+                class="w-full border p-2 rounded mt-1"
+                :class="{
+                  'border-red-500': errors.idNumber,
+                  'border-gray-300': !errors.idNumber,
+                }"
+                id="id-number"
+                placeholder="Enter your selected ID number"
+                type="text"
+                v-model="form.idNumber"
+              />
+              <p v-if="errors.idNumber" class="text-red-500 text-sm mt-1">
+                {{ errors.idNumber }}
+              </p>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="block text-gray-700" for="id-document"
+              >Upload ID document</label
+            >
+            <input
+              class="w-full border border-gray-300 p-2 rounded mt-1"
+              id="id-document"
+              type="file"
+              @change="handleFileUpload($event, 'ID')"
+            />
+            <p v-if="errors.idDocument" class="text-red-500 text-sm mt-1">
+              {{ errors.idDocument }}
+            </p>
+          </div>
           <div class="mb-4">
             <label class="block text-gray-700" for="profile-picture">
               Upload profile picture (optional)
@@ -171,15 +298,15 @@
                 @change="changeProfilePicture"
               />
               <!-- <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded">
-                    Change Picture
-                  </button> -->
+                  Change Picture
+                </button> -->
             </div>
           </div>
 
           <div class="flex justify-between">
             <!-- <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded">
-                  Back
-                </button> -->
+                Back
+              </button> -->
             <button
               class="bg-green-600 text-white px-4 py-2 rounded ml-auto"
               @click="nextStep"
@@ -291,6 +418,12 @@ export default {
         phone: '',
         age: '',
         gender: '',
+        account_type: '',
+        company_name: '',
+        address: '',
+        idType: '',
+        idNumber: '',
+        idDocument: null,
         profilePicture: null,
         password: '',
         confirmPassword: '',
@@ -372,6 +505,36 @@ export default {
       }
     },
 
+    'form.address'(value) {
+      this.errors.address = value ? '' : 'Address is required'
+      if (value) {
+        delete this.errors.address
+      }
+    },
+
+    'form.account_type'(value) {
+      this.errors.account_type = value ? '' : 'Account type is required'
+      if (value) {
+        delete this.errors.account_type
+      }
+    },
+    'form.company_name'(value) {
+      if (value && this.form.account_type === 'Company') {
+        this.errors.account_type = 'Company name is required'
+      } else {
+        this.errors.account_type = ''
+        delete this.errors.account_type
+      }
+    },
+    'form.idNumber'(value) {
+      if (this.form.idType && !value) {
+        this.errors.idNumber = "Selected ID's Number is required"
+      } else {
+        this.errors.idNumber = ''
+        delete this.errors.idNumber
+      }
+    },
+
     'form.password'(value) {
       const passwordRegex =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
@@ -403,13 +566,18 @@ export default {
       try {
         // Prepare the data object
         const requestData = {
-          user_type: 'buyer',
+          user_type: 'vendor',
           first_name: this.form.firstName,
           last_name: this.form.lastName,
           email: this.form.email,
           phone: `${this.form.phoneCode}${this.form.phone}`, // Combining country code and phone
           gender: this.form.gender,
+          location: this.form.address, // Mapping address field
           new_password: this.form.password, // Using password field
+          id_type: this.form.idType,
+          id_number: this.form.idNumber,
+          account_type: this.form.account_type,
+          company_name: this.form.company_name,
         }
 
         console.log({ requestData })
@@ -426,7 +594,7 @@ export default {
         const data = (await response.json()).message
 
         if (data.status == 201 && data.message) {
-          console.log('User Registration Success:', data.message)
+          console.log('User Registration Success:', data)
           return data
         } else {
           console.error('Unexpected API response format:', data)
@@ -442,10 +610,14 @@ export default {
         const formData = new FormData()
 
         // Append necessary fields to formData
-        formData.append('user_type', 'buyer')
+
+        formData.append('user_type', 'vendor')
 
         formData.append('user_email', this.response.user_id)
+        formData.append('farmer_id', this.response.farmer_id)
+
         formData.append('profile_image', this.form.profilePicture)
+        formData.append('id_document', this.form.idDocument)
 
         const response = await fetch(
           `${baseUrl}/api/method/farmer.api.user_api.upload_profile_picture`,
@@ -512,6 +684,26 @@ export default {
         if (!this.form.gender) {
           this.errors.gender = 'Gender is required'
         }
+
+        if (!this.form.address) {
+          this.errors.address = 'Address is required'
+        }
+
+        if (!this.form.account_type) {
+          this.errors.account_type = 'Account type is required'
+        }
+
+        // Additional validations only if processor is "Yes"
+        if (this.form.account_type === 'Company') {
+          if (!this.form.company_name) {
+            this.errors.company_name = 'Company name is required'
+          }
+        }
+
+        // Validate ID number only if ID type is selected
+        if (this.form.idType && !this.form.idNumber) {
+          this.errors.idNumber = "Selected ID's Number is required"
+        }
       }
 
       if (this.step === 2) {
@@ -564,6 +756,28 @@ export default {
     triggerFileInput() {
       this.$refs.fileInput.click() // Triggers hidden input when clicked
     },
+    handleFileUpload(event, flag) {
+      const file = event.target.files[0]
+      if (file) {
+        if (file.type !== 'application/pdf') {
+          alert('Only PDF files are allowed!')
+          return
+        }
+        if (file.size > 10 * 1024 * 1024) {
+          alert('File size must be less than 10MB!')
+          return
+        }
+        if (flag == 'ID') {
+          this.form.idDocument = file
+          console.log('ID')
+        }
+
+        // let formData = new FormData()
+        // formData.append('file', file, file.name)
+        // this.upload_file(formData)
+      }
+    },
+
     changeProfilePicture(event) {
       const file = event.target.files[0]
       this.form.profilePicture = file
@@ -586,6 +800,8 @@ export default {
 
             if (respo && respo.message === 'User Created Successfully') {
               this.response.user_id = respo.data.user_id
+              this.response.farm_id = respo.data.farm_id
+              this.response.farmer_id = respo.data.farmer_id
 
               const is_uploaded = await this.upload_file()
 
@@ -607,6 +823,6 @@ export default {
       }
     },
   },
-  name: 'buyerRegister',
+  name: 'farmerRegister',
 }
 </script>

@@ -108,9 +108,7 @@
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label class="block text-gray-700" for="age-group"
-                >Age Group *</label
-              >
+              <label class="block text-gray-700" for="age-group">Age *</label>
               <input
                 type="number"
                 id="age-group"
@@ -1414,6 +1412,8 @@ export default {
         const formData = new FormData()
 
         // Append necessary fields to formData
+        formData.append('user_type', 'farmer')
+
         formData.append('user_email', this.response.user_id)
         formData.append('farmer_id', this.response.farmer_id)
         formData.append('farm_name', this.response.farm_id)
