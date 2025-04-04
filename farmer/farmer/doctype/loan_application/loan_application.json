@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_guest_to_view": 1,
  "allow_rename": 1,
  "autoname": "LOAN-APP-.####",
  "creation": "2025-03-22 11:29:32.417050",
@@ -29,7 +30,9 @@
   "documents",
   "sales_order",
   "section_break_o1gf",
-  "remarks"
+  "remarks",
+  "route",
+  "published"
  ],
  "fields": [
   {
@@ -65,7 +68,8 @@
   {
    "fieldname": "loan_purpose",
    "fieldtype": "Small Text",
-   "label": "Loan Purpose"
+   "label": "Loan Purpose",
+   "read_only": 1
   },
   {
    "fieldname": "annual_income",
@@ -80,12 +84,10 @@
    "options": "Pending\nApproved\nRejected"
   },
   {
-   "default": "N/A",
    "fieldname": "remarks",
    "fieldtype": "Small Text",
    "in_list_view": 1,
-   "label": "Remarks",
-   "reqd": 1
+   "label": "Remarks"
   },
   {
    "fieldname": "documents",
@@ -161,11 +163,24 @@
    "fieldtype": "Select",
    "label": "Compounding Frequency",
    "options": "Monthly (12)"
+  },
+  {
+   "fieldname": "route",
+   "fieldtype": "Data",
+   "label": "Route"
+  },
+  {
+   "default": "0",
+   "fieldname": "published",
+   "fieldtype": "Check",
+   "label": "Published"
   }
  ],
+ "has_web_view": 1,
  "index_web_pages_for_search": 1,
+ "is_published_field": "published",
  "links": [],
- "modified": "2025-04-03 17:35:10.678174",
+ "modified": "2025-04-04 15:24:10.456129",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",
@@ -185,6 +200,7 @@
    "write": 1
   }
  ],
+ "route": "loan-applications",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

@@ -1,0 +1,69 @@
+{% extends "templates/web.html" %}
+
+{% block content %}
+<div style="width: 60%; margin: auto; font-family: Arial, sans-serif;">
+
+    <h2 style="text-align: center; margin: 30px 0;">Loan Application Details</h2>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+
+        <!-- First Column Group -->
+        <div style="flex: 1 1 30%;">
+            <p><strong>Loan ID:</strong><br> {{ doc.name }}</p>
+        </div>
+        <div style="flex: 1 1 30%;">
+            <p><strong>Applicant:</strong><br> {{ doc.applicant }}</p>
+        </div>
+        <div style="flex: 1 1 30%;">
+            <p><strong>Applicant Name:</strong><br> {{ doc.applicant_name }}</p>
+        </div>
+        <div style="flex: 1 1 30%;">
+            <p><strong>Status:</strong><br> {{ doc.status }}</p>
+        </div>
+        <div style="flex: 1 1 30%;">
+            <p><strong>Product Name:</strong><br> {{ doc.product_name }}</p>
+        </div>
+        <div style="flex: 1 1 30%;">
+            <p><strong>Sales Order:</strong><br> {{ doc.sales_order }}</p>
+        </div>
+
+        <!-- Second Column Group -->
+        <div style="flex: 1 1 30%;">
+            <p><strong>Loan Amount:</strong><br> ₦{{ "{:,.2f}".format(doc.loan_amount|float) }}</p>
+        </div>
+        <div style="flex: 1 1 30%;">
+            <p><strong>Total Amount:</strong><br> ₦{{ "{:,.2f}".format(doc.total_amount|float) }}</p>
+        </div>
+        <div style="flex: 1 1 30%;">
+            <p><strong>Repayment Period:</strong><br> {{ doc.repayment_period }} months</p>
+        </div>
+        <div style="flex: 1 1 30%;">
+            <p><strong>Interest Rate:</strong><br> {{ doc.interest_rate }}%</p>
+        </div>
+        <div style="flex: 1 1 30%;">
+            <p><strong>Annual Income:</strong><br> ₦{{ "{:,.2f}".format(doc.annual_income|float) }}</p>
+        </div>
+        <div style="flex: 1 1 30%;">
+            <p><strong>Down Payment %:</strong><br> {{ doc.down_payment_percentage }}%</p>
+        </div>
+
+        <!-- Third Column Group -->
+        <div style="flex: 1 1 30%;">
+            <p><strong>Down Payment Amount:</strong><br> ₦{{ "{:,.2f}".format(doc.down_payment_amount|float) }}</p>
+        </div>
+        <div style="flex: 1 1 30%;">
+            <p><strong>Compounding Frequency:</strong><br> {{ doc.compounding_frequency }}</p>
+        </div>
+        <div style="flex: 1 1 30%;">
+            <p><strong>Total After Interest:</strong><br> ₦{{ "{:,.2f}".format(doc.total_amount_after_interest|float) }}</p>
+        </div>
+        <div style="flex: 1 1 50%;">
+            <p><strong>Loan Purpose:</strong><br> {{ doc.loan_purpose }}</p>
+        </div>
+        <div style="flex: 1 1 50%;">
+            <p><strong>Remarks:</strong><br> {{ doc.remarks }}</p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
