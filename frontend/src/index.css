@@ -117,3 +117,18 @@ label {
   display: flex;
   gap: 10px;
 }
+
+/* CSS For Toast & Loader */
+.loader {
+  border-top-color: #10b981; /* Tailwind green-500 */
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
