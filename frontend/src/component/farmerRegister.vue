@@ -1,4 +1,13 @@
 <template>
+  <!-- Loader Overlay -->
+  <div
+    v-if="loading"
+    class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-40"
+  >
+    <div
+      class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"
+    ></div>
+  </div>
   <div class="container mx-auto p-4">
     <div class="flex justify-between items-center mb-6">
       <a class="text-green-600" @click="$emit('goBack')" href="#">
@@ -882,9 +891,16 @@
 </template>
 <script>
 const baseUrl = import.meta.env.VITE_BASE_URL
-// import { useToast } from 'vue-toastification'
+import { useToast } from 'vue-toastification'
 
 export default {
+  setup() {
+    const toast = useToast()
+
+    return {
+      toast,
+    }
+  },
   data() {
     return {
       step: 1,
@@ -958,6 +974,7 @@ export default {
         farm_id: '',
         farmer_id: '',
       },
+      loading: false,
     }
   },
   mounted() {
@@ -1284,7 +1301,7 @@ export default {
           {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
-          }
+          },
         )
         const data = await response.json()
         if (data && data.message) {
@@ -1303,7 +1320,7 @@ export default {
           {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
-          }
+          },
         )
         const data = await response.json()
         if (data && data.data) {
@@ -1326,7 +1343,7 @@ export default {
           {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
-          }
+          },
         )
         const data = await response.json()
         if (data && data.message) {
@@ -1390,7 +1407,7 @@ export default {
             method: 'POST', // Fixed "PPOST" typo
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(requestData), // Corrected to pass JSON
-          }
+          },
         )
 
         const data = (await response.json()).message
@@ -1426,7 +1443,7 @@ export default {
           {
             method: 'POST', // Use POST for file uploads
             body: formData, // Send formData directly
-          }
+          },
         )
 
         const data = (await response.json()).message
@@ -1735,6 +1752,7 @@ export default {
     async handleSubmit() {
       if (this.validateStep()) {
         if (this.step === 4) {
+          this.loading = true
           try {
             const respo = await this.registerUser() // Call registerUser and get response
             console.log({ respo })
@@ -1748,15 +1766,22 @@ export default {
 
               if (is_uploaded) {
                 console.log('Redirecting to login...')
+                this.toast.success('Registration successful!')
                 window.location.href = '/login' // Redirect to Frappe login page
               } else {
                 console.error('Registration failed: Due to File Upload')
+                this.toast.error('Registration failed: Due to File Upload')
               }
             } else {
               console.error('Registration failed:', respo.message)
+              this.toast.error(`Registration failed: ${respo.message}`)
             }
           } catch (error) {
-            console.error('Failed to register. Please try again!', error)
+            this.toast.error(
+              `Failed to register. Please try again! :  ${error}`,
+            )
+          } finally {
+            this.loading = false
           }
         }
       } else {
