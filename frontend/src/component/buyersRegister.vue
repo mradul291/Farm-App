@@ -611,7 +611,7 @@ export default {
               if (is_uploaded) {
                 console.log('Redirecting to login...')
                 this.toast.success('Registration successful!')
-                window.location.href = '/login' // Redirect to Frappe login page
+                window.location.href = '/' // Redirect to Frappe login page
               } else {
                 console.error('Registration failed: Due to File Upload')
                 this.toast.error('Registration failed: Due to File Upload')
