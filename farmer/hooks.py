@@ -189,9 +189,9 @@ app_include_js = "/assets/farmer/js/redirect.js"
 # before_tests = "farmer.install.before_tests"
 # app_include_js = "/assets/farmer/js/registration.js"
 
-app_include_js = [
-    "assets/appname/js/customer_quick_entry.js"
-]
+# app_include_js = [
+#     "assets/appname/js/customer_quick_entry.js"
+# ]
 
 # signup_form_template = "/www/registration/index.html"
 

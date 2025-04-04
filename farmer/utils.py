@@ -7,3 +7,10 @@ def custom_resolver(path):
     
     # Return None to let Frappe handle other routes normally
     return None
+
+
+def custom_after_logout():
+    # Set custom redirect URL after logout
+    print("herhehreh")
+    
+
