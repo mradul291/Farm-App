@@ -67,3 +67,31 @@ function get_compounding_frequency_value(freq) {
             return 12;  // Default to Monthly if not selected
     }
 }
+
+frappe.ui.form.on('Loan Application', {
+    before_save: function(frm) {
+        if (!frm.doc.route) {
+            frm.set_value('route', 'loan-application/' + frm.doc.name);
+        }
+
+        // Automatically publish
+        if (!frm.doc.published) {
+            frm.set_value('published', 1);
+        }
+    },
+
+    validate: function(frm) {
+        // Ensure 'remarks' field is filled
+        if (!frm.doc.remarks || frm.doc.remarks.trim() === "") {
+            frappe.throw(__('Please add remarks for the loan application before saving.'));
+        }
+        if (!frm.doc.down_payment_percentage) {
+            frappe.throw(__('Please enter Down Payment Percentage to proceed.'));
+        }
+        if (!frm.doc.interest_rate) {
+            frappe.throw(__('Please enter Interest Rate to proceed.'));
+        }
+    }
+});
+
+
