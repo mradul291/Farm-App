@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_guest_to_view": 1,
  "allow_rename": 1,
  "autoname": "LOAN-INST-.####",
  "creation": "2025-04-01 15:31:27.982925",
@@ -7,6 +8,7 @@
  "engine": "InnoDB",
  "field_order": [
   "applicant",
+  "applicant_name",
   "loan_amount",
   "repayment_period",
   "interest_rate",
@@ -16,7 +18,9 @@
   "status",
   "remarks",
   "section_break_qjms",
-  "installments"
+  "installments",
+  "route",
+  "published"
  ],
  "fields": [
   {
@@ -80,11 +84,30 @@
   {
    "fieldname": "section_break_qjms",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "route",
+   "fieldtype": "Data",
+   "label": "Route"
+  },
+  {
+   "default": "0",
+   "fieldname": "published",
+   "fieldtype": "Check",
+   "label": "Published"
+  },
+  {
+   "fieldname": "applicant_name",
+   "fieldtype": "Data",
+   "label": "Applicant Name",
+   "read_only": 1
   }
  ],
+ "has_web_view": 1,
  "index_web_pages_for_search": 1,
+ "is_published_field": "published",
  "links": [],
- "modified": "2025-04-01 18:36:04.925815",
+ "modified": "2025-04-05 11:32:34.396050",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Installments",
@@ -104,6 +127,7 @@
    "write": 1
   }
  ],
+ "route": "loan-installments",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []
