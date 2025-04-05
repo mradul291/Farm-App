@@ -1,4 +1,5 @@
 from frappe.website.website_generator import WebsiteGenerator
+import frappe
 
 class LoanApplication(WebsiteGenerator):
     
@@ -6,8 +7,6 @@ class LoanApplication(WebsiteGenerator):
         # Attach the document to context
         
 		context.doc = self
-
-        # Set the page title
 		context.title = self.loan_title if hasattr(self, "loan_title") else self.name
 
         # Assign all required fields to context
