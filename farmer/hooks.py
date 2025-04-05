@@ -214,17 +214,17 @@ doc_events = {
     }
 }
 
-website_route_rules = [
-    {"from_route": "/loan-applications", "to_route": "Loan Application"},
-    {
-        "from_route": "/loan-applications/<path:name>",
-        "to_route": "form",
-        "defaults": {
-            "doctype": "Loan Application",
-            "parents": [{"label": "Loan Applications", "route": "loan-applications"}],
-        },
-    },
-]
+# website_route_rules = [
+#     {"from_route": "/loan-applications", "to_route": "Loan Application"},
+#     {
+#         "from_route": "/loan-applications/<path:name>",
+#         "to_route": "form",
+#         "defaults": {
+#             "doctype": "Loan Application",
+#             "parents": [{"label": "Loan Applications", "route": "loan-applications"}],
+#         },
+#     },
+# ]
 
 
 # website_context = {

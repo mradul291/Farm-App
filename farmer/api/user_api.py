@@ -672,8 +672,6 @@ def create_loan_installments(doc, method):
         loan_installment.interest_rate = interest_rate
         loan_installment.compounding_frequency = doc.compounding_frequency
         loan_installment.status = "Active"
-        loan_installment.route = f"loan-installment/{loan_installment.name}"
-        loan_installment.published = 1
         
         # Calculate total amount after interest
         loan_installment.total_amount_after_interest = total_amount_after_interest  
@@ -683,6 +681,12 @@ def create_loan_installments(doc, method):
 
         # Save Loan Installments document
         loan_installment.insert()
+
+         # 3. Now set proper route
+        loan_installment.db_set("route", f"loan-installment/{loan_installment.name}")
+
+        # 4. Set published
+        loan_installment.db_set("published", 1)
         frappe.msgprint(f"Loan Installments created successfully for {doc.applicant}.", alert=True)
 
 def generate_installment_breakdown(loan_installment, loan_amount, interest_rate, repayment_period):

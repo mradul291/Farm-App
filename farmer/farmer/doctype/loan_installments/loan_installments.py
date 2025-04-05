@@ -6,9 +6,14 @@ from frappe.website.website_generator import WebsiteGenerator
 
 
 class LoanInstallments(WebsiteGenerator):
-	def after_insert(self):
+
+	def before_insert(self):
+        # Set route *before* insert so WebsiteGenerator picks it up
 		if not self.route:
-			self.db_set('route', f'loan-installment/{self.name}')
+			self.route = f'loan-installment/{self.name}'
+
+	def after_insert(self):
+        # Ensure it's published
 		if not self.published:
 			self.db_set('published', 1)
 
