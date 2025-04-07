@@ -1,0 +1,10 @@
+{%- from "farmer/templates/includes/loan_installment_macros.html" import installment_row -%}
+
+<div class="container">
+  <h4 style="text-align: left; margin-top: 20px;">Loan Installments</h4>
+  <div class="loan-list">
+    {%- for installment in frappe.get_all("Loan Installments", fields=["name", "applicant", "applicant_name", "loan_amount", "status", "interest_rate", "route"], limit=5) -%}
+      {{ installment_row(installment) }}
+    {%- endfor -%}
+  </div>
+</div>

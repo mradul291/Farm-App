@@ -1,0 +1,17 @@
+{
+ "__islocal": true,
+ "__unsaved": 1,
+ "creation": "2025-04-07 18:01:40.488785",
+ "docstatus": 0,
+ "doctype": "Web Template",
+ "fields": [],
+ "idx": 0,
+ "modified": "2025-04-07 18:01:40.488785",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Loan Installment",
+ "owner": "Administrator",
+ "standard": 1,
+ "template": "",
+ "type": "Component"
+}
