@@ -662,11 +662,13 @@ def create_loan_installments(doc, method):
         repayment_period = int(doc.repayment_period) if doc.repayment_period else 0
         total_amount_after_interest = float(doc.total_amount_after_interest) if doc.total_amount_after_interest else 0.0
         applicant_name = doc.applicant_name
+        applicant_id = doc.applicant
         
         # Create a new Loan Installments record
         loan_installment = frappe.new_doc("Loan Installments")
         loan_installment.applicant = doc.name
         loan_installment.applicant_name = applicant_name
+        loan_installment.applicant_id = applicant_id
         loan_installment.loan_amount = loan_amount
         loan_installment.repayment_period = repayment_period
         loan_installment.interest_rate = interest_rate

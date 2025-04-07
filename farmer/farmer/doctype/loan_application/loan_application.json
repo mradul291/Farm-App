@@ -152,7 +152,8 @@
   {
    "fieldname": "total_amount_after_interest",
    "fieldtype": "Data",
-   "label": "Total Amount After Interest"
+   "label": "Total Amount After Interest",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_teuj",
@@ -180,7 +181,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-05 15:05:07.822386",
+ "modified": "2025-04-07 11:29:49.464906",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",
