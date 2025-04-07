@@ -23,6 +23,10 @@
             <p>{{ status }}</p>
         </div>
         <div style="flex: 1 1 22%;">
+            <label><strong>Applicant ID:</strong></label>
+            <p>{{ applicant_id }}</p>
+        </div>
+        <div style="flex: 1 1 22%;">
             <label><strong>Repayment Period (Months):</strong></label>
             <p>{{ repayment_period or "-" }}</p>
         </div>
@@ -46,7 +50,7 @@
         </div>
 
     <!-- Installments Table Section -->
-    <h4 style="margin-top: 50px; margin-bottom: 20px;">Installment Breakdown</h4>
+    <h4 style="margin-top: 50px; margin-bottom: 20px; align-self: auto;">Installment Breakdown</h4>
 
     <div style="overflow-x: auto;">
         <table style="width: 100%; border-collapse: collapse; font-size: 14px;">

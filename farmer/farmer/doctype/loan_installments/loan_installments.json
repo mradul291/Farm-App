@@ -8,6 +8,7 @@
  "engine": "InnoDB",
  "field_order": [
   "applicant",
+  "applicant_id",
   "applicant_name",
   "loan_amount",
   "repayment_period",
@@ -26,7 +27,7 @@
   {
    "fieldname": "applicant",
    "fieldtype": "Link",
-   "label": "Applicant",
+   "label": "Loan",
    "options": "Loan Application",
    "read_only": 1
   },
@@ -101,13 +102,19 @@
    "fieldtype": "Data",
    "label": "Applicant Name",
    "read_only": 1
+  },
+  {
+   "fieldname": "applicant_id",
+   "fieldtype": "Data",
+   "label": "Applicant ID",
+   "read_only": 1
   }
  ],
  "has_web_view": 1,
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-05 11:32:34.396050",
+ "modified": "2025-04-07 11:30:01.936420",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Installments",

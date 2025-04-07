@@ -3,6 +3,7 @@
 
 # import frappe
 from frappe.website.website_generator import WebsiteGenerator
+import frappe
 
 
 class LoanInstallments(WebsiteGenerator):
@@ -24,6 +25,7 @@ class LoanInstallments(WebsiteGenerator):
         # Main fields from parent
 		context.name = self.name
 		context.applicant = self.applicant
+		context.applicant_id = self.applicant_id
 		context.applicant_name = self.applicant_name
 		context.loan_amount = self.loan_amount
 		context.repayment_period = self.repayment_period
@@ -52,3 +54,4 @@ class LoanInstallments(WebsiteGenerator):
 		context.title = f"Loan Installments for {self.applicant_name or self.name}"
 
 		return context
+	
