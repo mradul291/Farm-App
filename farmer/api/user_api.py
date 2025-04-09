@@ -718,3 +718,4 @@ def generate_installment_breakdown(loan_installment, loan_amount, interest_rate,
             "payment_link": payment_link, 
             "paid_status": "Unpaid"
         })
+
