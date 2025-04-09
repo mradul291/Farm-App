@@ -19,6 +19,9 @@ class LoanApplication(WebsiteGenerator):
 			path = frappe.local.request.path
 		if "/loan-application" in path:
 			context.sidebar_items = get_sidebar_items("") 
+
+			context.parents = [
+			{"label": "Loan Applications", "route": "/loan-application"},]
 		
         # Assign all required fields to context
 		context.name = self.name
