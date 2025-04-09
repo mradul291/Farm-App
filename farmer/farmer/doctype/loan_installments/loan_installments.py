@@ -29,6 +29,9 @@ class LoanInstallments(WebsiteGenerator):
 		if "/loan-installment" in path:
 			context.sidebar_items = get_sidebar_items("")
 
+			context.parents = [
+			{"label": "Loan Installment", "route": "/loan-installment"},]
+
         # Main fields from parent
 		context.name = self.name
 		context.applicant = self.applicant
