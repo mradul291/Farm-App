@@ -1,14 +1,25 @@
 from frappe.website.website_generator import WebsiteGenerator
 import frappe
+from frappe.website.utils import get_sidebar_items
+
 
 class LoanApplication(WebsiteGenerator):
     
 	def get_context(self, context):
         # Attach the document to context
-        
+
 		context.doc = self
 		context.title = self.loan_title if hasattr(self, "loan_title") else self.name
 
+		context.show_sidebar = True
+		context.breadcrumbs = True
+		context.show_portal_menu = True
+
+		if hasattr(frappe.local, "request"):
+			path = frappe.local.request.path
+		if "/loan-application" in path:
+			context.sidebar_items = get_sidebar_items("") 
+		
         # Assign all required fields to context
 		context.name = self.name
 		context.applicant = self.applicant

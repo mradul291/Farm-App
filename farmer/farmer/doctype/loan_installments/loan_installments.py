@@ -1,9 +1,7 @@
-# Copyright (c) 2025, chirag and contributors
-# For license information, please see license.txt
-
 # import frappe
 from frappe.website.website_generator import WebsiteGenerator
 import frappe
+from frappe.website.utils import get_sidebar_items
 
 
 class LoanInstallments(WebsiteGenerator):
@@ -21,6 +19,15 @@ class LoanInstallments(WebsiteGenerator):
 	def get_context(self, context):
         # Attach the document itself
 		context.doc = self
+
+		context.show_sidebar = True
+		context.breadcrumbs = True
+		context.show_portal_menu = True
+
+		if hasattr(frappe.local, "request"):
+			path = frappe.local.request.path
+		if "/loan-installment" in path:
+			context.sidebar_items = get_sidebar_items("")
 
         # Main fields from parent
 		context.name = self.name

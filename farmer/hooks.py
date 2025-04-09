@@ -214,23 +214,22 @@ doc_events = {
     }
 }
 
-# website_route_rules = [
-#     {"from_route": "/loan-applications", "to_route": "Loan Application"},
-#     {
-#         "from_route": "/loan-applications/<path:name>",
-#         "to_route": "form",
-#         "defaults": {
-#             "doctype": "Loan Application",
-#             "parents": [{"label": "Loan Applications", "route": "loan-applications"}],
-#         },
-#     },
-# ]
+website_route_rules = [
+    {"from_route": "/loan-application", "to_route": "Loan Application"},
+    {
+        "from_route": "/loan-application/<path:name>",
+        "to_route": "order",
+        "defaults": {
+            "doctype": "Loan Application",
+            "parents": [{"label": "Loan Application", "route": "loan-application"}],
+        },
+    },
+]
 
 
 # website_context = {
 #     "get_context": "farmer.api.user_api.get_context"
 # }
-
 
 # Overriding Methods
 # ------------------------------
@@ -242,8 +241,9 @@ override_whitelisted_methods = {
      "farmer.api.user_api.get_all_crops": "farmer.api.user_api.get_all_crops",
      "farmer.api.user_api.fetch_site_list": "farmer.api.user_api.fetch_site_list",
      "farmer.api.user_api.get_financing_availability": "farmer.api.user_api.get_financing_availability",
-     "farmer.api.user_api.create_sales_order": "farmer.api.user_api.create_sales_order"
+     "farmer.api.user_api.create_sales_order": "farmer.api.user_api.create_sales_order",
 }
+
 
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,

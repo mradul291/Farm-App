@@ -1,7 +1,7 @@
 {% extends "templates/web.html" %}
 
-{% block content %}
-<div style="width: 60%; margin: auto; font-family: Arial, sans-serif;">
+{% block page_content %}
+<div style="width: 100%; margin: auto; font-family: Arial, sans-serif;">
 
     <h2 style="text-align: center; margin: 30px 0;">Loan Application Details</h2>
 
@@ -63,6 +63,13 @@
         <div style="flex: 1 1 50%;">
             <p><strong>Remarks:</strong><br> {{ doc.remarks }}</p>
         </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="#" id="pay-now-btn" 
+               style="padding: 12px 24px; background-color: #03a87c; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                Make Down Payment
+            </a>
+        </div>        
 
     </div>
 </div>

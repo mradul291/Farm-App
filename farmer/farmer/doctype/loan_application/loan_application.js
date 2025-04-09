@@ -41,30 +41,15 @@ function calculate_total_amount_with_interest(frm) {
     if (frm.doc.loan_amount && frm.doc.interest_rate && frm.doc.repayment_period && frm.doc.compounding_frequency) {
         let P = frm.doc.loan_amount;
         let r = frm.doc.interest_rate / 100;  // Convert percentage to decimal
-        let t = frm.doc.repayment_period;
+        let t = frm.doc.repayment_period / 12;  // Convert months to years
 
         // Extract numeric value from the selected compounding frequency
-        let n = get_compounding_frequency_value(frm.doc.compounding_frequency);
+        let n = 12;
 
         if (n > 0) {
             let A = P * Math.pow(1 + (r / n), n * t);  // Compound Interest Formula
             frm.set_value('total_amount_after_interest', A.toFixed(2));  // Store rounded value
         }
-    }
-}
-
-function get_compounding_frequency_value(freq) {
-    switch (freq) {
-        case "Monthly (12)":
-            return 12;
-        case "Quarterly (4)":
-            return 4;
-        case "Yearly (1)":
-            return 1;
-        case "Daily (365)":
-            return 365;
-        default:
-            return 12;  // Default to Monthly if not selected
     }
 }
 
