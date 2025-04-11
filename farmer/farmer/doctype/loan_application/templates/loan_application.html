@@ -55,7 +55,8 @@
             <p><strong>Compounding Frequency:</strong><br> {{ doc.compounding_frequency }}</p>
         </div>
         <div style="flex: 1 1 30%;">
-            <p><strong>Total After Interest:</strong><br> ₦{{ "{:,.2f}".format(doc.total_amount_after_interest|float) }}</p>
+            <p><strong>Total After Interest:</strong><br> ₦{{ "{:,.2f}".format(doc.total_amount_after_interest|float) }}
+            </p>
         </div>
         <div style="flex: 1 1 50%;">
             <p><strong>Loan Purpose:</strong><br> {{ doc.loan_purpose }}</p>
@@ -65,12 +66,75 @@
         </div>
 
         <div style="text-align: center; margin-top: 40px;">
-            <a href="#" id="pay-now-btn" 
-               style="padding: 12px 24px; background-color: #03a87c; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            <a href="#" id="pay-now-btn"
+                style="padding: 12px 24px; background-color: #03a87c; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
                 Make Down Payment
             </a>
-        </div>        
-
+        </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const btn = document.getElementById('pay-now-btn');
+  
+      if (!btn) {
+        console.warn("Pay Now button not found.");
+        return;
+      }
+  
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+  
+        // Get dynamic values from Jinja context
+        const salesOrder = "{{ doc.sales_order }}";
+        const applicant = "{{ doc.applicant }}";
+        const payerEmail = "{{ doc.applicant_email or '' }}";
+        const payerName = "{{ doc.applicant_name or '' }}";
+        const amount = parseFloat("{{ doc.down_payment_amount or 0 }}");
+  
+        if (!salesOrder || !applicant || isNaN(amount) || amount <= 0) {
+          frappe.msgprint("Invalid payment details. Please check the application data.");
+          return;
+        }
+  
+        console.log("Initiating payment for Sales Order:", salesOrder);
+  
+        // Disable button while processing
+        btn.textContent = 'Processing...';
+        btn.style.opacity = '0.6';
+        btn.style.pointerEvents = 'none';
+  
+        // Make the API call to backend
+        frappe.call({
+          method: 'farmer.api.loan_api.make_loan_payment_request',  // Adjust as needed
+          args: {
+            dn: salesOrder,
+            dt: 'Sales Order',
+            submit_doc: 1
+          },
+          callback: function (r) {
+            // Restore button UI
+            btn.textContent = 'Make Down Payment';
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+  
+            if (r.message && r.message.payment_url) {
+              // Open the payment URL in new tab
+              window.open(r.message.payment_url, '_blank');
+            } else {
+              frappe.msgprint('Unable to generate payment link. Please try again.');
+            }
+          },
+          error: function () {
+            btn.textContent = 'Make Down Payment';
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+            frappe.msgprint('Something went wrong. Please contact support.');
+          }
+        });
+      });
+    });
+  </script>
+  
 {% endblock %}
