@@ -242,6 +242,9 @@ override_whitelisted_methods = {
      "farmer.api.user_api.fetch_site_list": "farmer.api.user_api.fetch_site_list",
      "farmer.api.user_api.get_financing_availability": "farmer.api.user_api.get_financing_availability",
      "farmer.api.user_api.create_sales_order": "farmer.api.user_api.create_sales_order",
+
+     "farmer.api.loan_api.make_loan_payment_request": "farmer.api.loan_api.make_loan_payment_request",
+
 }
 
 
