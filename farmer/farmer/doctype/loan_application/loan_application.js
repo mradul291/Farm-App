@@ -1,12 +1,12 @@
 frappe.ui.form.on('Loan Application', {
 
-    down_payment_percentage: function(frm) {
+    down_payment_percentage: function (frm) {
         calculate_down_payment(frm);
     },
-    total_amount: function(frm) {
+    total_amount: function (frm) {
         calculate_down_payment(frm);
     },
-    status: function(frm) {
+    status: function (frm) {
         frm.refresh();
     }
 });
@@ -23,16 +23,16 @@ function calculate_down_payment(frm) {
 }
 
 frappe.ui.form.on('Loan Application', {
-    loan_amount: function(frm) {
+    loan_amount: function (frm) {
         calculate_total_amount_with_interest(frm);
     },
-    interest_rate: function(frm) {
+    interest_rate: function (frm) {
         calculate_total_amount_with_interest(frm);
     },
-    repayment_period: function(frm) {
+    repayment_period: function (frm) {
         calculate_total_amount_with_interest(frm);
     },
-    compounding_frequency: function(frm) {
+    compounding_frequency: function (frm) {
         calculate_total_amount_with_interest(frm);
     }
 });
@@ -54,7 +54,7 @@ function calculate_total_amount_with_interest(frm) {
 }
 
 frappe.ui.form.on('Loan Application', {
-    before_save: function(frm) {
+    before_save: function (frm) {
         if (!frm.doc.route) {
             frm.set_value('route', 'loan-application/' + frm.doc.name);
         }
@@ -65,7 +65,7 @@ frappe.ui.form.on('Loan Application', {
         }
     },
 
-    validate: function(frm) {
+    validate: function (frm) {
         // Ensure 'remarks' field is filled
         if (!frm.doc.remarks || frm.doc.remarks.trim() === "") {
             frappe.throw(__('Please add remarks for the loan application before saving.'));
@@ -75,6 +75,16 @@ frappe.ui.form.on('Loan Application', {
         }
         if (!frm.doc.interest_rate) {
             frappe.throw(__('Please enter Interest Rate to proceed.'));
+        }
+        if (frm.doc.status === "Approved" && !frm.doc.down_payment_check) {
+            frappe.throw(__('Cannot approve the application until Down Payment is done.'));
+        }
+    },
+    before_workflow_action: function (frm) {
+        const action = frm.selected_workflow_action;
+
+        if (action === "Approve" && !frm.doc.down_payment_check) {
+            frappe.throw(__('Cannot approve the application until Down Payment is done.'));
         }
     }
 });

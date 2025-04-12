@@ -11,8 +11,12 @@
 
         <!-- Row 1 -->
         <div style="flex: 1 1 22%;">
-            <label><strong>Loan ID:</strong></label>
+            <label><strong>Loan Ins ID:</strong></label>
             <p>{{ name }}</p>
+        </div>
+        <div style="flex: 1 1 22%;">
+            <label><strong>Loan App ID:</strong></label>
+            <p>{{ applicant }}</p>
         </div>
         <div style="flex: 1 1 22%;">
             <label><strong>Applicant:</strong></label>
@@ -26,10 +30,7 @@
             <label><strong>Applicant ID:</strong></label>
             <p>{{ applicant_id }}</p>
         </div>
-        <div style="flex: 1 1 22%;">
-            <label><strong>Repayment Period (Months):</strong></label>
-            <p>{{ repayment_period or "-" }}</p>
-        </div>
+       
 
         <!-- Row 2 -->
         <div style="flex: 1 1 22%;">
@@ -47,6 +48,10 @@
         <div style="flex: 1 1 22%;">
             <label><strong>Compounding Frequency:</strong></label>
             <p>{{ compounding_frequency or "-" }}</p>
+        </div>
+        <div style="flex: 1 1 22%;">
+            <label><strong>Repayment Period (Months):</strong></label>
+            <p>{{ repayment_period or "-" }}</p>
         </div>
 
     <!-- Installments Table Section -->
