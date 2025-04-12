@@ -211,25 +211,9 @@ doc_events = {
     },
     "Loan Application": {
         "on_update": "farmer.api.user_api.create_loan_installments"
-    }
+    },
 }
 
-website_route_rules = [
-    {"from_route": "/loan-application", "to_route": "Loan Application"},
-    {
-        "from_route": "/loan-application/<path:name>",
-        "to_route": "order",
-        "defaults": {
-            "doctype": "Loan Application",
-            "parents": [{"label": "Loan Application", "route": "loan-application"}],
-        },
-    },
-]
-
-
-# website_context = {
-#     "get_context": "farmer.api.user_api.get_context"
-# }
 
 # Overriding Methods
 # ------------------------------
@@ -244,6 +228,7 @@ override_whitelisted_methods = {
      "farmer.api.user_api.create_sales_order": "farmer.api.user_api.create_sales_order",
 
      "farmer.api.loan_api.make_loan_payment_request": "farmer.api.loan_api.make_loan_payment_request",
+     "farmer.api.loan_api.create_installment_payment_requests": "farmer.api.loan_api.create_installment_payment_requests",
 
 }
 

@@ -19,6 +19,7 @@
   "section_break_1vxg",
   "down_payment_percentage",
   "down_payment_amount",
+  "down_payment_check",
   "column_break_teuj",
   "compounding_frequency",
   "total_amount_after_interest",
@@ -175,13 +176,20 @@
    "fieldname": "published",
    "fieldtype": "Check",
    "label": "Published"
+  },
+  {
+   "default": "0",
+   "fieldname": "down_payment_check",
+   "fieldtype": "Check",
+   "label": "Down Payment Done",
+   "read_only": 1
   }
  ],
  "has_web_view": 1,
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-07 11:29:49.464906",
+ "modified": "2025-04-12 13:09:01.170672",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",
