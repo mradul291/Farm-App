@@ -17,6 +17,8 @@
   "total_amount_after_interest",
   "compounding_frequency",
   "status",
+  "sales_order",
+  "installment_amount",
   "remarks",
   "section_break_qjms",
   "installments",
@@ -108,13 +110,26 @@
    "fieldtype": "Data",
    "label": "Applicant ID",
    "read_only": 1
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "Sales Order",
+   "options": "Sales Order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "installment_amount",
+   "fieldtype": "Currency",
+   "label": "Installment Amount",
+   "read_only": 1
   }
  ],
  "has_web_view": 1,
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-07 11:30:01.936420",
+ "modified": "2025-04-14 14:57:52.477202",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Installments",
