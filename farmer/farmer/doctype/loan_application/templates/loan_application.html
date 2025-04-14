@@ -81,22 +81,72 @@
     const salesOrder = "{{ doc.sales_order }}";
 
     // First, check if payment already done (before binding button click)
+    // frappe.call({
+    //   method: 'farmer.api.loan_api.make_loan_payment_request',
+    //   args: {
+    //     dn: salesOrder,
+    //     dt: 'Sales Order',
+    //     submit_doc: 0  // Don't submit, just check status
+    //   },
+    //   callback: function (r) {
+    //     const res = r.message;
+    //     const amountInfo = [...document.querySelectorAll('p')].find(p =>
+    //       p.textContent.includes('Down Payment Amount:')
+    //     );
+
+    //     if (res?.error === 1) {
+    //       // Payment already done → hide button and add Paid label
+    //       if (btn) btn.style.display = 'none';
+
+    //       if (amountInfo) {
+    //         const paidTag = document.createElement("span");
+    //         paidTag.textContent = " (Paid ✅)";
+    //         paidTag.style.color = "green";
+    //         paidTag.style.fontWeight = "bold";
+    //         paidTag.style.marginLeft = "8px";
+    //         amountInfo.appendChild(paidTag);
+    //       }
+    //     }
+    //   }
+    // });
+
+    // if (!btn) {
+    //   console.warn("Pay Now button not found.");
+    //   return;
+    // }
+
+    console.log("Initiating Loan Payment Request...");
+
     frappe.call({
       method: 'farmer.api.loan_api.make_loan_payment_request',
       args: {
         dn: salesOrder,
         dt: 'Sales Order',
-        submit_doc: 0  // Don't submit, just check status
+        submit_doc: 0
       },
       callback: function (r) {
+        console.log("Callback received:", r);
+
+        if (!r.message) {
+          console.error("No message returned from server.");
+          return;
+        }
+
         const res = r.message;
+        console.log("Server response message:", res);
+
         const amountInfo = [...document.querySelectorAll('p')].find(p =>
           p.textContent.includes('Down Payment Amount:')
         );
+        console.log("Amount info element:", amountInfo);
 
         if (res?.error === 1) {
-          // Payment already done → hide button and add Paid label
-          if (btn) btn.style.display = 'none';
+          console.warn("Payment already done. Hiding Pay Now button.");
+
+          if (btn) {
+            btn.style.display = 'none';
+            console.log("Pay Now button hidden.");
+          }
 
           if (amountInfo) {
             const paidTag = document.createElement("span");
@@ -105,15 +155,21 @@
             paidTag.style.fontWeight = "bold";
             paidTag.style.marginLeft = "8px";
             amountInfo.appendChild(paidTag);
+            console.log("Paid tag appended to UI.");
           }
+        } else {
+          console.log("Payment not done yet, Pay Now button will remain visible.");
         }
+      },
+      error: function (err) {
+        console.error("frappe.call error:", err);
       }
     });
 
     if (!btn) {
       console.warn("Pay Now button not found.");
-      return;
     }
+
 
     btn.addEventListener('click', function (e) {
       e.preventDefault();
