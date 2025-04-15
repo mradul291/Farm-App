@@ -20,28 +20,14 @@ def make_loan_payment_request(dn, dt="Sales Order", submit_doc=1, order_type="Sh
     ref_doc = frappe.get_doc(dt, dn)
 
     # Step 1: Check if Payment Entry already created
-    # existing_pe = frappe.get_all("Payment Entry", filters={
-    #     "reference_doctype": dt,
-    #     "reference_name": dn,
-    #     "docstatus": 1
-    # })
+    existing_pe = frappe.get_all("Payment Entry", filters={
+        "reference_doctype": dt,
+        "reference_name": dn,
+        "docstatus": 1
+    })
 
-    # if existing_pe:
-    #     return {
-    #         "error": 1,
-    #         "message": "Payment already completed. Cannot initiate again."
-    #     }
-
-    # Step 1: Check if any existing Payment Request is already marked as Paid
-    paid_requests = frappe.get_all("Payment Request", filters={
-            "reference_name": dn,
-            "reference_doctype": dt,
-            "docstatus": 1,
-            "status": "Paid"
-        })
-
-    if paid_requests:
-            return {
+    if existing_pe:
+        return {
             "error": 1,
             "message": "Payment already completed. Cannot initiate again."
         }
@@ -51,7 +37,7 @@ def make_loan_payment_request(dn, dt="Sales Order", submit_doc=1, order_type="Sh
         "reference_name": dn,
         "reference_doctype": dt,
         "docstatus": 1,
-        "status": ["in", ["Initiated", "Requested"]]
+        "status": ["in", ["Initiated", "Paid"]]
     }, fields=["name"], order_by="creation desc", limit=1)
 
     if existing_request:
