@@ -19,50 +19,50 @@ def get_payment_url(pr_name):
 def make_loan_payment_request(dn, dt="Sales Order", submit_doc=1, order_type="Shopping Cart"):
     ref_doc = frappe.get_doc(dt, dn)
 
-    # Step 1: Check if Payment Entry already created
-    existing_pe = frappe.get_all("Payment Entry", filters={
+    # 1. Check if Payment Entry already exists (means payment is done)
+    payment_entries = frappe.get_all("Payment Entry", filters={
         "reference_doctype": dt,
         "reference_name": dn,
         "docstatus": 1
     })
 
-    if existing_pe:
+    if payment_entries:
         return {
             "error": 1,
-            "message": "Payment already completed. Cannot initiate again."
+            "message": "Payment Entry already created. Payment completed."
         }
 
-    # Step 2: Check for existing Payment Request
+    # 2. Check if a Payment Request already exists
     existing_request = frappe.get_all("Payment Request", filters={
-        "reference_name": dn,
         "reference_doctype": dt,
+        "reference_name": dn,
         "docstatus": 1,
-        "status": ["in", ["Initiated", "Paid" , "Requested"]]
+        "status": ["in", ["Initiated", "Requested", "Paid"]]
     }, fields=["name", "status"], order_by="creation desc", limit=1)
 
-    # if existing_request:
-    #     existing_doc = frappe.get_doc("Payment Request", existing_request[0].name)
-    #     return {
-    #         "payment_request": existing_doc.name,
-    #         "payment_url": existing_doc.get_payment_url()
-    #     }
-
     if existing_request:
-        existing_doc = frappe.get_doc("Payment Request", existing_request[0].name)
-
-    # Optional: Customize based on status
-        if existing_doc.status == "Paid":
+        request_doc = frappe.get_doc("Payment Request", existing_request[0].name)
+        
+        # If Payment Request is paid, don't allow retry
+        if request_doc.status == "Paid":
             return {
                 "error": 1,
                 "message": "Payment already completed.",
-                "payment_request": existing_doc.name,
-                "payment_url": existing_doc.get_payment_url()
+                "payment_request": request_doc.name,
+                "payment_url": request_doc.get_payment_url()
             }
 
+        # Otherwise, return the current payment request link
         return {
-            "payment_request": existing_doc.name,
-            "payment_url": existing_doc.get_payment_url()
+            "payment_request": request_doc.name,
+            "payment_url": request_doc.get_payment_url()
         }
+
+    # 3. If no PE and no existing request, return a signal to frontend
+    return {
+        "error": 0,
+        "message": "No existing payment. Proceed with creating payment request."
+    }
 
 
     # Step 3: Find linked Loan Application
