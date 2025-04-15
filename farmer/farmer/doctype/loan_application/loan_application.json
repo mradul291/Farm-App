@@ -82,7 +82,8 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Pending\nApproved\nRejected"
+   "options": "Pending\nApproved\nRejected",
+   "read_only": 1
   },
   {
    "fieldname": "remarks",
@@ -189,7 +190,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-12 13:09:01.170672",
+ "modified": "2025-04-15 16:07:01.927922",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",

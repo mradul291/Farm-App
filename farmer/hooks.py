@@ -212,6 +212,9 @@ doc_events = {
     "Loan Application": {
         "on_update": "farmer.api.loan_api.create_loan_installments"
     },
+    "Payment Request": {
+        "on_update_after_submit": "farmer.api.loan_api.update_loan_installment_on_payment"
+    }
 }
 
 

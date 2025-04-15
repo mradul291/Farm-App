@@ -21,27 +21,32 @@
   {
    "fieldname": "installment_number",
    "fieldtype": "Int",
-   "label": "Installment Number\t"
+   "label": "Installment Number\t",
+   "read_only": 1
   },
   {
    "fieldname": "due_date",
    "fieldtype": "Date",
-   "label": "Due Date\t"
+   "label": "Due Date\t",
+   "read_only": 1
   },
   {
    "fieldname": "installment_amount",
    "fieldtype": "Currency",
-   "label": "Installment Amount\t"
+   "label": "Installment Amount\t",
+   "read_only": 1
   },
   {
    "fieldname": "principal_amount",
    "fieldtype": "Currency",
-   "label": "Principal Amount\t"
+   "label": "Principal Amount\t",
+   "read_only": 1
   },
   {
    "fieldname": "interest_amount",
    "fieldtype": "Currency",
-   "label": "Interest Amount\t"
+   "label": "Interest Amount\t",
+   "read_only": 1
   },
   {
    "fieldname": "paid_status",
@@ -52,29 +57,33 @@
   {
    "fieldname": "payment_date",
    "fieldtype": "Date",
-   "label": "Payment Date\t"
+   "label": "Payment Date\t",
+   "read_only": 1
   },
   {
    "fieldname": "payment_link",
    "fieldtype": "Text",
-   "label": "Payment Link"
+   "label": "Payment Link",
+   "read_only": 1
   },
   {
    "fieldname": "payment_request",
    "fieldtype": "Link",
    "label": "Payment Request",
-   "options": "Payment Request"
+   "options": "Payment Request",
+   "read_only": 1
   },
   {
    "fieldname": "installment_id",
    "fieldtype": "Data",
-   "label": "Installment Id"
+   "label": "Installment Id",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-04-14 16:01:26.128660",
+ "modified": "2025-04-15 15:22:06.460802",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Installment Breakdown",
