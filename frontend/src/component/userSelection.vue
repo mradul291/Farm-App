@@ -56,7 +56,7 @@
       </div>
       <p class="text-center text-gray-600 mt-4">
         Already have an account?
-        <a class="text-green-500" href="#"> Log in </a>
+        <a class="text-green-500" href="/"> Log in </a>
       </p>
     </div>
     <!-- <farmerRegister v-if="selectedUserType === 'farmer'" /> -->
