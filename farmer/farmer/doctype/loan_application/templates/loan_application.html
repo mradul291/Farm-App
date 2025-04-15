@@ -115,6 +115,8 @@
     //   return;
     // }
 
+    console.log("Initiating Loan Payment Request...");
+
     frappe.call({
       method: 'farmer.api.loan_api.make_loan_payment_request',
       args: {
@@ -125,20 +127,21 @@
       callback: function (r) {
         console.log("Callback received:", r);
 
-        const res = r.message;
-
-        if (!res) {
+        if (!r.message) {
           console.error("No message returned from server.");
           return;
         }
 
+        const res = r.message;
+        console.log("Server response message:", res);
+
         const amountInfo = [...document.querySelectorAll('p')].find(p =>
           p.textContent.includes('Down Payment Amount:')
         );
+        console.log("Amount info element:", amountInfo);
 
-        if (res.error === 1) {
-          // Case: Payment already completed (Paid status from server)
-          console.warn("Payment already completed. Hiding Pay Now button.");
+        if (res?.error === 1) {
+          console.warn("Payment already done. Hiding Pay Now button.");
 
           if (btn) {
             btn.style.display = 'none';
@@ -152,17 +155,10 @@
             paidTag.style.fontWeight = "bold";
             paidTag.style.marginLeft = "8px";
             amountInfo.appendChild(paidTag);
-            console.log("Paid tag added to amount info.");
+            console.log("Paid tag appended to UI.");
           }
-
-        } else if (res.payment_url && res.payment_request) {
-          // Case: Payment request already exists and is pending
-          console.log(`Active payment request found: ${res.payment_request}`);
-          // Optionally update UI with link, modal, or just keep button active
-
         } else {
-          // Case: No existing request created — possibly new, needs initiation
-          console.log("No existing active payment request. Pay Now can proceed.");
+          console.log("Payment not done yet, Pay Now button will remain visible.");
         }
       },
       error: function (err) {
@@ -173,7 +169,6 @@
     if (!btn) {
       console.warn("Pay Now button not found.");
     }
-
 
 
     btn.addEventListener('click', function (e) {
