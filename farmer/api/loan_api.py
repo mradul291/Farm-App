@@ -57,14 +57,7 @@ def make_loan_payment_request(dn, dt="Sales Order", submit_doc=1, order_type="Sh
             "payment_request": request_doc.name,
             "payment_url": request_doc.get_payment_url()
         }
-
-    # 3. If no PE and no existing request, return a signal to frontend
-    return {
-        "error": 0,
-        "message": "No existing payment. Proceed with creating payment request."
-    }
-
-
+    
     # Step 3: Find linked Loan Application
     loan_apps = frappe.get_all("Loan Application", filters={"sales_order": dn}, fields=["name", "down_payment_amount"])
 

@@ -136,12 +136,10 @@
     if (!btn) {
       console.warn("Pay Now button not found.");
     }
-
-
+    
     btn.addEventListener('click', function (e) {
       e.preventDefault();
 
-      // Get dynamic values from Jinja context
       const salesOrder = "{{ doc.sales_order }}";
       const applicant = "{{ doc.applicant }}";
       const payerEmail = "{{ doc.applicant_email or '' }}";
@@ -160,36 +158,59 @@
       btn.style.opacity = '0.6';
       btn.style.pointerEvents = 'none';
 
-      // Make the API call to backend
       frappe.call({
-        method: 'farmer.api.loan_api.make_loan_payment_request',  // Adjust as needed
+        method: 'farmer.api.loan_api.make_loan_payment_request',
         args: {
           dn: salesOrder,
           dt: 'Sales Order',
           submit_doc: 1
         },
         callback: function (r) {
-          // Restore button UI
+          // Restore button state
           btn.textContent = 'Make Down Payment';
           btn.style.opacity = '1';
           btn.style.pointerEvents = 'auto';
 
-          const payment_url = r.message?.payment_url;
+          const res = r.message;
 
-          if (payment_url) {
-            // Open the payment URL in a new tab
-            window.location.href = payment_url;
-          } else {
-            // Show error if payment_url is not returned
-            frappe.msgprint({
-              title: 'Error',
-              message: 'Down Payment Already Done...',
-              indicator: 'red'
-            });
+          if (!res) {
+            frappe.msgprint('Something went wrong. No response received.');
+            return;
           }
-        }
-        ,
+
+          // Case 1: Payment already done
+          if (res.status === 'paid' || res.error === 1) {
+            frappe.msgprint({
+              title: 'Payment Status',
+              message: res.message || 'Down Payment already completed.',
+              indicator: 'green'
+            });
+
+            // Hide button
+            btn.style.display = 'none';
+
+            // Add "(Paid ✅)" tag to amount
+            const amountInfo = [...document.querySelectorAll('p')].find(p =>
+              p.textContent.includes('Down Payment Amount:')
+            )
+          }
+
+          // Case 2: Redirect to payment URL if available
+          if (res.payment_url) {
+            window.location.href = res.payment_url;
+            return;
+          }
+
+          // Case 3: Unknown response
+          frappe.msgprint({
+            title: 'Unknown Response',
+            message: 'Could not proceed with payment. Try again later.',
+            indicator: 'red'
+          });
+        },
+
         error: function () {
+          // Restore button UI and show error
           btn.textContent = 'Make Down Payment';
           btn.style.opacity = '1';
           btn.style.pointerEvents = 'auto';
@@ -197,6 +218,7 @@
         }
       });
     });
+
   });
 </script>
 
