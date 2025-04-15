@@ -37,15 +37,33 @@ def make_loan_payment_request(dn, dt="Sales Order", submit_doc=1, order_type="Sh
         "reference_name": dn,
         "reference_doctype": dt,
         "docstatus": 1,
-        "status": ["in", ["Initiated", "Paid"]]
+        "status": ["in", ["Initiated", "Paid" , "Requested"]]
     }, fields=["name"], order_by="creation desc", limit=1)
+
+    # if existing_request:
+    #     existing_doc = frappe.get_doc("Payment Request", existing_request[0].name)
+    #     return {
+    #         "payment_request": existing_doc.name,
+    #         "payment_url": existing_doc.get_payment_url()
+    #     }
 
     if existing_request:
         existing_doc = frappe.get_doc("Payment Request", existing_request[0].name)
-        return {
+
+    # Optional: Customize based on status
+        if existing_doc.status in ["Initiated", "Paid", "Requested"]:
+            return {
+            "error": 1,
+            "message": "Payment already initiated or completed.",
             "payment_request": existing_doc.name,
             "payment_url": existing_doc.get_payment_url()
+            }
+
+        return {
+        "payment_request": existing_doc.name,
+        "payment_url": existing_doc.get_payment_url()
         }
+
 
     # Step 3: Find linked Loan Application
     loan_apps = frappe.get_all("Loan Application", filters={"sales_order": dn}, fields=["name", "down_payment_amount"])
