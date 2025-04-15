@@ -104,7 +104,7 @@
         );
         console.log("Amount info element:", amountInfo);
 
-        if (res?.error === 1) {
+        if (res?.error === 1) { 
           console.warn("Payment already done. Hiding Pay Now button.");
 
           if (btn) {
@@ -136,7 +136,7 @@
     if (!btn) {
       console.warn("Pay Now button not found.");
     }
-    
+
     btn.addEventListener('click', function (e) {
       e.preventDefault();
 

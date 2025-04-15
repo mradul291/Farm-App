@@ -287,3 +287,19 @@ def make_installment_payment_request(dn):
         "total_requested": len(created_requests),
         "payment_requests": created_requests
     }
+
+#Loan Installments Payment Status
+def update_loan_installment_on_payment(pr_doc, method):
+    if pr_doc.status != "Paid":
+        return
+
+    payment_request_id = pr_doc.name
+
+    # Search for the matching child table row using payment_request
+    loan_installment = frappe.get_doc("Loan Installments", {"sales_order": pr_doc.reference_name})
+    for row in loan_installment.installments:
+        if row.payment_request == payment_request_id:
+            row.paid_status = "Paid"
+            break
+
+    loan_installment.save(ignore_permissions=True)
