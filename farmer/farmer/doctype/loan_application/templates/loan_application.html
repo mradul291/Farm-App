@@ -157,6 +157,9 @@
             amountInfo.appendChild(paidTag);
             console.log("Paid tag appended to UI.");
           }
+        }
+        else if (res?.payment_request) {
+          console.log("Payment Request already exists:", res.payment_request);
         } else {
           console.log("Payment not done yet, Pay Now button will remain visible.");
         }
