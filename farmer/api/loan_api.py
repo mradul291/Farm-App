@@ -286,20 +286,36 @@ def make_installment_payment_request(dn):
         "sales_order": dn,
         "total_requested": len(created_requests),
         "payment_requests": created_requests
-    }
+    }   
 
 #Loan Installments Payment Status
-def update_loan_installment_on_payment(pr_doc, method):
-    if pr_doc.status != "Paid":
-        return
+# File: farmer/api/loan_api.py
 
-    payment_request_id = pr_doc.name
+def update_loan_installment_on_payment_entry(doc, method):
+    """
+    When a Payment Entry is submitted, find its linked Payment Request,
+    and update the corresponding row in Loan Installments to mark it as Paid.
+    """
+    for ref in doc.references:
+        if ref.reference_doctype == "Payment Request":
+            payment_request_name = ref.reference_name
 
-    # Search for the matching child table row using payment_request
-    loan_installment = frappe.get_doc("Loan Installments", {"sales_order": pr_doc.reference_name})
-    for row in loan_installment.installments:
-        if row.payment_request == payment_request_id:
-            row.paid_status = "Paid"
-            break
+            # Get Payment Request
+            pr = frappe.get_doc("Payment Request", payment_request_name)
 
-    loan_installment.save(ignore_permissions=True)
+            # Safety check: ensure it's linked to Sales Order
+            if pr.reference_doctype != "Sales Order" or not pr.reference_name:
+                continue
+
+            try:
+                # Get Loan Installments for that Sales Order
+                loan_doc = frappe.get_doc("Loan Installments", {"sales_order": pr.reference_name})
+
+                # Find the matching row
+                for row in loan_doc.installments:
+                    if row.payment_request == payment_request_name:
+                        row.db_set("paid_status", "Paid")
+                        break
+
+            except Exception as e:
+                frappe.log_error(frappe.get_traceback(), "Loan Installment Update Error")

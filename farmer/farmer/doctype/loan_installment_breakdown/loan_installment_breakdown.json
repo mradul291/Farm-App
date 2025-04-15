@@ -50,9 +50,8 @@
   },
   {
    "fieldname": "paid_status",
-   "fieldtype": "Select",
-   "label": "Paid Status\t",
-   "options": "Paid\nUnpaid"
+   "fieldtype": "Data",
+   "label": "Paid Status\t"
   },
   {
    "fieldname": "payment_date",
@@ -83,7 +82,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-04-15 15:22:06.460802",
+ "modified": "2025-04-15 17:44:59.702713",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Installment Breakdown",
