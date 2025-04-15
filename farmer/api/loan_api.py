@@ -38,7 +38,7 @@ def make_loan_payment_request(dn, dt="Sales Order", submit_doc=1, order_type="Sh
         "reference_doctype": dt,
         "docstatus": 1,
         "status": ["in", ["Initiated", "Paid" , "Requested"]]
-    }, fields=["name"], order_by="creation desc", limit=1)
+    }, fields=["name", "status"], order_by="creation desc", limit=1)
 
     # if existing_request:
     #     existing_doc = frappe.get_doc("Payment Request", existing_request[0].name)
@@ -51,17 +51,17 @@ def make_loan_payment_request(dn, dt="Sales Order", submit_doc=1, order_type="Sh
         existing_doc = frappe.get_doc("Payment Request", existing_request[0].name)
 
     # Optional: Customize based on status
-        if existing_doc.status in ["Initiated", "Paid", "Requested"]:
+        if existing_doc.status == "Paid":
             return {
-            "error": 1,
-            "message": "Payment already initiated or completed.",
-            "payment_request": existing_doc.name,
-            "payment_url": existing_doc.get_payment_url()
+                "error": 1,
+                "message": "Payment already completed.",
+                "payment_request": existing_doc.name,
+                "payment_url": existing_doc.get_payment_url()
             }
 
         return {
-        "payment_request": existing_doc.name,
-        "payment_url": existing_doc.get_payment_url()
+            "payment_request": existing_doc.name,
+            "payment_url": existing_doc.get_payment_url()
         }
 
 
