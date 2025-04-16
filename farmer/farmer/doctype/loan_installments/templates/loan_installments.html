@@ -30,7 +30,7 @@
             <label><strong>Applicant ID:</strong></label>
             <p>{{ applicant_id }}</p>
         </div>
-       
+
 
         <!-- Row 2 -->
         <div style="flex: 1 1 22%;">
@@ -54,53 +54,78 @@
             <p>{{ repayment_period or "-" }}</p>
         </div>
 
-    <!-- Installments Table Section -->
-    <div style="width: 100%; display: flex; justify-content: center;">
-        <h4 style="margin: 25px 0 10px 0;">Installment Breakdown</h4>
-      </div>
-      
-    <div style="overflow-x: auto;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-            <thead style="background-color: #f8f8f8;">
-                <tr>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Installment No.</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Due Date</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Installment Amount</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Principal</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Interest</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Paid Status</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Payment Date</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Payment Link</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in installments %}
-                <tr>
-                    <td style="padding: 10px; border: 1px solid #ddd;">{{ row.installment_number }}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">{{ row.due_date }}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">₦{{ row.installment_amount | float | round(2) }}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">₦{{ row.principal_amount | float | round(2) }}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">₦{{ row.interest_amount | float | round(2) }}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">{{ row.paid_status or "Pending" }}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">{{ row.payment_date or "-" }}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">
-                        {% if row.payment_link %}
-                        <a href="{{ row.payment_link }}" style="color: blue;" >Pay Now</a>
-                        {% else %}
-                        -
-                        {% endif %}
-                    </td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="8" style="padding: 10px; border: 1px solid #ddd; text-align: center; color: gray;">
-                        No installment records available.
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
+        <!-- Installments Table Section -->
+        {% set current_month = frappe.utils.now_datetime().strftime('%m') %}
+        {% set current_year = frappe.utils.now_datetime().strftime('%Y') %}
 
-{% endblock %}
+        <style>
+            .disabled-link {
+                color: gray;
+                pointer-events: none;
+                cursor: not-allowed;
+                text-decoration: none;
+            }
+
+            .active-link {
+                color: blue;
+                text-decoration: underline;
+                cursor: pointer;
+            }
+        </style>
+
+        <div style="width: 100%; display: flex; justify-content: center;">
+            <h4 style="margin: 25px 0 10px 0;">Installment Breakdown</h4>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                <thead style="background-color: #f8f8f8;">
+                    <tr>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Installment No.</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Due Date</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Installment Amount</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Principal</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Interest</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Paid Status</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Payment Date</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Payment Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in installments %}
+                    {% set due_month = row.due_date.strftime('%m') %}
+                    {% set due_year = row.due_date.strftime('%Y') %}
+                    {% set is_current_month = due_month == current_month and due_year == current_year %}
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">{{ row.installment_number }}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">{{ row.due_date }}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">₦{{ row.installment_amount | float | round(2)
+                            }}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">₦{{ row.principal_amount | float | round(2)
+                            }}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">₦{{ row.interest_amount | float | round(2) }}
+                        </td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">{{ row.paid_status or "Pending" }}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">{{ row.payment_date or "-" }}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">
+                            {% if row.payment_link %}
+                            <a href="{{ row.payment_link }}"
+                                class="{{ 'active-link' if is_current_month else 'disabled-link' }}">Pay Now</a>
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" style="padding: 10px; border: 1px solid #ddd; text-align: center; color: gray;">
+                            No installment records available.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% endblock %}
