@@ -204,10 +204,6 @@ permission_query_conditions = {
     # "Farmer Master": "farmer.api.user_api.user_specific_farmer_master"
 }
 
-override_doctype_class = {
-    "Payment Entry": "farmer.overrides.payment_entry.CustomPaymentEntry"
-}
-
 doc_events = {
     "Item": {
         "after_insert": "farmer.api.user_api.create_or_update_website_item",
