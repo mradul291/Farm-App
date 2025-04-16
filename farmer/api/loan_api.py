@@ -91,7 +91,6 @@ def make_loan_payment_request(dn, dt="Sales Order", submit_doc=1, order_type="Sh
         "mute_email": 1,
     }
 
-    from erpnext.accounts.doctype.payment_request import payment_request
     original_get_amount = payment_request.get_amount
 
     def get_custom_amount(doc, account=None):
@@ -103,6 +102,7 @@ def make_loan_payment_request(dn, dt="Sales Order", submit_doc=1, order_type="Sh
     payment_request.get_amount = original_get_amount
 
     if result.docstatus == 0:
+        result.flags.ignore_permissions = True
         result.submit()
 
     if frappe.local.response.get("type") == "redirect":
@@ -289,32 +289,3 @@ def make_installment_payment_request(dn):
     }   
 
 #Loan Installments Payment Status
-
-def update_loan_installment_on_payment_entry(doc, method):
-    """
-    When a Payment Entry is submitted, find its linked Payment Request,
-    and update the corresponding row in Loan Installments to mark it as Paid.
-    """
-    for ref in doc.references:
-        if ref.reference_doctype == "Payment Request":
-            payment_request_name = ref.reference_name
-
-            # Get Payment Request
-            pr = frappe.get_doc("Payment Request", payment_request_name)
-
-            # Safety check: ensure it's linked to Sales Order
-            if pr.reference_doctype != "Sales Order" or not pr.reference_name:
-                continue
-
-            try:
-                # Get Loan Installments for that Sales Order
-                loan_doc = frappe.get_doc("Loan Installments", {"sales_order": pr.reference_name})
-
-                # Find the matching row
-                for row in loan_doc.installments:
-                    if row.payment_request == payment_request_name:
-                        row.db_set("paid_status", "Paid")
-                        break
-
-            except Exception as e:
-                frappe.log_error(frappe.get_traceback(), "Loan Installment Update Error")
