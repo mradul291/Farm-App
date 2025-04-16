@@ -197,6 +197,19 @@ app_include_js = "/assets/farmer/js/redirect.js"
 
 define_csrf = 1
 
+override_payment_entry = [
+    "farmer.api.loan_api.patched_get_payment_entry"
+]
+
+# Register the patch on startup
+def on_app_start():
+    import frappe
+    from custom_app.payment_entry.payment_entry_utils import patched_get_payment_entry
+    from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
+
+    # Patch the original function with the custom logic
+    payment_entry.get_payment_entry = patched_get_payment_entry
+
 permission_query_conditions = {
     "Item": "farmer.api.user_api.item_permission_query_conditions",
     "Loan Application": "farmer.api.user_api.loan_application_permission_query_conditions",

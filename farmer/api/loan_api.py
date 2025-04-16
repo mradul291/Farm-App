@@ -5,6 +5,8 @@ from frappe import _
 from frappe.utils import flt,cint
 from datetime import datetime, timedelta
 from erpnext.accounts.doctype.payment_request import payment_request
+from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry as original_get_payment_entry
+
 
 
 @frappe.whitelist(allow_guest=True)
@@ -197,7 +199,7 @@ def generate_installment_breakdown(loan_installment, loan_amount, interest_rate,
             "interest_amount": round(interest_amount, 2),
             "payment_link": "", 
             "installment_id": unique_note,
-            "paid_status": "Unpaid"
+            "paid_status": ""
         })
 
 
@@ -289,7 +291,6 @@ def make_installment_payment_request(dn):
     }   
 
 #Loan Installments Payment Status
-# File: farmer/api/loan_api.py
 
 def update_loan_installment_on_payment_entry(doc, method):
     """
@@ -319,3 +320,49 @@ def update_loan_installment_on_payment_entry(doc, method):
 
             except Exception as e:
                 frappe.log_error(frappe.get_traceback(), "Loan Installment Update Error")
+
+
+#####################################################################################################
+
+@frappe.whitelist(allow_guest=True)
+def get_installment_payment_entry(sales_order, amount):
+    """
+    This function generates a partial payment entry for installments in Sales Order.
+    """
+    # Temporarily bypass the 'fully billed' validation check
+    frappe.flags.ignore_sales_order_billed_validation = True
+
+    try:
+        # Create the payment entry based on the Sales Order and payment amount
+        pe = original_get_payment_entry(
+            dt="Sales Order",
+            dn=sales_order,
+            party_amount=amount,
+            ignore_permissions=True
+        )
+        # Set custom partial amount
+        pe.paid_amount = amount
+        pe.received_amount = amount
+        pe.references[0].allocated_amount = amount
+        return pe
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Installment Payment Entry Error")
+        frappe.throw(str(e))
+
+# This is the core method to override the default behavior for payment entry creation.
+def patched_get_payment_entry(*args, **kwargs):
+    dt = kwargs.get('dt') or args[0]
+    dn = kwargs.get('dn') or args[1]
+
+    doc = frappe.get_doc(dt, dn)
+    over_billing_allowance = frappe.db.get_single_value("Accounts Settings", "over_billing_allowance")
+
+    # Only override if we explicitly allow (through custom logic)
+    if dt == "Sales Order" and frappe.flags.get("ignore_sales_order_billed_validation"):
+        # Skip the "fully billed" validation
+        pass
+    elif dt == "Sales Order" and flt(doc.per_billed, 2) >= (100.0 + flt(over_billing_allowance)):
+        frappe.throw(_("Can only make payment against unbilled {0}").format(_(dt)))
+
+    # Proceed to the original method if no custom logic applies
+    return original_get_payment_entry(*args, **kwargs)
