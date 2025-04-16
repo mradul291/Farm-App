@@ -27,8 +27,7 @@
   {
    "fieldname": "due_date",
    "fieldtype": "Date",
-   "label": "Due Date\t",
-   "read_only": 1
+   "label": "Due Date\t"
   },
   {
    "fieldname": "installment_amount",
@@ -83,7 +82,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-04-16 10:56:13.588560",
+ "modified": "2025-04-16 17:22:26.581724",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Installment Breakdown",

@@ -212,9 +212,6 @@ doc_events = {
     "Loan Application": {
         "on_update": "farmer.api.loan_api.create_loan_installments"
     },
-    "Payment Request": {
-        "on_submit": "farmer.api.loan_api.update_loan_installment_on_payment"
-    }
 }
 
 
@@ -233,7 +230,6 @@ override_whitelisted_methods = {
 
      "farmer.api.loan_api.make_loan_payment_request": "farmer.api.loan_api.make_loan_payment_request",
      "farmer.api.loan_api.make_installment_payment_request": "farmer.api.loan_api.make_installment_payment_request",
-
 }
 
 
