@@ -27,6 +27,7 @@
   "loan_purpose",
   "section_break_uqt5",
   "status",
+  "sales_invoice",
   "column_break_onuc",
   "documents",
   "sales_order",
@@ -184,13 +185,20 @@
    "fieldtype": "Check",
    "label": "Down Payment Done",
    "read_only": 1
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1
   }
  ],
  "has_web_view": 1,
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-15 16:07:01.927922",
+ "modified": "2025-04-17 13:12:36.968806",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",

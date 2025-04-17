@@ -79,15 +79,16 @@
     const btn = document.getElementById('pay-now-btn');
 
     const salesOrder = "{{ doc.sales_order }}";
+    const salesInvoice = "{{ doc.sales_invoice }}";
 
     console.log("Initiating Loan Payment Request...");
 
     frappe.call({
       method: 'farmer.api.loan_api.make_loan_payment_request',
       args: {
-        dn: salesOrder,
-        dt: 'Sales Order',
-        submit_doc: 0
+        dn: salesInvoice,
+        dt: 'Sales Invoice',
+        submit_doc: 1
       },
       callback: function (r) {
         console.log("Callback received:", r);
@@ -104,7 +105,7 @@
         );
         console.log("Amount info element:", amountInfo);
 
-        if (res?.error === 1) { 
+        if (res?.error === 1) {
           console.warn("Payment already done. Hiding Pay Now button.");
 
           if (btn) {
@@ -161,8 +162,8 @@
       frappe.call({
         method: 'farmer.api.loan_api.make_loan_payment_request',
         args: {
-          dn: salesOrder,
-          dt: 'Sales Order',
+          dn: salesInvoice,
+          dt: 'Sales Invoice',
           submit_doc: 1
         },
         callback: function (r) {
