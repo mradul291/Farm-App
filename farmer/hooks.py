@@ -230,6 +230,7 @@ override_whitelisted_methods = {
 
      "farmer.api.loan_api.make_loan_payment_request": "farmer.api.loan_api.make_loan_payment_request",
      "farmer.api.loan_api.make_installment_payment_request": "farmer.api.loan_api.make_installment_payment_request",
+     "farmer.api.loan_api.create_invoice_from_sales_order": "farmer.api.loan_api.create_invoice_from_sales_order",
 }
 
 

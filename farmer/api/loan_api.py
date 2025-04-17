@@ -8,15 +8,42 @@ from erpnext.accounts.doctype.payment_request import payment_request
 
 
 @frappe.whitelist(allow_guest=True)
+def create_invoice_from_sales_order(sales_order):
+    if not sales_order:
+        frappe.throw("Sales Order ID is required.")
+
+    # Import ERPNext utility to generate Sales Invoice                                                                              
+    from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
+
+    # Create and submit invoice
+    si = make_sales_invoice(sales_order, ignore_permissions=True)
+    si.allocate_advances_automatically = True
+    si.insert(ignore_permissions=True)
+    si.submit()
+     
+    loan_app = frappe.get_all("Loan Application", filters={"sales_order": sales_order}, fields=["name"], limit=1)
+
+    if loan_app:
+        loan_doc = frappe.get_doc("Loan Application", loan_app[0].name)
+        loan_doc.sales_invoice = si.name
+        loan_doc.save(ignore_permissions=True)
+    frappe.db.commit()
+
+    return {
+        "status": "success",
+        "invoice": si.name
+    }
+
+
+@frappe.whitelist(allow_guest=True)
 def get_payment_url(pr_name):
     pr = frappe.get_doc("Payment Request", pr_name)
     return pr.get_payment_url()
 
 #Down Payment Process 
 
-
 @frappe.whitelist(allow_guest=True)
-def make_loan_payment_request(dn, dt="Sales Order", submit_doc=1, order_type="Shopping Cart"):
+def make_loan_payment_request(dn, dt="Sales Invoice", submit_doc=1, order_type="Shopping Cart"):
     ref_doc = frappe.get_doc(dt, dn)
 
     # 1. Check if Payment Entry already exists (means payment is done)
@@ -59,7 +86,7 @@ def make_loan_payment_request(dn, dt="Sales Order", submit_doc=1, order_type="Sh
         }
     
     # Step 3: Find linked Loan Application
-    loan_apps = frappe.get_all("Loan Application", filters={"sales_order": dn}, fields=["name", "down_payment_amount"])
+    loan_apps = frappe.get_all("Loan Application", filters={"sales_invoice": dn}, fields=["name", "down_payment_amount"])
 
     for la in loan_apps:
         loan_doc = frappe.get_doc("Loan Application", la.name)
@@ -68,7 +95,7 @@ def make_loan_payment_request(dn, dt="Sales Order", submit_doc=1, order_type="Sh
             frappe.db.commit()
 
     if not loan_apps:
-        frappe.throw(_("No Loan Application linked to Sales Order {0}").format(dn))
+        frappe.throw(_("No Loan Application linked to Sales Invoice {0}").format(dn))
 
     loan_app = loan_apps[0]
     down_payment_amount = loan_app.down_payment_amount
@@ -116,6 +143,7 @@ def make_loan_payment_request(dn, dt="Sales Order", submit_doc=1, order_type="Sh
     }
 
 
+
 #####################################################################################################
 
 def create_loan_installments(doc, method):
@@ -137,6 +165,7 @@ def create_loan_installments(doc, method):
         applicant_name = doc.applicant_name
         applicant_id = doc.applicant
         sales_order = doc.sales_order
+        sales_invoice = doc.sales_invoice
         
         # Create a new Loan Installments record
         loan_installment = frappe.new_doc("Loan Installments")
@@ -149,6 +178,7 @@ def create_loan_installments(doc, method):
         loan_installment.compounding_frequency = doc.compounding_frequency
         loan_installment.status = "Active"
         loan_installment.sales_order = sales_order
+        loan_installment.sales_invoice = sales_invoice
         
         # Calculate total amount after interest
         loan_installment.total_amount_after_interest = total_amount_after_interest  
@@ -165,7 +195,7 @@ def create_loan_installments(doc, method):
         # 4. Set published
         loan_installment.db_set("published", 1)
 
-        make_installment_payment_request(sales_order)
+        make_installment_payment_request(sales_invoice)
 
         frappe.msgprint(f"Loan Installments created successfully for {doc.applicant}.", alert=True)
         frappe.msgprint(f"Loan Installments created successfully for {doc.applicant}.", alert=True)
@@ -205,17 +235,17 @@ def generate_installment_breakdown(loan_installment, loan_amount, interest_rate,
 @frappe.whitelist(allow_guest=True)
 def make_installment_payment_request(dn):
     if not dn:
-        frappe.throw("Please pass the Sales Order (dn)")
+        frappe.throw("Please pass the Sales Invoice (dn)")
 
-    ref_doc = frappe.get_doc("Sales Order", dn)
+    ref_doc = frappe.get_doc("Sales Invoice", dn)
     created_requests = []
 
     from erpnext.accounts.doctype.payment_request import payment_request
     original_get_amount = payment_request.get_amount
 
-    loan_installment = frappe.get_doc("Loan Installments", {"sales_order": dn})
+    loan_installment = frappe.get_doc("Loan Installments", {"sales_invoice": dn})
     if not loan_installment:
-        frappe.throw(f"Loan Installments not found for Sales Order {dn}")
+        frappe.throw(f"Loan Installments not found for Sales Invoice {dn}")
 
     def get_custom_amount(doc, account=None):
         # This will be overridden per loop iteration
@@ -232,7 +262,7 @@ def make_installment_payment_request(dn):
             continue  # Skip rows with 0 amount
 
         pr_args = {
-            "dt": "Sales Order",
+            "dt": "Sales Invoice",
             "dn": dn,
             "submit_doc": 1,
             "order_type": "Shopping Cart",
@@ -243,7 +273,7 @@ def make_installment_payment_request(dn):
             "amount": current_amount,
             "return_doc": True,
             "mute_email": 1,
-            "notes": f"Installment {i+1} of {len(loan_installment.installments)} for Sales Order {dn}",
+            "notes": f"Installment {i+1} of {len(loan_installment.installments)} for Sales Invoice {dn}",
             "installment": unique_note,
             "is_installment_payment": 1
         }
@@ -283,7 +313,7 @@ def make_installment_payment_request(dn):
     payment_request.get_amount = original_get_amount
 
     return {
-        "sales_order": dn,
+        "sales_invoice": dn,
         "total_requested": len(created_requests),
         "payment_requests": created_requests
     }   

@@ -19,6 +19,8 @@ function calculate_down_payment(frm) {
 
         frm.set_value('down_payment_amount', down_payment);
         frm.set_value('loan_amount', loan_amount);  // Storing remaining amount in 'loan_amount' field
+
+        calculate_total_amount_with_interest(frm)
     }
 }
 
@@ -48,7 +50,10 @@ function calculate_total_amount_with_interest(frm) {
 
         if (n > 0) {
             let A = P * Math.pow(1 + (r / n), n * t);  // Compound Interest Formula
-            frm.set_value('total_amount_after_interest', A.toFixed(2));  // Store rounded value
+            let down_payment = frm.doc.down_payment_amount || 0;
+            let total = A + parseFloat(down_payment);
+
+            frm.set_value('total_amount_after_interest', total.toFixed(2));  // Store rounded value
         }
     }
 }

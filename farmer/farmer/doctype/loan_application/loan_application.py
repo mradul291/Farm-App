@@ -1,6 +1,7 @@
 from frappe.website.website_generator import WebsiteGenerator
 import frappe
 from frappe.website.utils import get_sidebar_items
+from frappe.utils import flt
 
 
 class LoanApplication(WebsiteGenerator):
@@ -44,3 +45,34 @@ class LoanApplication(WebsiteGenerator):
 
 		return context
 	
+
+	def before_save(self):
+		if not self.sales_invoice and self.sales_order:
+			inv = frappe.get_all("Sales Invoice", filters={"sales_order": self.sales_order}, fields=["name"])
+			if inv:
+				self.sales_invoice = inv[0].name
+				
+
+	def on_update(self):
+		if self.sales_invoice and self.total_amount_after_interest:
+			try:
+				si = frappe.get_doc("Sales Invoice", self.sales_invoice)
+            
+            	# Only update if different
+				if flt(si.grand_total) != flt(self.total_amount_after_interest):
+					new_total = flt(self.total_amount_after_interest)
+					si.grand_total = new_total
+					si.rounded_total = new_total
+					si.outstanding_amount = new_total
+					si.base_grand_total = new_total
+					si.base_rounded_total = new_total
+
+					si.set_onload("ignore_validate_update_after_submit", True)
+					si.flags.ignore_validate_update_after_submit = True
+					si.flags.ignore_validate = True
+					si.flags.ignore_mandatory = True
+					si.flags.ignore_permissions = True
+					si.save()
+					frappe.msgprint(f"Sales Invoice {si.name} updated with new total amount: {new_total}")
+			except Exception as e:
+				frappe.log_error(frappe.get_traceback(), "Error Updating Sales Invoice from Loan Application")
