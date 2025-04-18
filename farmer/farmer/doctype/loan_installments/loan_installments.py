@@ -2,6 +2,7 @@
 from frappe.website.website_generator import WebsiteGenerator
 import frappe
 from frappe.website.utils import get_sidebar_items
+from frappe.utils import nowdate
 
 
 class LoanInstallments(WebsiteGenerator):
