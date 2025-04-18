@@ -13,7 +13,7 @@ frappe.ui.form.on('Loan Installment Breakdown', {
             frm.refresh_field("installments");
         }
     },
-    mode_of_payment: function(frm, cdt, cdn) {
+    mode_of_payment: function (frm, cdt, cdn) {
         let row = locals[cdt][cdn];
 
         if (row.mode_of_payment === 'Cash') {
@@ -28,10 +28,12 @@ frappe.ui.form.on('Loan Installment Breakdown', {
                 args: {
                     docname: row.payment_request
                 },
-                callback: function(response) {
+                callback: function (response) {
                     if (response.message) {
                         frappe.model.sync(response.message);
-                        frappe.set_route("Form", response.message.doctype, response.message.name);
+                        frm.save().then(() => {
+                            frappe.set_route("Form", response.message.doctype, response.message.name);
+                        });
                     }
                 }
             });
@@ -42,8 +44,7 @@ frappe.ui.form.on('Loan Installment Breakdown', {
 
 frappe.ui.form.on('Loan Installments', {
     onload_post_render(frm) {
-        // Loop through each installment row
-        frm.doc.installments.forEach(row => {
+        frm.doc.installments.forEach((row, index) => {
             if (row.payment_request) {
                 frappe.call({
                     method: "frappe.client.get_value",
@@ -52,10 +53,26 @@ frappe.ui.form.on('Loan Installments', {
                         filters: { name: row.payment_request },
                         fieldname: "status"
                     },
-                    callback: function(r) {
-                        if (r.message && r.message.status === "Paid" && row.paid_status !== "Paid") {
-                            row.paid_status = "Paid";
-                            frm.refresh_field("installments");
+                    callback: function (r) {
+                        if (r.message && r.message.status === "Paid") {
+                            let updated = false;
+
+                            if (row.paid_status !== "Paid") {
+                                row.paid_status = "Paid";
+                                updated = true;
+                            }
+
+                            if (!row.payment_date) {
+                                row.payment_date = frappe.datetime.get_today();
+                                updated = true;
+                            }
+
+                            frm.fields_dict["installments"].grid.grid_rows_by_docname[row.name]
+                                .toggle_editable("payment_link", false);
+
+                            if (updated) {
+                                frm.refresh_field("installments");
+                            }
                         }
                     }
                 });
@@ -63,4 +80,5 @@ frappe.ui.form.on('Loan Installments', {
         });
     }
 });
+
 

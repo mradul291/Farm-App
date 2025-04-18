@@ -83,7 +83,7 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Pending\nApproved\nRejected",
+   "options": "Pending\nApproved\nRejected\nLoan Sanctioned",
    "read_only": 1
   },
   {
@@ -198,7 +198,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-17 13:12:36.968806",
+ "modified": "2025-04-18 19:17:32.891570",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",

@@ -106,7 +106,7 @@ def make_loan_payment_request(dn, dt="Sales Invoice", submit_doc=1, order_type="
 
     # Step 4: Prepare Payment Request
     args = {
-        "dn": dn,
+        "dn": dn,   
         "dt": dt,
         "submit_doc": cint(submit_doc),
         "order_type": order_type,
@@ -114,7 +114,7 @@ def make_loan_payment_request(dn, dt="Sales Invoice", submit_doc=1, order_type="
         "recipient_id": ref_doc.get("contact_email") or ref_doc.owner,
         "party_type": "Customer",
         "party": ref_doc.customer,
-        "amount": down_payment_amount,
+        "amount": int(round(down_payment_amount * 100)),
         "return_doc": True,
         "mute_email": 1,
     }
@@ -250,7 +250,7 @@ def make_installment_payment_request(dn):
 
     def get_custom_amount(doc, account=None):
         # This will be overridden per loop iteration
-        return current_amount
+        return current_amount   
 
     # Override global method temporarily
     payment_request.get_amount = get_custom_amount
@@ -271,7 +271,7 @@ def make_installment_payment_request(dn):
             "recipient_id": ref_doc.get("contact_email") or ref_doc.owner,
             "party_type": "Customer",
             "party": ref_doc.customer,
-            "amount": current_amount,
+            "amount": int(flt(current_amount) * 100),
             "return_doc": True,
             "mute_email": 1,
             "notes": f"Installment {i+1} of {len(loan_installment.installments)} for Sales Invoice {dn}",
