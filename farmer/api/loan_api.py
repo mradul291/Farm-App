@@ -319,3 +319,25 @@ def make_installment_payment_request(dn):
     }   
 
 #Loan Installments Payment Status
+
+def update_loan_installment_paid_status(doc, method):
+    if doc.status == "Paid":
+        # Search for the Loan Installments doc where any child row has this Payment Request
+        loan_docs = frappe.get_all(
+            "Loan Installments",
+            filters={"installments.payment_request": doc.name},
+            fields=["name"]
+        )
+
+        for loan in loan_docs:
+            loan_doc = frappe.get_doc("Loan Installments", loan.name)
+
+            updated = False
+            for row in loan_doc.installments:
+                if row.payment_request == doc.name:
+                    row.paid_status = "Paid"
+                    row.payment_date = frappe.utils.nowdate()
+                    updated = True
+
+            if updated:
+                loan_doc.save(ignore_permissions=True)

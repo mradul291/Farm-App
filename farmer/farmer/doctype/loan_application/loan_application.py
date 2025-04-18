@@ -61,6 +61,7 @@ class LoanApplication(WebsiteGenerator):
             	# Only update if different
 				if flt(si.grand_total) != flt(self.total_amount_after_interest):
 					new_total = flt(self.total_amount_after_interest)
+					si.total = new_total
 					si.grand_total = new_total
 					si.rounded_total = new_total
 					si.outstanding_amount = new_total
