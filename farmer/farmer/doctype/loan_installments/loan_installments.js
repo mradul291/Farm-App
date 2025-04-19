@@ -72,6 +72,12 @@ frappe.ui.form.on('Loan Installments', {
 
                             if (updated) {
                                 frm.refresh_field("installments");
+                                
+                                 const amount = parseFloat(row.installment_amount || 0);
+                                 const currentTotal = parseFloat(frm.doc.total_loan_amount || 0);
+                                 const newTotal = currentTotal - amount;
+ 
+                                 frm.set_value("total_loan_amount", Math.round(newTotal));
                             }
                         }
                     }

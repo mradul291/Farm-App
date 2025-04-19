@@ -45,6 +45,7 @@ class LoanInstallments(WebsiteGenerator):
 		context.compounding_frequency = self.compounding_frequency
 		context.status = self.status
 		context.remarks = self.remarks
+		context.total_loan_amount = self.total_loan_amount
 
         # Fetch child table data (Loan Installment Breakdown)
 		context.installments = []

@@ -13,6 +13,7 @@
   "loan_amount",
   "repayment_period",
   "interest_rate",
+  "down_payment",
   "column_break_qmhe",
   "total_amount_after_interest",
   "compounding_frequency",
@@ -20,6 +21,7 @@
   "sales_order",
   "sales_invoice",
   "installment_amount",
+  "total_loan_amount",
   "remarks",
   "section_break_qjms",
   "installments",
@@ -131,13 +133,25 @@
    "label": "Sales Invoice",
    "options": "Sales Invoice",
    "read_only": 1
+  },
+  {
+   "fieldname": "down_payment",
+   "fieldtype": "Currency",
+   "label": "Down Payment",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_loan_amount",
+   "fieldtype": "Currency",
+   "label": "Total Loan Amount",
+   "read_only": 1
   }
  ],
  "has_web_view": 1,
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-17 11:17:43.473871",
+ "modified": "2025-04-19 17:14:09.953111",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Installments",
