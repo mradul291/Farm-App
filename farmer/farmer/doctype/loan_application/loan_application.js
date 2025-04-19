@@ -55,7 +55,7 @@ frappe.ui.form.on('Loan Application', {
 
 function calculate_down_payment(frm) {
     if (frm.doc.total_amount && frm.doc.down_payment_percentage) {
-        let down_payment = (frm.doc.total_amount * frm.doc.down_payment_percentage) / 100;
+        let down_payment = parseInt((frm.doc.total_amount * frm.doc.down_payment_percentage) / 100);
         let loan_amount = frm.doc.total_amount - down_payment;
 
         frm.set_value('down_payment_amount', down_payment);
@@ -79,6 +79,6 @@ function calculate_total_amount_with_interest(frm) {
         let down_payment = frm.doc.down_payment_amount || 0;
         let total = total_emi + down_payment;
 
-        frm.set_value('total_amount_after_interest', total.toFixed(2));
+        frm.set_value('total_amount_after_interest', parseInt(total));
     }
 }

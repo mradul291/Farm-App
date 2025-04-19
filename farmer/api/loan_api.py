@@ -93,6 +93,7 @@ def make_loan_payment_request(dn, dt="Sales Invoice", submit_doc=1, order_type="
         loan_doc = frappe.get_doc("Loan Application", la.name)
         if not loan_doc.down_payment_check:
             loan_doc.db_set("down_payment_check", 1)
+            loan_doc.db_set("status", "Loan Sanctioned")
             frappe.db.commit()
 
     if not loan_apps:
@@ -110,11 +111,11 @@ def make_loan_payment_request(dn, dt="Sales Invoice", submit_doc=1, order_type="
         "dt": dt,
         "submit_doc": cint(submit_doc),
         "order_type": order_type,
-        "mode_of_payment": "Cash",
+        "mode_of_payment": "Paystack",
         "recipient_id": ref_doc.get("contact_email") or ref_doc.owner,
         "party_type": "Customer",
         "party": ref_doc.customer,
-        "amount": int(round(down_payment_amount * 100)),
+        "amount": down_payment_amount,
         "return_doc": True,
         "mute_email": 1,
     }
@@ -167,6 +168,7 @@ def create_loan_installments(doc, method):
         applicant_id = doc.applicant
         sales_order = doc.sales_order
         sales_invoice = doc.sales_invoice
+        down_payment = doc.down_payment_amount
         
         # Create a new Loan Installments record
         loan_installment = frappe.new_doc("Loan Installments")
@@ -180,9 +182,11 @@ def create_loan_installments(doc, method):
         loan_installment.status = "Active"
         loan_installment.sales_order = sales_order
         loan_installment.sales_invoice = sales_invoice
+        loan_installment.down_payment = down_payment
         
         # Calculate total amount after interest
         loan_installment.total_amount_after_interest = total_amount_after_interest  
+        loan_installment.total_loan_amount = total_amount_after_interest - down_payment
 
         # Generate Installments
         generate_installment_breakdown(loan_installment, loan_amount, interest_rate, repayment_period)
@@ -223,7 +227,7 @@ def generate_installment_breakdown(loan_installment, loan_amount, interest_rate,
         loan_installment.append("installments", {
             "installment_number": i,
             "due_date": due_date.strftime('%Y-%m-%d'),
-            "installment_amount": round(emi, 2),
+            "installment_amount": int(round(emi)),
             "principal_amount": round(principal_amount, 2),
             "interest_amount": round(interest_amount, 2),
             "payment_link": "", 
