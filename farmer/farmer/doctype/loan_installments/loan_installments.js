@@ -31,6 +31,17 @@ frappe.ui.form.on('Loan Installment Breakdown', {
                 callback: function (response) {
                     if (response.message) {
                         frappe.model.sync(response.message);
+                        row.paid_status = "Paid";
+                        row.payment_date = frappe.datetime.get_today();
+
+                        const installmentAmount = parseFloat(row.installment_amount || 0);
+                        const currentTotalLoan = parseFloat(frm.doc.total_loan_amount || 0);
+                        const updatedTotal = currentTotalLoan - installmentAmount;
+
+                        frm.set_value('total_loan_amount', Math.round(updatedTotal));
+                        frm.refresh_field('installments');
+                        frm.refresh_field('total_loan_amount');
+
                         frm.save().then(() => {
                             frappe.set_route("Form", response.message.doctype, response.message.name);
                         });
@@ -39,7 +50,6 @@ frappe.ui.form.on('Loan Installment Breakdown', {
             });
         }
     }
-
 });
 
 frappe.ui.form.on('Loan Installments', {
@@ -72,7 +82,7 @@ frappe.ui.form.on('Loan Installments', {
 
                             if (updated) {
                                 frm.refresh_field("installments");
-                                
+
                                  const amount = parseFloat(row.installment_amount || 0);
                                  const currentTotal = parseFloat(frm.doc.total_loan_amount || 0);
                                  const newTotal = currentTotal - amount;

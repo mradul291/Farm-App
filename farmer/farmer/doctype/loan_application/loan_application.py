@@ -61,6 +61,15 @@ class LoanApplication(WebsiteGenerator):
             	# Only update if different
 				if flt(si.grand_total) != flt(self.total_amount_after_interest):
 					new_total = flt(self.total_amount_after_interest)
+
+					total_items = len(si.items)
+					if total_items > 0:
+						per_item_amount = round(new_total / total_items, 2)
+
+						for item in si.items:
+							item.rate = per_item_amount
+							item.amount = per_item_amount
+
 					si.total = new_total
 					si.grand_total = new_total
 					si.rounded_total = new_total
