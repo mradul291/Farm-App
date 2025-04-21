@@ -150,14 +150,15 @@
   {
    "fieldname": "loan_amount_after_interest",
    "fieldtype": "Currency",
-   "label": "Loan Amount(After Interest)"
+   "label": "Loan Amount(After Interest)",
+   "read_only": 1
   }
  ],
  "has_web_view": 1,
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-21 12:01:02.021031",
+ "modified": "2025-04-21 14:48:29.108805",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Installments",
