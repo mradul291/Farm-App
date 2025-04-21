@@ -22,6 +22,7 @@
   "sales_invoice",
   "installment_amount",
   "total_loan_amount",
+  "loan_amount_after_interest",
   "remarks",
   "section_break_qjms",
   "installments",
@@ -143,15 +144,20 @@
   {
    "fieldname": "total_loan_amount",
    "fieldtype": "Currency",
-   "label": "Total Loan Amount",
+   "label": "Remaining Loan Amount",
    "read_only": 1
+  },
+  {
+   "fieldname": "loan_amount_after_interest",
+   "fieldtype": "Currency",
+   "label": "Loan Amount(After Interest)"
   }
  ],
  "has_web_view": 1,
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-19 17:14:09.953111",
+ "modified": "2025-04-21 12:01:02.021031",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Installments",

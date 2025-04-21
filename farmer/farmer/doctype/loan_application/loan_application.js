@@ -69,11 +69,11 @@ function calculate_total_amount_with_interest(frm) {
     if (frm.doc.loan_amount && frm.doc.interest_rate && frm.doc.repayment_period) {
         let P = frm.doc.loan_amount;
         let annual_rate = frm.doc.interest_rate;
-        let r = annual_rate / 100 / 12;  // Monthly rate
+        let r = annual_rate / 100 / 12;
         let n = frm.doc.repayment_period;
 
         let emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-        emi = parseFloat(emi.toFixed(2));  // ✅ Round exactly like Python
+        emi = parseFloat(emi.toFixed(2));  
         let total_emi = emi * n;
 
         let down_payment = frm.doc.down_payment_amount || 0;

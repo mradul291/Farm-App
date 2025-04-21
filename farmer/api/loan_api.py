@@ -185,7 +185,8 @@ def create_loan_installments(doc, method):
         loan_installment.down_payment = down_payment
         
         # Calculate total amount after interest
-        loan_installment.total_amount_after_interest = total_amount_after_interest  
+        loan_installment.total_amount_after_interest = total_amount_after_interest
+        loan_installment.loan_amount_after_interest = total_amount_after_interest - down_payment
         loan_installment.total_loan_amount = total_amount_after_interest - down_payment
 
         # Generate Installments
@@ -215,7 +216,7 @@ def generate_installment_breakdown(loan_installment, loan_amount, interest_rate,
     monthly_rate = interest_rate / 100 / 12
     emi = (loan_amount * monthly_rate * math.pow(1 + monthly_rate, repayment_period)) / (math.pow(1 + monthly_rate, repayment_period) - 1)
 
-    loan_installment.installment_amount = round(emi, 2)
+    loan_installment.installment_amount = int(round(emi))
 
     for i in range(1, repayment_period + 1):
         due_date = datetime.today() + timedelta(days=30 * i)

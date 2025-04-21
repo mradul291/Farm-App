@@ -43,9 +43,11 @@ class LoanInstallments(WebsiteGenerator):
 		context.interest_rate = self.interest_rate
 		context.total_amount_after_interest = self.total_amount_after_interest
 		context.compounding_frequency = self.compounding_frequency
+		context.down_payemnet = self.down_payment
 		context.status = self.status
 		context.remarks = self.remarks
 		context.total_loan_amount = self.total_loan_amount
+		context.loan_amount_after_interest = self.loan_amount_after_interest
 
         # Fetch child table data (Loan Installment Breakdown)
 		context.installments = []
