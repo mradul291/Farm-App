@@ -34,12 +34,12 @@
 
         <!-- Row 2 -->
         <div style="flex: 1 1 22%;">
-            <label><strong>Loan Amount:</strong></label>
-            <p>₦{{ loan_amount | float | round(2) }}</p>
+            <label><strong>Loan Amount(After Interest):</strong></label>
+            <p>₦{{ loan_amount_after_interest | float | round(2) }}</p>
         </div>
         <div style="flex: 1 1 22%;">
-            <label><strong>Total Amount (After Interest):</strong></label>
-            <p>₦{{ total_amount_after_interest | float | round(2) }}</p>
+            <label><strong> Down Payment:</strong></label>
+            <p>₦{{ down_payment | float | round(2) }}</p>
         </div>
         <div style="flex: 1 1 22%;">
             <label><strong>Interest Rate (%):</strong></label>
@@ -50,8 +50,12 @@
             <p>{{ compounding_frequency or "-" }}</p>
         </div>
         <div style="flex: 1 1 22%;">
-            <label><strong>Total Loan Amount:</strong></label>
+            <label><strong>Remaining Loan Amount:</strong></label>
             <p>{{ total_loan_amount or "-" }}</p>
+        </div>
+        <div style="flex: 1 1 22%;">
+            <label><strong>Total Amount:</strong></label>
+            <p>₦{{ total_amount_after_interest | float | round(2) }}</p>
         </div>
         <div style="flex: 1 1 22%;">
             <label><strong>Repayment Period (Months):</strong></label>
@@ -112,11 +116,11 @@
                         <td style="padding: 10px; border: 1px solid #ddd;">{{ row.paid_status or "Pending" }}</td>
                         <td style="padding: 10px; border: 1px solid #ddd;">{{ row.payment_date or "-" }}</td>
                         <td style="padding: 10px; border: 1px solid #ddd;">
-                            {% if row.payment_link %}
-                            <a href="{{ row.payment_link }}"
-                                class="{{ 'active-link' if is_current_month else 'disabled-link' }}">Pay Now</a>
+                            {% if row.payment_link and row.paid_status != "Paid" %}
+                                <a href="{{ row.payment_link }}"
+                                    class="{{ 'active-link' if is_current_month else 'disabled-link' }}">Pay Now</a>
                             {% else %}
-                            -
+                                -
                             {% endif %}
                         </td>
                     </tr>
