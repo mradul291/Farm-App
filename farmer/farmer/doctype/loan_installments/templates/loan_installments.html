@@ -12,7 +12,7 @@
         <!-- Row 1 -->
         <div style="flex: 1 1 22%;">
             <label><strong>Loan Ins ID:</strong></label>
-            <p>{{ name }}</p>
+            <p id="loan_id">{{ name }}</p>
         </div>
         <div style="flex: 1 1 22%;">
             <label><strong>Loan App ID:</strong></label>
@@ -139,16 +139,30 @@
     </div>
 
     <script>
-        frappe.call({
-            method: "farmer.api.loan_api.update_paid_installments",
-            args: {
-                loan_name: "{{ doc.name }}"
-            },
-            callback: function (r) {
-                if (r.message.updated) {
-                    console.log("Installment(s) updated.");
-                    location.reload(); 
-                }
+        document.addEventListener("DOMContentLoaded", function () {
+            // Ensure the page has loaded and the element is available
+            const loanIdElement = document.getElementById("loan_id");
+            if (loanIdElement) {
+                const loanName = loanIdElement.textContent.trim();
+
+                // Call the server-side function using frappe.call()
+                frappe.call({
+                    method: "farmer.api.loan_api.refresh_loan_installments",
+                    args: {
+                        loan_name: loanName
+                    },
+                    callback: function (r) {
+                        // Log the response to see the result
+                        console.log("Server Response:", r.message.status);
+                        if (r.message.status === "Updated") {
+                            // Optionally, refresh the page to see the updated details
+                            location.reload();
+                        }
+                    },
+                    error: function (err) {
+                        console.error("Error in refreshing loan installments:", err);
+                    }
+                });
             }
         });
     </script>

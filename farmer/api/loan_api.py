@@ -325,25 +325,34 @@ def make_installment_payment_request(dn):
     }   
 
 
-@frappe.whitelist()
-def update_paid_installments(loan_name):
-		loan = frappe.get_doc("Loan Installments", loan_name)
-		updated = False
+@frappe.whitelist(allow_guest=True)
+def refresh_loan_installments(loan_name):
+    try:
+        # Fetch the Loan Installments document
+        doc = frappe.get_doc("Loan Installments", loan_name)
+        updated = False
 
-		for row in loan.installments:
-			if row.payment_request:
-				status = frappe.db.get_value("Payment Request", row.payment_request, "status")
-				if status == "Paid":
-					if row.paid_status != "Paid":
-						row.paid_status = "Paid"
-						updated = True
-					if not row.payment_date:
-						row.payment_date = frappe.utils.nowdate()
-						updated = True
-						loan.total_loan_amount -= float(row.installment_amount or 0)
+        # Loop through each installment in the document
+        for row in doc.installments:
+            if row.payment_request:
+                # Fetch the status of the payment request
+                status = frappe.db.get_value("Payment Request", row.payment_request, "status")
+                
+                # If the payment is marked as "Paid", update the installment details
+                if status == "Paid":
+                    if row.paid_status != "Paid":
+                        row.paid_status = "Paid"
+                        updated = True
+                    if not row.payment_date:
+                        row.payment_date = nowdate()
+                        updated = True
 
-		if updated:
-			loan.save(ignore_permissions=True)
-			frappe.db.commit()
+        # Save the document if any changes were made
+        if updated:
+            doc.save(ignore_permissions=True)
+            return {"status": "Updated"}
+        else:
+            return {"status": "No Change"}
+    except Exception as e:
+        return {"status": "Error", "message": str(e)}
 
-		return {"updated": updated}
