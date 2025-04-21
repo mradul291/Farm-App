@@ -324,3 +324,26 @@ def make_installment_payment_request(dn):
         "payment_requests": created_requests
     }   
 
+
+@frappe.whitelist()
+def update_paid_installments(loan_name):
+		loan = frappe.get_doc("Loan Installments", loan_name)
+		updated = False
+
+		for row in loan.installments:
+			if row.payment_request:
+				status = frappe.db.get_value("Payment Request", row.payment_request, "status")
+				if status == "Paid":
+					if row.paid_status != "Paid":
+						row.paid_status = "Paid"
+						updated = True
+					if not row.payment_date:
+						row.payment_date = frappe.utils.nowdate()
+						updated = True
+						loan.total_loan_amount -= float(row.installment_amount or 0)
+
+		if updated:
+			loan.save(ignore_permissions=True)
+			frappe.db.commit()
+
+		return {"updated": updated}

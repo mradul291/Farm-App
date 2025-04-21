@@ -69,3 +69,6 @@ class LoanInstallments(WebsiteGenerator):
 
 		return context
 	
+
+
+	

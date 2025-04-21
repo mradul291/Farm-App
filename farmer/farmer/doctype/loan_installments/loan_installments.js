@@ -90,7 +90,6 @@ frappe.ui.form.on('Loan Installments', {
                                  frm.set_value("total_loan_amount", Math.round(newTotal));
 
                                  frm.save().then(() => {
-                                    frappe.msgprint(`Installment #${row.installment_number} marked as Paid and saved.`);
                                     frappe.set_route("Form", frm.doctype, frm.docname);
 
                                 });
