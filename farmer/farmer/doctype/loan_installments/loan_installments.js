@@ -52,51 +52,118 @@ frappe.ui.form.on('Loan Installment Breakdown', {
     }
 });
 
+// frappe.ui.form.on('Loan Installments', {
+//     onload_post_render(frm) {
+//         frm.doc.installments.forEach((row, index) => {
+//             if (row.payment_request) {
+//                 frappe.call({
+//                     method: "frappe.client.get_value",
+//                     args: {
+//                         doctype: "Payment Request",
+//                         filters: { name: row.payment_request },
+//                         fieldname: "status"
+//                     },
+//                     callback: function (r) {
+//                         if (r.message && r.message.status === "Paid") {
+//                             let updated = false;
+
+//                             if (row.paid_status !== "Paid") {
+//                                 row.paid_status = "Paid";
+//                                 updated = true;
+//                             }
+
+//                             if (!row.payment_date) {
+//                                 row.payment_date = frappe.datetime.get_today();
+//                                 updated = true;
+//                             }
+
+//                             frm.fields_dict["installments"].grid.grid_rows_by_docname[row.name]
+//                                 .toggle_editable("payment_link", false);
+
+//                             if (updated) {
+//                                 frm.refresh_field("installments");
+
+//                                  const amount = parseFloat(row.installment_amount || 0);
+//                                  const currentTotal = parseFloat(frm.doc.total_loan_amount || 0);
+//                                  const newTotal = currentTotal - amount;
+ 
+//                                  frm.set_value("total_loan_amount", Math.round(newTotal));
+//                                  frm.refresh_field('installments');
+//                                  frm.refresh_field("total_loan_amount");
+
+//                                  frm.save().then(() => {
+//                                     frappe.set_route("Form", frm.doctype, frm.docname);
+
+//                                 });
+//                             }
+//                         }
+//                     }
+//                 });
+//             }
+//         });
+//     }
+// });
+
+
 frappe.ui.form.on('Loan Installments', {
     onload_post_render(frm) {
+        let totalPaid = 0;
+        let promises = [];
+
         frm.doc.installments.forEach((row, index) => {
             if (row.payment_request) {
-                frappe.call({
-                    method: "frappe.client.get_value",
-                    args: {
-                        doctype: "Payment Request",
-                        filters: { name: row.payment_request },
-                        fieldname: "status"
-                    },
-                    callback: function (r) {
-                        if (r.message && r.message.status === "Paid") {
-                            let updated = false;
+                const p = new Promise((resolve) => {
+                    frappe.call({
+                        method: "frappe.client.get_value",
+                        args: {
+                            doctype: "Payment Request",
+                            filters: { name: row.payment_request },
+                            fieldname: "status"
+                        },
+                        callback: function (r) {
+                            if (r.message && r.message.status === "Paid") {
+                                let updated = false;
 
-                            if (row.paid_status !== "Paid") {
-                                row.paid_status = "Paid";
-                                updated = true;
+                                if (row.paid_status !== "Paid") {
+                                    row.paid_status = "Paid";
+                                    updated = true;
+                                }
+
+                                if (!row.payment_date) {
+                                    row.payment_date = frappe.datetime.get_today();
+                                    updated = true;
+                                }
+
+                                frm.fields_dict["installments"].grid.grid_rows_by_docname[row.name]
+                                    .toggle_editable("payment_link", false);
+
+                                if (updated) {
+                                    frm.refresh_field("installments");
+
+                                    const amount = parseFloat(row.installment_amount || 0);
+                                    totalPaid += amount;
+                                }
                             }
-
-                            if (!row.payment_date) {
-                                row.payment_date = frappe.datetime.get_today();
-                                updated = true;
-                            }
-
-                            frm.fields_dict["installments"].grid.grid_rows_by_docname[row.name]
-                                .toggle_editable("payment_link", false);
-
-                            if (updated) {
-                                frm.refresh_field("installments");
-
-                                 const amount = parseFloat(row.installment_amount || 0);
-                                 const currentTotal = parseFloat(frm.doc.total_loan_amount || 0);
-                                 const newTotal = currentTotal - amount;
- 
-                                 frm.set_value("total_loan_amount", Math.round(newTotal));
-                                 frm.refresh_field("total_loan_amount");
-
-                                 frm.save().then(() => {
-                                    frappe.set_route("Form", frm.doctype, frm.docname);
-
-                                });
-                            }
+                            resolve();  // Finish this promise
                         }
-                    }
+                    });
+                });
+
+                promises.push(p);
+            }
+        });
+
+        // After all API calls are done
+        Promise.all(promises).then(() => {
+            if (totalPaid > 0) {
+                const currentTotal = parseFloat(frm.doc.total_loan_amount || 0);
+                const newTotal = currentTotal - totalPaid;
+
+                frm.set_value("total_loan_amount", Math.round(newTotal));
+                frm.refresh_field("total_loan_amount");
+
+                frm.save().then(() => {
+                    frappe.set_route("Form", frm.doctype, frm.docname);
                 });
             }
         });
