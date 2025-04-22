@@ -326,33 +326,74 @@ def make_installment_payment_request(dn):
 
 #Function to refresh the Loan Installment document from web page using id.
 @frappe.whitelist(allow_guest=True)
+# def refresh_loan_installments(loan_name):
+#     try:
+#         # Fetch the Loan Installments document
+#         doc = frappe.get_doc("Loan Installments", loan_name)
+#         updated = False
+
+#         # Loop through each installment in the document
+#         for row in doc.installments:
+#             if row.payment_request:
+#                 # Fetch the status of the payment request
+#                 status = frappe.db.get_value("Payment Request", row.payment_request, "status")
+                
+#                 # If the payment is marked as "Paid", update the installment details
+#                 if status == "Paid":
+#                     if row.paid_status != "Paid":
+#                         row.paid_status = "Paid"
+#                         updated = True
+#                     if not row.payment_date:
+#                         row.payment_date = nowdate()
+#                         updated = True
+
+#         # Save the document if any changes were made
+#         if updated:
+#             doc.save(ignore_permissions=True)
+#             return {"status": "Updated"}
+#         else:
+#             return {"status": "No Change"}
+#     except Exception as e:
+#         return {"status": "Error", "message": str(e)}
+
 def refresh_loan_installments(loan_name):
     try:
-        # Fetch the Loan Installments document
         doc = frappe.get_doc("Loan Installments", loan_name)
         updated = False
+        total_deduction = 0
 
-        # Loop through each installment in the document
         for row in doc.installments:
             if row.payment_request:
-                # Fetch the status of the payment request
                 status = frappe.db.get_value("Payment Request", row.payment_request, "status")
-                
-                # If the payment is marked as "Paid", update the installment details
                 if status == "Paid":
+                    row_updated = False
+
                     if row.paid_status != "Paid":
                         row.paid_status = "Paid"
-                        updated = True
+                        row_updated = True
+
                     if not row.payment_date:
                         row.payment_date = nowdate()
+                        row_updated = True
+
+                    # ✅ Subtract amount only if not already deducted
+                    if not row.get("is_deducted"):
+                        installment_amount = flt(row.installment_amount or 0)
+                        total_deduction += installment_amount
+                        row.is_deducted = 1  # mark as deducted
+                        row_updated = True
+
+                    if row_updated:
                         updated = True
 
-        # Save the document if any changes were made
+        if total_deduction:
+            doc.total_loan_amount = flt(doc.total_loan_amount) - total_deduction
+
         if updated:
             doc.save(ignore_permissions=True)
             return {"status": "Updated"}
         else:
             return {"status": "No Change"}
+
     except Exception as e:
         return {"status": "Error", "message": str(e)}
-
