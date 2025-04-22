@@ -368,25 +368,19 @@ def refresh_loan_installments(loan_name):
                 if status == "Paid":
                     row_updated = False
 
+                    # ✅ Only do these updates once
                     if row.paid_status != "Paid":
                         row.paid_status = "Paid"
-                        row_updated = True
-
-                    if not row.payment_date:
                         row.payment_date = nowdate()
-                        row_updated = True
-
-                    # ✅ Subtract amount only if not already deducted
-                    if not row.get("is_deducted"):
                         installment_amount = flt(row.installment_amount or 0)
                         total_deduction += installment_amount
-                        row.is_deducted = 1  # mark as deducted
                         row_updated = True
 
                     if row_updated:
                         updated = True
 
-        if total_deduction:
+        # ✅ Reduce total only once per call
+        if total_deduction > 0:
             doc.total_loan_amount = flt(doc.total_loan_amount) - total_deduction
 
         if updated:
