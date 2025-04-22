@@ -104,10 +104,11 @@ frappe.ui.form.on('Loan Installment Breakdown', {
 //     }
 // });
 
+
 frappe.ui.form.on('Loan Installments', {
     onload_post_render(frm) {
-        frm.doc.installments.forEach((row, index) => {
-            if (row.payment_request) {
+        frm.doc.installments.forEach((row) => {
+            if (row.payment_request && row.paid_status !== "Paid") {
                 frappe.call({
                     method: "frappe.client.get_value",
                     args: {
@@ -117,39 +118,27 @@ frappe.ui.form.on('Loan Installments', {
                     },
                     callback: function (r) {
                         if (r.message && r.message.status === "Paid") {
-                            let wasAlreadyPaid = row.paid_status === "Paid";
-                            let updated = false;
+                            // Update paid status and payment date
+                            row.paid_status = "Paid";
+                            row.payment_date = frappe.datetime.get_today();
 
-                            if (!wasAlreadyPaid) {
-                                row.paid_status = "Paid";
-                                updated = true;
-                            }
-
-                            if (!row.payment_date) {
-                                row.payment_date = frappe.datetime.get_today();
-                                updated = true;
-                            }
-
+                            // Prevent editing of payment_link
                             frm.fields_dict["installments"].grid.grid_rows_by_docname[row.name]
                                 .toggle_editable("payment_link", false);
 
-                            if (updated) {
-                                frm.refresh_field("installments");
+                            // Perform loan amount calculation like in mode_of_payment
+                            const installmentAmount = parseFloat(row.installment_amount || 0);
+                            const currentTotalLoan = parseFloat(frm.doc.total_loan_amount || 0);
+                            const updatedTotal = currentTotalLoan - installmentAmount;
 
-                                // Only subtract if not already marked as paid
-                                if (!wasAlreadyPaid) {
-                                    const amount = parseFloat(row.installment_amount || 0);
-                                    const currentTotal = parseFloat(frm.doc.total_loan_amount || 0);
-                                    const newTotal = currentTotal - amount;
+                            frm.set_value('total_loan_amount', Math.round(updatedTotal));
+                            frm.refresh_field('installments');
+                            frm.refresh_field('total_loan_amount');
 
-                                    frm.set_value("total_loan_amount", Math.round(newTotal));
-                                    frm.refresh_field("total_loan_amount");
-
-                                    frm.save().then(() => {
-                                        frappe.set_route("Form", frm.doctype, frm.docname);
-                                    });
-                                }
-                            }
+                            // Save and stay on same form
+                            frm.save().then(() => {
+                                frappe.set_route("Form", frm.doctype, frm.docname);
+                            });
                         }
                     }
                 });
@@ -157,4 +146,3 @@ frappe.ui.form.on('Loan Installments', {
         });
     }
 });
-
