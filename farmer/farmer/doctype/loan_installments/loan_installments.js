@@ -88,6 +88,7 @@ frappe.ui.form.on('Loan Installments', {
                                  const newTotal = currentTotal - amount;
  
                                  frm.set_value("total_loan_amount", Math.round(newTotal));
+                                 frm.refresh_field("total_loan_amount");
 
                                  frm.save().then(() => {
                                     frappe.set_route("Form", frm.doctype, frm.docname);

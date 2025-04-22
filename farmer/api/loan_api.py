@@ -324,7 +324,7 @@ def make_installment_payment_request(dn):
         "payment_requests": created_requests
     }   
 
-
+#Function to refresh the Loan Installment document from web page using id.
 @frappe.whitelist(allow_guest=True)
 def refresh_loan_installments(loan_name):
     try:

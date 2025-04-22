@@ -69,13 +69,23 @@ class LoanApplication(WebsiteGenerator):
 						for item in si.items:
 							item.rate = per_item_amount
 							item.amount = per_item_amount
+							item.price_list_rate = per_item_amount
+							item.base_price_list_rate = per_item_amount
+							item.base_rate = per_item_amount
+							item.base_amount = per_item_amount
+							item.net_rate = per_item_amount
+							item.net_amount = per_item_amount
+							item.base_net_rate = per_item_amount
+							item.base_net_amount = per_item_amount
 
 					si.total = new_total
+					si.total_amount = new_total
 					si.grand_total = new_total
 					si.rounded_total = new_total
 					si.outstanding_amount = new_total
 					si.base_grand_total = new_total
 					si.base_rounded_total = new_total
+					si.outstanding = new_total
 
 					si.set_onload("ignore_validate_update_after_submit", True)
 					si.flags.ignore_validate_update_after_submit = True
