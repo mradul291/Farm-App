@@ -12,12 +12,12 @@
   "product_name",
   "item_code",
   "tier_name",
-  "total_amount",
   "column_break_knly",
   "loan_amount",
   "repayment_period",
   "interest_rate",
   "annual_income",
+  "total_amount",
   "section_break_1vxg",
   "down_payment_percentage",
   "down_payment_amount",
@@ -66,7 +66,8 @@
   {
    "fieldname": "interest_rate",
    "fieldtype": "Percent",
-   "label": "Interest Rate (%)\t"
+   "label": "Interest Rate (%)\t",
+   "read_only": 1
   },
   {
    "fieldname": "loan_purpose",
@@ -132,7 +133,8 @@
   {
    "fieldname": "down_payment_percentage",
    "fieldtype": "Float",
-   "label": "Down Payment(%)"
+   "label": "Down Payment(%)",
+   "read_only": 1
   },
   {
    "fieldname": "down_payment_amount",
@@ -167,7 +169,8 @@
    "fieldname": "compounding_frequency",
    "fieldtype": "Select",
    "label": "Compounding Frequency",
-   "options": "Monthly (12)"
+   "options": "Monthly (12)",
+   "read_only": 1
   },
   {
    "fieldname": "route",
@@ -212,7 +215,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-25 16:34:58.673463",
+ "modified": "2025-04-25 19:03:47.755750",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",
