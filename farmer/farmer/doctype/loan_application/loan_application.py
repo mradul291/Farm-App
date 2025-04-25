@@ -69,30 +69,39 @@ class LoanApplication(WebsiteGenerator):
 						for item in si.items:
 							item.rate = per_item_amount
 							item.amount = per_item_amount
-							item.price_list_rate = per_item_amount
-							item.base_price_list_rate = per_item_amount
-							item.base_rate = per_item_amount
-							item.base_amount = per_item_amount
-							item.net_rate = per_item_amount
-							item.net_amount = per_item_amount
-							item.base_net_rate = per_item_amount
-							item.base_net_amount = per_item_amount
+							# item.price_list_rate = per_item_amount
+							# item.base_price_list_rate = per_item_amount
+							# item.base_rate = per_item_amount
+							# item.base_amount = per_item_amount
+							# item.net_rate = per_item_amount
+							# item.net_amount = per_item_amount
+							# item.base_net_rate = per_item_amount
+							# item.base_net_amount = per_item_amount
 
 					si.total = new_total
 					si.total_amount = new_total
 					si.grand_total = new_total
 					si.rounded_total = new_total
 					si.outstanding_amount = new_total
+					# si.base_outstanding = new_total
+					# si.outstanding = new_total
+
+					si.total_amount_after_interest = new_total
 					si.base_grand_total = new_total
 					si.base_rounded_total = new_total
-					si.outstanding = new_total
-
-					si.set_onload("ignore_validate_update_after_submit", True)
+					si.base_net_total = new_total
+					si.base_total = new_total
+					si.base_rounding_adjustment = new_total
+					si.total_billing_amount = new_total
+					si.total_allocated_amount = new_total
+					
 					si.flags.ignore_validate_update_after_submit = True
 					si.flags.ignore_validate = True
 					si.flags.ignore_mandatory = True
 					si.flags.ignore_permissions = True
 					si.save()
+					si.submit()
 					frappe.msgprint(f"Sales Invoice {si.name} updated with new total amount: {new_total}")
 			except Exception as e:
 				frappe.log_error(frappe.get_traceback(), "Error Updating Sales Invoice from Loan Application")
+

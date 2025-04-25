@@ -20,7 +20,6 @@ def create_invoice_from_sales_order(sales_order):
     si = make_sales_invoice(sales_order, ignore_permissions=True)
     si.allocate_advances_automatically = True
     si.insert(ignore_permissions=True)
-    si.submit()
      
     loan_app = frappe.get_all("Loan Application", filters={"sales_order": sales_order}, fields=["name"], limit=1)
 
@@ -237,7 +236,6 @@ def generate_installment_breakdown(loan_installment, loan_amount, interest_rate,
             "mode_of_payment": "Paystack"
         })
 
-
 @frappe.whitelist(allow_guest=True)
 def make_installment_payment_request(dn):
     if not dn:
@@ -333,7 +331,7 @@ def refresh_loan_installments(loan_name):
         updated = False
 
         # Loop through each installment in the document
-        for row in doc.installments:
+        for row in doc.installments:    
             if row.payment_request:
                 # Fetch the status of the payment request
                 status = frappe.db.get_value("Payment Request", row.payment_request, "status")
@@ -343,12 +341,18 @@ def refresh_loan_installments(loan_name):
                     if row.paid_status != "Paid":
                         row.paid_status = "Paid"
                         updated = True
+
+                        # Subtract installment amount from total_loan_amount
+                        if row.installment_amount:
+                            doc.total_loan_amount = flt(doc.total_loan_amount) - flt(row.installment_amount)
+                            updated = True
+
                     if not row.payment_date:
                         row.payment_date = nowdate()
                         updated = True
 
         # Save the document if any changes were made
-        if updated:
+        if updated: 
             doc.save(ignore_permissions=True)
             return {"status": "Updated"}
         else:
@@ -356,38 +360,3 @@ def refresh_loan_installments(loan_name):
     except Exception as e:
         return {"status": "Error", "message": str(e)}
 
-# def refresh_loan_installments(loan_name):
-#     try:
-#         doc = frappe.get_doc("Loan Installments", loan_name)
-#         updated = False
-#         total_deduction = 0
-
-#         for row in doc.installments:
-#             if row.payment_request:
-#                 status = frappe.db.get_value("Payment Request", row.payment_request, "status")
-#                 if status == "Paid":
-#                     row_updated = False
-
-#                     # ✅ Only do these updates once
-#                     if row.paid_status != "Paid":
-#                         row.paid_status = "Paid"
-#                         row.payment_date = nowdate()
-#                         installment_amount = flt(row.installment_amount or 0)
-#                         total_deduction += installment_amount
-#                         row_updated = True
-
-#                     if row_updated:
-#                         updated = True
-
-#         # ✅ Reduce total only once per call
-#         if total_deduction > 0:
-#             doc.total_loan_amount = flt(doc.total_loan_amount) - total_deduction
-
-#         if updated:
-#             doc.save(ignore_permissions=True)
-#             return {"status": "Updated"}
-#         else:
-#             return {"status": "No Change"}
-
-#     except Exception as e:
-#         return {"status": "Error", "message": str(e)}

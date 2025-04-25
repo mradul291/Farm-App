@@ -201,7 +201,6 @@ permission_query_conditions = {
     "Item": "farmer.api.user_api.item_permission_query_conditions",
     "Loan Application": "farmer.api.user_api.loan_application_permission_query_conditions",
     "Website Item": "farmer.api.user_api.user_specific_website_item",
-    # "Farmer Master": "farmer.api.user_api.user_specific_farmer_master"
 }
 
 doc_events = {
@@ -211,7 +210,7 @@ doc_events = {
     },
     "Loan Application": {
         "on_update": "farmer.api.loan_api.create_loan_installments"
-    }
+    },
 }
 
 # Overriding Methods
