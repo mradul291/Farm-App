@@ -73,7 +73,7 @@ function calculate_total_amount_with_interest(frm) {
         let n = frm.doc.repayment_period;
 
         let emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-        emi = parseFloat(emi.toFixed(2));  
+        emi = Math.round(emi);  
         let total_emi = emi * n;
 
         let down_payment = frm.doc.down_payment_amount || 0;
