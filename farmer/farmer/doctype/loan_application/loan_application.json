@@ -10,6 +10,8 @@
   "applicant",
   "applicant_name",
   "product_name",
+  "item_code",
+  "tier_name",
   "total_amount",
   "column_break_knly",
   "loan_amount",
@@ -59,7 +61,6 @@
    "fieldname": "repayment_period",
    "fieldtype": "Select",
    "label": "Repayment Period (Months)\t",
-   "options": "3\n6\n12\n24\n36\n48\n60\n72\n84\n96\n108\n120",
    "read_only": 1
   },
   {
@@ -192,13 +193,26 @@
    "label": "Sales Invoice",
    "options": "Sales Invoice",
    "read_only": 1
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Data",
+   "label": "Item Code",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tier_name",
+   "fieldtype": "Data",
+   "label": "Tier Name",
+   "options": "Tier Master",
+   "read_only": 1
   }
  ],
  "has_web_view": 1,
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-18 19:17:32.891570",
+ "modified": "2025-04-25 16:34:58.673463",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",
