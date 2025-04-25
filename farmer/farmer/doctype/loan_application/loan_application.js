@@ -21,6 +21,28 @@ frappe.ui.form.on('Loan Application', {
         frm.refresh();
     },
 
+    onload: function(frm) {
+        // Trigger calculations based on initial data available in the fields
+        if (frm.doc.loan_amount && frm.doc.down_payment_percentage) {
+            calculate_down_payment(frm);
+        }
+        if (frm.doc.loan_amount && frm.doc.interest_rate && frm.doc.repayment_period) {
+            calculate_total_amount_with_interest(frm);
+        }
+    },
+
+    refresh: function(frm) {
+        if (!frm.doc.__islocal) {
+            // If the document is not new, trigger calculations
+            if (frm.doc.loan_amount && frm.doc.interest_rate && frm.doc.repayment_period) {
+                calculate_total_amount_with_interest(frm);
+            }
+            if (frm.doc.down_payment_percentage) {
+                calculate_down_payment(frm);
+            }
+        }
+    },
+
     validate: function (frm) {
         if (!frm.doc.remarks || frm.doc.remarks.trim() === "") {
             frappe.throw(__('Please add remarks for the loan application before saving.'));
@@ -52,6 +74,7 @@ frappe.ui.form.on('Loan Application', {
         }
     }
 });
+
 
 function calculate_down_payment(frm) {
     if (frm.doc.total_amount && frm.doc.down_payment_percentage) {
