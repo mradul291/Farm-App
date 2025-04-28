@@ -70,11 +70,10 @@ frappe.ui.form.on('Loan Application', {
     before_workflow_action: function (frm) {
         const action = frm.selected_workflow_action;
         if (action === "Approve" && !frm.doc.down_payment_check) {
-            frappe.throw(__('Cannot approve the application until Down Payment is done.'));
+            frappe.throw(__('User has not completed the Down Payment yet. Try after refreshing the page'));
         }
     }
 });
-
 
 function calculate_down_payment(frm) {
     if (frm.doc.total_amount && frm.doc.down_payment_percentage) {
@@ -103,5 +102,69 @@ function calculate_total_amount_with_interest(frm) {
         let total = total_emi + down_payment;
 
         frm.set_value('total_amount_after_interest', parseInt(total));
+    }
+}
+
+
+frappe.ui.form.on('Loan Application', {
+    refresh: function(frm) {
+        if (frm.doc.tier_name) {
+            fetch_and_set_tier_details(frm);
+        }
+    },
+    repayment_period: function(frm) {
+        update_interest_rate(frm);
+    }
+});
+
+// Function to fetch Tier Details and set Repayment Period options
+function fetch_and_set_tier_details(frm) {
+    frappe.call({
+        method: "frappe.client.get",
+        args: {
+            doctype: "Tier Master",
+            name: frm.doc.tier_name
+        },
+        callback: function(tierResponse) {
+            if (tierResponse && tierResponse.message) {
+                let tierMaster = tierResponse.message;
+                let tierDetails = tierMaster.tier_details || [];
+
+                console.log("Fetched Tier Details (Child Table):", tierDetails);
+
+                frm.doc._tier_details = tierDetails; // temporarily store for later use
+
+                // Prepare Repayment Period options
+                let tenureOptions = tierDetails
+                    .map(entry => entry.tenure_months)
+                    .filter(months => months)
+                    .map(String);
+
+                tenureOptions = [...new Set(tenureOptions)]; // remove duplicates
+
+                console.log("Setting Repayment Period Options:", tenureOptions);
+
+                frm.set_df_property("repayment_period", "options", tenureOptions);
+                frm.refresh_field("repayment_period");
+            }
+        }
+    });
+}
+
+// Function to update Interest Rate based on selected Repayment Period
+function update_interest_rate(frm) {
+    if (frm.doc.repayment_period && frm.doc._tier_details) {
+        let selectedTenure = frm.doc.repayment_period;
+
+        // Find matching record
+        let match = frm.doc._tier_details.find(entry => 
+            String(entry.tenure_months) === String(selectedTenure)
+        );
+
+        if (match) {
+            frm.set_value("interest_rate", match.interest_rate || 0);
+        } else {
+            frm.set_value("interest_rate", 0);
+        }
     }
 }

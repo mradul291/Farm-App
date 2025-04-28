@@ -23,7 +23,7 @@
  "list_columns": [],
  "login_required": 0,
  "max_attachment_size": 0,
- "modified": "2025-04-25 19:05:05.374463",
+ "modified": "2025-04-28 10:57:44.204940",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "loan-application-form",
@@ -169,7 +169,7 @@
    "max_value": 0,
    "precision": "",
    "read_only": 0,
-   "reqd": 1,
+   "reqd": 0,
    "show_in_filter": 0
   },
   {
@@ -200,12 +200,12 @@
   {
    "allow_read_on_all_link_options": 0,
    "fieldname": "down_payment_percentage",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "hidden": 0,
    "label": "Down Payment(%)",
    "max_length": 0,
    "max_value": 0,
-   "options": "10\n20\n30\n40\n50\n60\n70\n80\n90\n90\n100",
+   "options": "Down Payment Percent",
    "precision": "",
    "read_only": 0,
    "reqd": 1,
