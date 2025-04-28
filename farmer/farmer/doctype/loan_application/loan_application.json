@@ -60,14 +60,12 @@
   {
    "fieldname": "repayment_period",
    "fieldtype": "Select",
-   "label": "Repayment Period (Months)\t",
-   "read_only": 1
+   "label": "Repayment Period (Months)\t"
   },
   {
    "fieldname": "interest_rate",
    "fieldtype": "Percent",
-   "label": "Interest Rate (%)\t",
-   "read_only": 1
+   "label": "Interest Rate (%)\t"
   },
   {
    "fieldname": "loan_purpose",
@@ -132,9 +130,9 @@
   },
   {
    "fieldname": "down_payment_percentage",
-   "fieldtype": "Float",
+   "fieldtype": "Link",
    "label": "Down Payment(%)",
-   "read_only": 1
+   "options": "Down Payment Percent"
   },
   {
    "fieldname": "down_payment_amount",
@@ -215,7 +213,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-25 19:03:47.755750",
+ "modified": "2025-04-28 11:22:37.710805",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",
