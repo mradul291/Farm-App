@@ -8,8 +8,10 @@
  "field_order": [
   "sponsored_equipments_section",
   "equipment",
+  "equipment_name",
   "quantity",
   "discount",
+  "tier",
   "female_discount"
  ],
  "fields": [
@@ -22,7 +24,8 @@
    "fieldname": "equipment",
    "fieldtype": "Link",
    "label": "Equipment",
-   "options": "Website Item"
+   "options": "Website Item",
+   "read_only": 1
   },
   {
    "fieldname": "quantity",
@@ -39,12 +42,26 @@
    "fieldname": "female_discount",
    "fieldtype": "Check",
    "label": "Have a separate discount for females?"
+  },
+  {
+   "fieldname": "tier",
+   "fieldtype": "Link",
+   "label": "Tier",
+   "options": "Tier Master",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "equipment.item_name",
+   "fieldname": "equipment_name",
+   "fieldtype": "Data",
+   "label": "Equipment Name",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-03-25 16:27:47.669846",
+ "modified": "2025-04-30 15:30:45.184373",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Sponsored Equipments Table",
