@@ -3,14 +3,6 @@ frappe.ui.form.on("PUE Sponsor", {
         calculate_total_quantity(frm);
         no_of_equipments(frm);
     },
-    sponsored_equipments_add: function (frm) {
-        calculate_total_quantity(frm);
-        no_of_equipments(frm);
-    },
-    sponsored_equipments_remove: function (frm) {
-        calculate_total_quantity(frm);
-        no_of_equipments(frm);
-    }
 });
 
 frappe.ui.form.on("Sponsored Equipments", {
@@ -123,9 +115,12 @@ frappe.ui.form.on('Sponsored Equipments Table', {
 frappe.ui.form.on('Sponsored Equipments Table', {
     equipment: function (frm, cdt, cdn) {
         calculate_row_value_and_total(frm, cdt, cdn);
+        no_of_equipments(frm);
+        
     },
     quantity: function (frm, cdt, cdn) {
         calculate_row_value_and_total(frm, cdt, cdn);
+        calculate_total_quantity(frm);
     }
 });
 
