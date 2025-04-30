@@ -351,6 +351,12 @@ def refresh_loan_installments(loan_name):
                         row.payment_date = nowdate()
                         updated = True
 
+        # Check if all installments are paid (loan fully settled)
+        if flt(doc.total_loan_amount) <= 0:
+            doc.total_loan_amount = 0  # Ensure it's exactly zero
+            doc.status = "Deactive"
+            updated = True
+
         # Save the document if any changes were made
         if updated: 
             doc.save(ignore_permissions=True)
