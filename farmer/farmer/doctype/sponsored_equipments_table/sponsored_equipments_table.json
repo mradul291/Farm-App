@@ -24,8 +24,7 @@
    "fieldname": "equipment",
    "fieldtype": "Link",
    "label": "Equipment",
-   "options": "Website Item",
-   "read_only": 1
+   "options": "Website Item"
   },
   {
    "fieldname": "quantity",
@@ -61,7 +60,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-04-30 15:30:45.184373",
+ "modified": "2025-04-30 16:05:37.260007",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Sponsored Equipments Table",
