@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"uSJHfF605l\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Farms</span>\",\"col\":12}},{\"id\":\"rFWWi-4cxL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Farms\",\"col\":3}}]",
+ "content": "[{\"id\":\"uSJHfF605l\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Farms</span>\",\"col\":12}},{\"id\":\"P7zWMqjEke\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total number of farms\",\"col\":4}},{\"id\":\"MOmAvoa9e8\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total number of crops\",\"col\":4}},{\"id\":\"sRwJk4ePt-\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"rFWWi-4cxL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Farms\",\"col\":3}},{\"id\":\"XSVO7xMzzs\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Crops\",\"col\":3}}]",
  "creation": "2025-05-08 16:34:31.901774",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,11 +13,20 @@
  "is_hidden": 0,
  "label": "Farms",
  "links": [],
- "modified": "2025-05-08 16:43:09.564937",
+ "modified": "2025-05-08 18:04:05.664999",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Farms",
- "number_cards": [],
+ "number_cards": [
+  {
+   "label": "Total number of farms",
+   "number_card_name": "Total number of farms"
+  },
+  {
+   "label": "Total number of crops",
+   "number_card_name": "Total number of crops"
+  }
+ ],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
@@ -27,13 +36,21 @@
    "role": "Farmer"
   }
  ],
- "sequence_id": 27.0,
+ "sequence_id": 28.0,
  "shortcuts": [
   {
    "color": "Grey",
    "doc_view": "List",
    "label": "Farms",
    "link_to": "Farm Master",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Crops",
+   "link_to": "Crops Master",
    "stats_filter": "[]",
    "type": "DocType"
   }
