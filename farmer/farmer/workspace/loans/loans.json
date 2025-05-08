@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"EQuFxA-w-h\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Loans</span>\",\"col\":12}},{\"id\":\"TQAYgPzAI5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loan Applications\",\"col\":3}},{\"id\":\"VNlhGzyABZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loan Installments\",\"col\":3}}]",
+ "content": "[{\"id\":\"EQuFxA-w-h\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Loans</span>\",\"col\":12}},{\"id\":\"wCz4iFvbZh\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Applied Loan\",\"col\":4}},{\"id\":\"bSmSLAXtHM\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"TQAYgPzAI5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loan Applications\",\"col\":3}},{\"id\":\"VNlhGzyABZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loan Installments\",\"col\":3}}]",
  "creation": "2025-05-08 16:15:55.790519",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,11 +13,16 @@
  "is_hidden": 0,
  "label": "Loans",
  "links": [],
- "modified": "2025-05-08 17:16:47.323499",
+ "modified": "2025-05-08 19:41:02.144662",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loans",
- "number_cards": [],
+ "number_cards": [
+  {
+   "label": "Total Applied Loan",
+   "number_card_name": "Total Loan Applied"
+  }
+ ],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,

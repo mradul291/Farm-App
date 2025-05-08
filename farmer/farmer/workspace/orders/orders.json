@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"mHUhbGEJ_J\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Orders</span>\",\"col\":12}},{\"id\":\"thadjU4f-x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Orders\",\"col\":3}}]",
+ "content": "[{\"id\":\"mHUhbGEJ_J\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Orders</span>\",\"col\":12}},{\"id\":\"z6Oep28Cpa\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Orders\",\"col\":4}},{\"id\":\"7eZTNRTFbz\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"thadjU4f-x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Orders\",\"col\":3}}]",
  "creation": "2025-05-08 16:39:43.890370",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,11 +13,16 @@
  "is_hidden": 0,
  "label": "Orders",
  "links": [],
- "modified": "2025-05-08 17:16:47.053694",
+ "modified": "2025-05-08 19:35:05.728795",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Orders",
- "number_cards": [],
+ "number_cards": [
+  {
+   "label": "Total Orders",
+   "number_card_name": "Total Orders-1"
+  }
+ ],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
