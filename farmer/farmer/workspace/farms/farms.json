@@ -1,0 +1,42 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"uSJHfF605l\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Farms</span>\",\"col\":12}},{\"id\":\"rFWWi-4cxL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Farms\",\"col\":3}}]",
+ "creation": "2025-05-08 16:34:31.901774",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "today",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Farms",
+ "links": [],
+ "modified": "2025-05-08 16:43:09.564937",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Farms",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "Farmer"
+  }
+ ],
+ "sequence_id": 27.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Farms",
+   "link_to": "Farm Master",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Farms"
+}

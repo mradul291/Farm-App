@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Dash Board",
  "links": [],
- "modified": "2025-05-08 15:48:03.636672",
+ "modified": "2025-05-08 16:43:09.192179",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Dash Board",
@@ -56,24 +56,10 @@
   {
    "color": "Grey",
    "doc_view": "List",
-   "label": "Loan Applications",
-   "type": "URL",
-   "url": "http://127.0.0.1:8004/loan-application"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
    "label": "Loan Application",
    "link_to": "Loan Application",
    "stats_filter": "[]",
    "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Loan Installments",
-   "type": "URL",
-   "url": "http://127.0.0.1:8004/loan-installment"
   },
   {
    "color": "Grey",
