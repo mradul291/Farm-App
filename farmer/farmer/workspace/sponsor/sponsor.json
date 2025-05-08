@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Sponsor",
  "links": [],
- "modified": "2025-05-08 12:30:35.430898",
+ "modified": "2025-05-08 16:43:09.488420",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Sponsor",
@@ -44,7 +44,7 @@
    "role": "Administrator"
   }
  ],
- "sequence_id": 25.0,
+ "sequence_id": 26.0,
  "shortcuts": [
   {
    "color": "Grey",
