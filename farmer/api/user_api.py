@@ -659,3 +659,13 @@ def user_specific_crops(user):
         return None
     else:
         return f"`tabCrops Master`.owner = '{user}'"
+    
+
+# 11: Check for User Specific Sales Orders  
+
+def user_specific_sales_order(user):
+    if not user: user = frappe.session.user
+    if "System Manager" in frappe.get_roles(user):
+        return None
+    else:
+        return f"`tabSales Order`.owner = '{user}'"

@@ -326,7 +326,7 @@ def make_installment_payment_request(dn):
 @frappe.whitelist(allow_guest=True)
 def refresh_loan_installments(loan_name):
     try:
-        # Fetch the Loan Installments document
+        # Fetch the Loan Installments documentt
         doc = frappe.get_doc("Loan Installments", loan_name)
         updated = False
 
