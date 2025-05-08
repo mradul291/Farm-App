@@ -15,7 +15,7 @@
       </a>
       <a class="text-gray-600" href="#">
         Already have an account?
-        <span class="text-green-600" href="/login">Log in</span>
+        <a class="text-green-600" href="/login">Log in</a>
       </a>
     </div>
     <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md">
