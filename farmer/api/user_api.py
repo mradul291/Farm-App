@@ -633,5 +633,20 @@ def user_specific_website_item(user):
     else:
         return f"`tabWebsite Item`.owner = '{user}'"
     
-# API 9: Check for User Specific Farmer Master View
+# API 9: Check for User Specific Farms 
 
+def user_specific_farms(user):
+    if not user: user = frappe.session.user
+    if "System Manager" in frappe.get_roles(user):
+        return None
+    else:
+        return f"`tabFarm Master`.owner = '{user}'"
+    
+# 10: Check for User Specific Loan Installments 
+
+def user_specific_loan_installments(user):
+    if not user: user = frappe.session.user
+    if "System Manager" in frappe.get_roles(user):
+        return None
+    else:
+        return f"`tabLoan Installments`.owner = '{user}'"
