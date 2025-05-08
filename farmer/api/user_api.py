@@ -650,3 +650,12 @@ def user_specific_loan_installments(user):
         return None
     else:
         return f"`tabLoan Installments`.owner = '{user}'"
+    
+# 11: Check for User Specific Crops  
+
+def user_specific_crops(user):
+    if not user: user = frappe.session.user
+    if "System Manager" in frappe.get_roles(user):
+        return None
+    else:
+        return f"`tabCrops Master`.owner = '{user}'"
