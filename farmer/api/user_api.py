@@ -196,7 +196,7 @@ def create_user_farmer(data):
     # Optional Fields
     optional_fields = [  "id_type", "id_number", "bank_name", "account_number", 
         "crops_processed", "qty_processed_daily", "equipments_used", "unit",  "longitude", 
-        "latitude", "crops", "actual_crops"
+        "latitude", "crops", "actual_crops", "address"
     ]
     
     user_data = {field: data.get(field, "" if field not in ["crops", "actual_crops"] else []) for field in optional_fields}
@@ -294,7 +294,7 @@ def update_farm_in_farmer(farmer_id, farm_id):
         return False
 
 # @frappe.whitelist(allow_guest=True)
-def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site):
+def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site,address):
     try:
         # Get JSON data from Postman request
         data = frappe.request.get_json()
@@ -332,6 +332,7 @@ def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site):
             "associated_farmer":farmer_id,
             "site":site,
             "longitude": longitude,
+            "address": address,
             "latitude": latitude,
             "crop_name": crop_table,        # MultiSelect Table field
             "actual_crops": actual_crop_table  # Child Table field

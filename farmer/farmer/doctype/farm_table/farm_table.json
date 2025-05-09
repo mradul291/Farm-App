@@ -1,66 +1,78 @@
 {
-    "actions": [],
-    "allow_rename": 1,
-    "creation": "2025-03-12 12:27:23.863303",
-    "doctype": "DocType",
-    "editable_grid": 1,
-    "engine": "InnoDB",
-    "field_order": [
-        "farm",
-        "farm_name",
-        "longitude",
-        "latitude",
-        "crops",
-        "document"
-    ],
-    "fields": [
-        {
-            "fetch_from": "farm.farm_name",
-            "fieldname": "farm_name",
-            "fieldtype": "Data",
-            "label": "Farm Name"
-        },
-        {
-            "fetch_from": "farm.longitude",
-            "fieldname": "longitude",
-            "fieldtype": "Data",
-            "label": "Longitude"
-        },
-        {
-            "fetch_from": "farm.longitude",
-            "fieldname": "latitude",
-            "fieldtype": "Data",
-            "label": "Latitude"
-        },
-        {
-            "fetch_from": "farm.crop_name",
-            "fieldname": "crops",
-            "fieldtype": "Data",
-            "label": "Crops"
-        },
-        {
-            "fetch_from": "farm.documents",
-            "fieldname": "document",
-            "fieldtype": "Data",
-            "label": "Document"
-        },
-        {
-            "fieldname": "farm",
-            "fieldtype": "Link",
-            "label": "Farm",
-            "options": "Farm Master"
-        }
-    ],
-    "index_web_pages_for_search": 1,
-    "istable": 1,
-    "links": [],
-    "modified": "2025-04-01 12:49:14.084806",
-    "modified_by": "Administrator",
-    "module": "Farmer",
-    "name": "Farm Table",
-    "owner": "Administrator",
-    "permissions": [],
-    "sort_field": "modified",
-    "sort_order": "DESC",
-    "states": []
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-03-12 12:27:23.863303",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "farm",
+  "farm_name",
+  "longitude",
+  "latitude",
+  "crops",
+  "document"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "fetch_from": "farm.farm_name",
+   "fieldname": "farm_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Farm Name"
+  },
+  {
+   "columns": 2,
+   "fetch_from": "farm.longitude",
+   "fieldname": "longitude",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Longitude"
+  },
+  {
+   "columns": 2,
+   "fetch_from": "farm.longitude",
+   "fieldname": "latitude",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Latitude"
+  },
+  {
+   "columns": 2,
+   "fetch_from": "farm.crop_name",
+   "fieldname": "crops",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Crops"
+  },
+  {
+   "columns": 1,
+   "fetch_from": "farm.documents",
+   "fieldname": "document",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Document"
+  },
+  {
+   "columns": 1,
+   "fieldname": "farm",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Farm",
+   "options": "Farm Master"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-05-09 11:46:47.963693",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Farm Table",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
 }
