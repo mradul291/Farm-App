@@ -170,11 +170,16 @@ function update_interest_rate(frm) {
 }
 
 frappe.ui.form.on('Loan Application', {
-    refresh: function (frm) {
-        if (frm.doc.sales_invoice && frm.doc.mode_of_down_payment !== "Cash") {
-            frm.add_custom_button(__('Cash Down Payment'), function () {
+    mode_of_down_payment: function (frm) {
+        if (
+            frm.doc.mode_of_down_payment === "Cash" &&
+            frm.doc.sales_invoice
+        ) {
+            // First save the form to ensure everything is up to date
+            frm.save().then(() => {
+                // Call backend method to create or get Payment Request
                 frappe.call({
-                    method: "farmer.api.loan_api.make_loan_payment_request", // Your Python method
+                    method: "farmer.api.loan_api.make_loan_payment_request",
                     args: {
                         dn: frm.doc.sales_invoice,
                         dt: "Sales Invoice",
@@ -183,6 +188,7 @@ frappe.ui.form.on('Loan Application', {
                     },
                     callback: function (r) {
                         if (r.message && r.message.payment_request) {
+                            // Make Payment Entry directly
                             frappe.call({
                                 method: "erpnext.accounts.doctype.payment_request.payment_request.make_payment_entry",
                                 args: {
