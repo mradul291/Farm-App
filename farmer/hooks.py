@@ -215,6 +215,9 @@ doc_events = {
     "Loan Application": {
         "on_update": "farmer.api.loan_api.create_loan_installments"
     },
+    "Payment Entry": {
+        "on_submit": "farmer.api.loan_api.update_down_payment_mode"
+    }
 }
 
 # Overriding Methods

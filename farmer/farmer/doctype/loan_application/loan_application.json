@@ -9,6 +9,7 @@
  "field_order": [
   "applicant",
   "applicant_name",
+  "loan_installment",
   "product_name",
   "item_code",
   "tier_name",
@@ -21,6 +22,7 @@
   "section_break_1vxg",
   "down_payment_percentage",
   "down_payment_amount",
+  "mode_of_down_payment",
   "down_payment_check",
   "column_break_teuj",
   "compounding_frequency",
@@ -207,13 +209,26 @@
    "label": "Tier Name",
    "options": "Tier Master",
    "read_only": 1
+  },
+  {
+   "fieldname": "loan_installment",
+   "fieldtype": "Link",
+   "label": "Loan Installment",
+   "options": "Loan Installments",
+   "read_only": 1
+  },
+  {
+   "fieldname": "mode_of_down_payment",
+   "fieldtype": "Select",
+   "label": "Mode Of Down payment",
+   "options": "Paystack\nCash"
   }
  ],
  "has_web_view": 1,
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-28 11:22:37.710805",
+ "modified": "2025-05-09 16:00:34.475995",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",
