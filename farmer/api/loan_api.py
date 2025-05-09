@@ -370,20 +370,5 @@ def refresh_loan_installments(loan_name):
         return {"status": "Error", "message": str(e)}
     
 
-@frappe.whitelist()
-def update_down_payment_mode(doc, method):
-    # Iterate through the references table (child table of Payment Entry)
-    for ref in doc.get("references", []):
-        if ref.reference_doctype == "Sales Invoice":
-            linked_loans = frappe.get_all(
-                "Loan Application", 
-                filters={"sales_invoice": ref.reference_name},
-                pluck="name"
-            )
-            for loan_name in linked_loans:
-                loan_doc = frappe.get_doc("Loan Application", loan_name)
-                if not loan_doc.mode_of_down_payment:
-                    loan_doc.db_set("mode_of_down_payment", "Cash")
-
 
 
