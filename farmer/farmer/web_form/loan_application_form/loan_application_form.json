@@ -23,7 +23,7 @@
  "list_columns": [],
  "login_required": 0,
  "max_attachment_size": 0,
- "modified": "2025-04-28 10:57:44.204940",
+ "modified": "2025-05-09 12:23:34.544040",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "loan-application-form",
@@ -122,7 +122,7 @@
   {
    "allow_read_on_all_link_options": 0,
    "fieldname": "loan_amount",
-   "fieldtype": "Currency",
+   "fieldtype": "Data",
    "hidden": 0,
    "label": "Loan Amount\t",
    "max_length": 0,

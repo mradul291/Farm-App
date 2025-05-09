@@ -11,20 +11,24 @@
  ],
  "fields": [
   {
+   "columns": 2,
    "fieldname": "tenure_months",
    "fieldtype": "Int",
+   "in_list_view": 1,
    "label": "Tenure (Months)\t"
   },
   {
+   "columns": 2,
    "fieldname": "interest_rate",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Interest Rate (%)"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-04-25 14:54:56.240483",
+ "modified": "2025-05-09 11:45:04.181862",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Tier Details",
