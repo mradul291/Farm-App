@@ -372,3 +372,17 @@ def refresh_loan_installments(loan_name):
 
 
 
+@frappe.whitelist()
+def update_down_payment_mode(doc, method):
+    # Ensure you're working with a doc object
+    if isinstance(doc, str):
+        doc = frappe.get_doc(json.loads(doc))
+
+    for ref in doc.references:
+        if ref.reference_doctype == "Sales Invoice":
+            sales_invoice = ref.reference_name
+
+            loan_app = frappe.db.get_value("Sales Invoice", sales_invoice, "loan_application")
+            if loan_app:
+                frappe.db.set_value("Loan Application", loan_app, "mode_of_down_payment", "Cash")
+                frappe.db.commit()
