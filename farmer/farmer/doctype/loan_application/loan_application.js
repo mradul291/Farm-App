@@ -168,3 +168,40 @@ function update_interest_rate(frm) {
         }
     }
 }
+
+frappe.ui.form.on('Loan Application', {
+    refresh: function (frm) {
+        if (frm.doc.sales_invoice && frm.doc.mode_of_down_payment !== "Cash") {
+            frm.add_custom_button(__('Cash Down Payment'), function () {
+                frappe.call({
+                    method: "farmer.api.loan_api.make_loan_payment_request", // Your Python method
+                    args: {
+                        dn: frm.doc.sales_invoice,
+                        dt: "Sales Invoice",
+                        submit_doc: 1,
+                        order_type: "Shopping Cart"
+                    },
+                    callback: function (r) {
+                        if (r.message && r.message.payment_request) {
+                            frappe.call({
+                                method: "erpnext.accounts.doctype.payment_request.payment_request.make_payment_entry",
+                                args: {
+                                    docname: r.message.payment_request
+                                },
+                                callback: function (res) {
+                                    if (res.message) {
+                                        frappe.model.sync(res.message);
+                                        frappe.set_route("Form", res.message.doctype, res.message.name);
+                                    }
+                                }
+                            });
+                        } else if (r.message && r.message.error) {
+                            frappe.msgprint(__(r.message.message));
+                        }
+                    }
+                });
+            });
+        }
+    }
+});
+

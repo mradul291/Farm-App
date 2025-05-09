@@ -200,6 +200,14 @@ def create_loan_installments(doc, method):
         # 4. Set published
         loan_installment.db_set("published", 1)
 
+        try:
+            frappe.db.set_value("Loan Application", doc.name, "loan_installment", loan_installment.name, update_modified=False)
+            frappe.db.commit()
+            # frappe.msgprint(f"Loan Installment ID {loan_installment.name} linked to Loan Application {doc.name}.", alert=True)
+        except Exception as e:
+            frappe.log_error(title="Loan Application Update Failed", message=frappe.get_traceback())
+            frappe.msgprint("Failed to link Loan Installment to Loan Application. Check error logs.", alert=True)
+
         make_installment_payment_request(sales_invoice)
 
         frappe.msgprint(f"Loan Installments created successfully for {doc.applicant}.", alert=True)
@@ -360,4 +368,16 @@ def refresh_loan_installments(loan_name):
             return {"status": "No Change"}
     except Exception as e:
         return {"status": "Error", "message": str(e)}
+    
+
+@frappe.whitelist()
+def update_down_payment_mode(doc, method):
+    if doc.reference_doctype == "Sales Invoice":
+        linked_loan = frappe.get_all("Loan Application", filters={"sales_invoice": doc.reference_name})
+        for loan in linked_loan:
+            loan_doc = frappe.get_doc("Loan Application", loan.name)
+            if not loan_doc.mode_of_down_payment:
+                loan_doc.db_set("mode_of_down_payment", "Cash")
+
+
 
