@@ -27,14 +27,16 @@
    "fieldname": "farm_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Farm Name"
+   "label": "Farm Name",
+   "reqd": 1
   },
   {
    "fieldname": "site",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Site",
-   "options": "Site"
+   "options": "Site",
+   "reqd": 1
   },
   {
    "fieldname": "associated_farmer",
@@ -111,7 +113,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-09 12:07:33.776544",
+ "modified": "2025-05-09 18:34:39.343600",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Farm Master",
