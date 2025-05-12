@@ -196,7 +196,7 @@ def create_user_farmer(data):
     # Optional Fields
     optional_fields = [  "id_type", "id_number", "bank_name", "account_number", 
         "crops_processed", "qty_processed_daily", "equipments_used", "unit",  "longitude", 
-        "latitude", "crops", "actual_crops"
+        "latitude", "crops", "actual_crops", "address"
     ]
     
     user_data = {field: data.get(field, "" if field not in ["crops", "actual_crops"] else []) for field in optional_fields}
@@ -237,7 +237,7 @@ def create_user_farmer(data):
         
         farm_id = create_farm(
             farm_name, user_data["longitude"], user_data["latitude"], user_data["crops"], 
-            user_data["actual_crops"],user_data["address"], farmer_id, site, email
+            user_data["actual_crops"], farmer_id, site, email,user_data["address"]
         )
         
         is_farm_updated = update_farm_in_farmer(farmer_id, farm_id)
@@ -294,7 +294,8 @@ def update_farm_in_farmer(farmer_id, farm_id):
         return False
 
 # @frappe.whitelist(allow_guest=True)
-def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site, email,address=None):
+def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site, email,address):
+    
     try:
         # Get JSON data from Postman request
         data = frappe.request.get_json()
@@ -337,8 +338,13 @@ def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site, 
             "crop_name": crop_table,        # MultiSelect Table field
             "actual_crops": actual_crop_table  # Child Table field
         })
+
+        print("******************************************************************************")
+        print(address)
         farm.insert(ignore_permissions=True)  # Allow Guest
         frappe.db.set_value("Farm Master", farm.name, "owner", email)
+        print(email)
+
 
         frappe.db.commit()
 
@@ -672,3 +678,12 @@ def user_specific_sales_order(user):
         return None
     else:
         return f"`tabSales Order`.owner = '{user}'"
+    
+# 13: Check for User Specific Farmer Master  
+
+def user_specific_farmer(user):
+    if not user: user = frappe.session.user
+    if "System Manager" in frappe.get_roles(user):
+        return None
+    else:
+        return f"`tabFarmer Master`.owner = '{user}'"
