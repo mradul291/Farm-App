@@ -10,6 +10,7 @@
   "site",
   "site_name",
   "associated_farmer",
+  "farmer_name",
   "number_of_crops",
   "column_break_ewsv",
   "longitude",
@@ -43,7 +44,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Associated Farmer",
-   "options": "Farmer Master"
+   "options": "Farmer Master",
+   "read_only": 1
   },
   {
    "fieldname": "number_of_crops",
@@ -109,11 +111,17 @@
    "fieldname": "address",
    "fieldtype": "Data",
    "label": "Address"
+  },
+  {
+   "fetch_from": "associated_farmer.farmer_name",
+   "fieldname": "farmer_name",
+   "fieldtype": "Data",
+   "label": "Farmer Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-09 18:34:39.343600",
+ "modified": "2025-05-12 15:19:24.327313",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Farm Master",
