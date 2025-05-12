@@ -203,7 +203,7 @@ permission_query_conditions = {
     "Website Item": "farmer.api.user_api.user_specific_website_item",
     "Farm Master": "farmer.api.user_api.user_specific_farms",
     "Loan Installments": "farmer.api.user_api.user_specific_loan_installments",
-    "Crops Master": "farmer.api.user_api.user_specific_crops",
+    # "Crops Master": "farmer.api.user_api.user_specific_crops",
     "Sales Order": "farmer.api.user_api.user_specific_sales_order"
 }
 
