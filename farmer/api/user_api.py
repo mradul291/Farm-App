@@ -281,7 +281,6 @@ def update_farm_in_farmer(farmer_id, farm_id):
                 "latitude": farm_doc.latitude, # Example field
                 "crops": farm_doc.crop_name,  # Example field
                 "document": farm_doc.documents,  # Example field
-
             })
             farmer_doc.save()
             frappe.db.commit()
@@ -338,7 +337,7 @@ def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site, 
             "actual_crops": actual_crop_table  # Child Table field
         })
         farm.insert(ignore_permissions=True)  # Allow Guest
-        frappe.db.set_value("Farm Master", farm.name, "owner", frappe.session.user or farmer_id)
+        frappe.db.set_value("Farm Master", farm.name, "owner", farmer_id)
 
         frappe.db.commit()
 
@@ -654,17 +653,17 @@ def user_specific_loan_installments(user):
     else:
         return f"`tabLoan Installments`.owner = '{user}'"
     
-# 11: Check for User Specific Crops  
+# # 11: Check for User Specific Crops  
 
-def user_specific_crops(user):
-    if not user: user = frappe.session.user
-    if "System Manager" in frappe.get_roles(user):
-        return None
-    else:
-        return f"`tabCrops Master`.owner = '{user}'"
+# def user_specific_crops(user):
+#     if not user: user = frappe.session.user
+#     if "System Manager" in frappe.get_roles(user):
+#         return None
+#     else:
+#         return f"`tabCrops Master`.owner = '{user}'"
     
 
-# 11: Check for User Specific Sales Orders  
+# 12: Check for User Specific Sales Orders  
 
 def user_specific_sales_order(user):
     if not user: user = frappe.session.user

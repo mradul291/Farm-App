@@ -1387,6 +1387,7 @@ export default {
           farm_name: this.form.farmName,
           longitude: this.form.longitude,
           latitude: this.form.latitude,
+          address: this.form.farmAddress,
 
           crops: this.form.crops.map((crop) => crop.name), // Extracting crop names
 
