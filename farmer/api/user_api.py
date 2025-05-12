@@ -294,7 +294,7 @@ def update_farm_in_farmer(farmer_id, farm_id):
         return False
 
 # @frappe.whitelist(allow_guest=True)
-def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site):
+def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site, address=None):
     try:
         # Get JSON data from Postman request
         data = frappe.request.get_json()
@@ -333,13 +333,16 @@ def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site):
             "site":site,
             "longitude": longitude,
             "latitude": latitude,
+            "address": address, 
             "crop_name": crop_table,        # MultiSelect Table field
             "actual_crops": actual_crop_table  # Child Table field
         })
         farm.insert(ignore_permissions=True)  # Allow Guest
+        frappe.db.set_value("Farm Master", farm.name, "owner", frappe.session.user or farmer_id)
+
         frappe.db.commit()
 
-        return farm.name
+        return farm.name                                                                            
 
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Farm Creation Error")
