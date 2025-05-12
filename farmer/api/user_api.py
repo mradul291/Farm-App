@@ -280,6 +280,7 @@ def update_farm_in_farmer(farmer_id, farm_id):
                 "longitude": farm_doc.longitude,          # Example field
                 "latitude": farm_doc.latitude, # Example field
                 "crops": farm_doc.crop_name,  # Example field
+                "address": farm_doc.address,
                 "document": farm_doc.documents,  # Example field
             })
             farmer_doc.save()
