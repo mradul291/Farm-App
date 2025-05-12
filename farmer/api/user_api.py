@@ -234,13 +234,19 @@ def create_user_farmer(data):
             user_data["id_number"], user_data["bank_name"], user_data["account_number"], user_data["crops_processed"], 
             user_data["qty_processed_daily"], user_data["equipments_used"], user_data["unit"], site
         )
+
+        # Get user email from Farmer record
+        user_email = None
+        if frappe.db.exists("Farmer", farmer_id):
+            user_email = frappe.db.get_value("Farmer", farmer_id, "email")
         
         farm_id = create_farm(
             farm_name, user_data["longitude"], user_data["latitude"], user_data["crops"], 
-            user_data["actual_crops"], farmer_id, site
+            user_data["actual_crops"], farmer_id, site, user_data.get("address"), user_email
         )
         
         is_farm_updated = update_farm_in_farmer(farmer_id, farm_id)
+        
         
         if not is_farm_updated:
             return {"message": "Failed to create user", "status": 500}
@@ -291,9 +297,10 @@ def update_farm_in_farmer(farmer_id, farm_id):
     except Exception as e:
         frappe.log_error(f"Error updating farm in farmer: {str(e)}", "update_farm_in_farmer")
         return False
+    
 
 # @frappe.whitelist(allow_guest=True)
-def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site, address=None):
+def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site, address=None, user_email=None):
     try:
         # Get JSON data from Postman request
         data = frappe.request.get_json()
@@ -337,7 +344,8 @@ def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site, 
             "actual_crops": actual_crop_table  # Child Table field
         })
         farm.insert(ignore_permissions=True)  # Allow Guest
-        frappe.db.set_value("Farm Master", farm.name, "owner", farmer_id)
+        if user_email:
+            frappe.db.set_value("Farm Master", farm.name, "owner", user_email)
 
         frappe.db.commit()
 
