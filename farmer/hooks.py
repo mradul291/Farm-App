@@ -204,7 +204,8 @@ permission_query_conditions = {
     "Farm Master": "farmer.api.user_api.user_specific_farms",
     "Loan Installments": "farmer.api.user_api.user_specific_loan_installments",
     # "Crops Master": "farmer.api.user_api.user_specific_crops",
-    "Sales Order": "farmer.api.user_api.user_specific_sales_order"
+    "Sales Order": "farmer.api.user_api.user_specific_sales_order",
+    "Farmer Master": "farmer.api.user_api.user_specific_farmer"
 }
 
 doc_events = {
