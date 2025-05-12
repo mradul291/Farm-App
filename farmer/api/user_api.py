@@ -237,7 +237,7 @@ def create_user_farmer(data):
         
         farm_id = create_farm(
             farm_name, user_data["longitude"], user_data["latitude"], user_data["crops"], 
-            user_data["actual_crops"], farmer_id, site
+            user_data["actual_crops"],user_data["address"], farmer_id, site, email
         )
         
         is_farm_updated = update_farm_in_farmer(farmer_id, farm_id)
@@ -293,7 +293,7 @@ def update_farm_in_farmer(farmer_id, farm_id):
         return False
 
 # @frappe.whitelist(allow_guest=True)
-def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site,user_email, address=None):
+def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site, email,address=None):
     try:
         # Get JSON data from Postman request
         data = frappe.request.get_json()
@@ -337,9 +337,10 @@ def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site,u
             "actual_crops": actual_crop_table  # Child Table field
         })
         farm.insert(ignore_permissions=True)  # Allow Guest
-        frappe.db.set_value("Farm Master", farm.name, "owner", user_email)
+        frappe.db.set_value("Farm Master", farm.name, "owner", email)
 
         frappe.db.commit()
+
         return farm.name                                                                            
 
     except Exception as e:
