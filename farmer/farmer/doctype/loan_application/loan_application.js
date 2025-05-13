@@ -170,44 +170,51 @@ function update_interest_rate(frm) {
 }
 
 frappe.ui.form.on('Loan Application', {
-    mode_of_down_payment: function (frm) {
-        if (
-            frm.doc.mode_of_down_payment === "Cash" &&
-            frm.doc.sales_invoice
-        ) {
-            // First save the form to ensure everything is up to date
-            frm.save().then(() => {
-                // Call backend method to create or get Payment Request
-                frappe.call({
-                    method: "farmer.api.loan_api.make_loan_payment_request",
-                    args: {
-                        dn: frm.doc.sales_invoice,
-                        dt: "Sales Invoice",
-                        submit_doc: 1,
-                        order_type: "Shopping Cart"
-                    },
-                    callback: function (r) {
-                        if (r.message && r.message.payment_request) {
-                            // Make Payment Entry directly
-                            frappe.call({
-                                method: "erpnext.accounts.doctype.payment_request.payment_request.make_payment_entry",
-                                args: {
-                                    docname: r.message.payment_request
-                                },
-                                callback: function (res) {
-                                    if (res.message) {
-                                        frappe.model.sync(res.message);
-                                        frappe.set_route("Form", res.message.doctype, res.message.name);
+    refresh: function (frm) {
+        // Show the button only if needed
+        if (!frm.doc.mode_of_down_payment || frm.doc.mode_of_down_payment !== "Cash") {
+            frm.add_custom_button('Cash Down Payment', function () {
+                if (!frm.doc.sales_invoice) {
+                    frappe.msgprint(__('Please select a Sales Invoice before proceeding.'));
+                    return;
+                }
+
+                // Save the form before making backend call
+                frm.save().then(() => {
+                    frappe.call({
+                        method: "farmer.api.loan_api.make_loan_payment_request",
+                        args: {
+                            dn: frm.doc.sales_invoice,
+                            dt: "Sales Invoice",
+                            submit_doc: 1,
+                            order_type: "Shopping Cart"
+                        },
+                        callback: function (r) {
+                            if (r.message && r.message.payment_request) {
+                                // Create Payment Entry
+                                frappe.call({
+                                    method: "erpnext.accounts.doctype.payment_request.payment_request.make_payment_entry",
+                                    args: {
+                                        docname: r.message.payment_request
+                                    },
+                                    callback: function (res) {
+                                        if (res.message) {
+                                            frappe.model.sync(res.message);
+                                            frappe.set_route("Form", res.message.doctype, res.message.name);
+
+                                            // Update the mode_of_down_payment to Cash after payment is made
+                                            frm.set_value("mode_of_down_payment", "Cash");
+                                            frm.save();
+                                        }
                                     }
-                                }
-                            });
-                        } else if (r.message && r.message.error) {
-                            frappe.msgprint(__(r.message.message));
+                                });
+                            } else if (r.message && r.message.error) {
+                                frappe.msgprint(__(r.message.message));
+                            }
                         }
-                    }
+                    });
                 });
             });
         }
     }
 });
-
