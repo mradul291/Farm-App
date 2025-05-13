@@ -45,7 +45,7 @@
    "in_list_view": 1,
    "label": "Associated Farmer",
    "options": "Farmer Master",
-   "read_only": 1
+   "read_only_depends_on": "eval:frappe.user.has_role('Administrator') != 1"
   },
   {
    "fieldname": "number_of_crops",
@@ -121,7 +121,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-12 15:19:24.327313",
+ "modified": "2025-05-13 15:24:30.904202",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Farm Master",

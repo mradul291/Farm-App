@@ -88,13 +88,6 @@ def make_loan_payment_request(dn, dt="Sales Invoice", submit_doc=1, order_type="
     # Step 3: Find linked Loan Application
     loan_apps = frappe.get_all("Loan Application", filters={"sales_invoice": dn}, fields=["name", "down_payment_amount"])
 
-    for la in loan_apps:
-        loan_doc = frappe.get_doc("Loan Application", la.name)
-        if not loan_doc.down_payment_check:
-            loan_doc.db_set("down_payment_check", 1)
-            loan_doc.db_set("status", "Loan Sanctioned")
-            frappe.db.commit()
-
     if not loan_apps:
         frappe.throw(_("No Loan Application linked to Sales Invoice {0}").format(dn))
 
@@ -143,6 +136,17 @@ def make_loan_payment_request(dn, dt="Sales Invoice", submit_doc=1, order_type="
         "payment_url": result.get_payment_url()
     }
 
+
+def loan_payment_update(doc, method):
+    for ref in doc.references:
+        if ref.reference_doctype == "Sales Invoice" and ref.reference_name:
+            loan_apps = frappe.get_all("Loan Application", filters={"sales_invoice": ref.reference_name})
+
+            for la in loan_apps:
+                loan_doc = frappe.get_doc("Loan Application", la.name)
+                if not loan_doc.down_payment_check:
+                    loan_doc.db_set("down_payment_check", 1)
+                    loan_doc.db_set("status", "Loan Sanctioned")
 
 
 #####################################################################################################
@@ -369,28 +373,3 @@ def refresh_loan_installments(loan_name):
     except Exception as e:
         return {"status": "Error", "message": str(e)}
     
-
-def on_update(doc, method):
-    for ref in doc.references:
-        if ref.reference_doctype == "Sales Invoice" and ref.reference_name:
-            # Fetch related Loan Application by Sales Invoice
-            loan_app = frappe.get_all(
-                "Loan Application",
-                filters={"sales_invoice": ref.reference_name},
-                fields=["name", "down_payment_amount", "total_amount"]
-            )
-
-            if loan_app:
-                loan = loan_app[0]
-                paid_amount = doc.paid_amount
-
-                if loan.total_amount and paid_amount:
-                    try:
-                        total_amount = int(loan.total_amount)
-                        new_percentage = (paid_amount / total_amount) * 100
-
-            # Update fields in Loan Application
-                        frappe.db.set_value("Loan Application", loan.name, "down_payment_percentage", new_percentage)
-                        frappe.db.set_value("Loan Application", loan.name, "down_payment_amount", paid_amount)
-                    except ValueError:
-                        frappe.log_error(f"Invalid total_amount value in Loan Application: {loan.total_amount}", "Loan Update Error")
