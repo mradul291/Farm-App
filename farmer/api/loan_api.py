@@ -370,3 +370,27 @@ def refresh_loan_installments(loan_name):
         return {"status": "Error", "message": str(e)}
     
 
+def on_update(doc, method):
+    for ref in doc.references:
+        if ref.reference_doctype == "Sales Invoice" and ref.reference_name:
+            # Fetch related Loan Application by Sales Invoice
+            loan_app = frappe.get_all(
+                "Loan Application",
+                filters={"sales_invoice": ref.reference_name},
+                fields=["name", "down_payment_amount", "total_amount"]
+            )
+
+            if loan_app:
+                loan = loan_app[0]
+                paid_amount = doc.paid_amount
+
+                if loan.total_amount and paid_amount:
+                    try:
+                        total_amount = int(loan.total_amount)
+                        new_percentage = (paid_amount / total_amount) * 100
+
+            # Update fields in Loan Application
+                        frappe.db.set_value("Loan Application", loan.name, "down_payment_percentage", new_percentage)
+                        frappe.db.set_value("Loan Application", loan.name, "down_payment_amount", paid_amount)
+                    except ValueError:
+                        frappe.log_error(f"Invalid total_amount value in Loan Application: {loan.total_amount}", "Loan Update Error")

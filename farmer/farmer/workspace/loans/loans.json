@@ -1,8 +1,17 @@
 {
  "charts": [],
- "content": "[{\"id\":\"EQuFxA-w-h\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Loans</span>\",\"col\":12}},{\"id\":\"wCz4iFvbZh\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Applied Loan\",\"col\":4}},{\"id\":\"bSmSLAXtHM\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"TQAYgPzAI5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loan Applications\",\"col\":3}},{\"id\":\"VNlhGzyABZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loan Installments\",\"col\":3}}]",
+ "content": "[{\"id\":\"EQuFxA-w-h\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Loans</span>\",\"col\":12}},{\"id\":\"wCz4iFvbZh\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Applied Loan\",\"col\":4}},{\"id\":\"bSmSLAXtHM\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"FX-ZRCsZpT\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Loan Application\",\"col\":3}},{\"id\":\"qHCbgcg0aD\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Loan Installment\",\"col\":3}}]",
  "creation": "2025-05-08 16:15:55.790519",
- "custom_blocks": [],
+ "custom_blocks": [
+  {
+   "custom_block_name": "Loan Application",
+   "label": "Loan Application"
+  },
+  {
+   "custom_block_name": "Loan Installment",
+   "label": "Loan Installment"
+  }
+ ],
  "docstatus": 0,
  "doctype": "Workspace",
  "for_user": "",
@@ -13,7 +22,7 @@
  "is_hidden": 0,
  "label": "Loans",
  "links": [],
- "modified": "2025-05-08 19:41:02.144662",
+ "modified": "2025-05-13 10:41:32.903503",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loans",
@@ -33,21 +42,6 @@
   }
  ],
  "sequence_id": 29.0,
- "shortcuts": [
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Loan Applications",
-   "type": "URL",
-   "url": "http://138.199.212.24/loan-application"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Loan Installments",
-   "type": "URL",
-   "url": "http://138.199.212.24/loan-installment"
-  }
- ],
+ "shortcuts": [],
  "title": "Loans"
 }
