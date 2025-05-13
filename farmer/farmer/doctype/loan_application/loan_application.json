@@ -221,14 +221,14 @@
    "fieldname": "mode_of_down_payment",
    "fieldtype": "Select",
    "label": "Mode Of Down payment",
-   "options": "Paystack\nCash"
+   "options": "\nPaystack\nCash"
   }
  ],
  "has_web_view": 1,
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-05-13 12:28:38.169699",
+ "modified": "2025-05-13 18:43:49.098659",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",
