@@ -132,7 +132,7 @@
   },
   {
    "fieldname": "down_payment_percentage",
-   "fieldtype": "Link",
+   "fieldtype": "Float",
    "label": "Down Payment(%)",
    "options": "Down Payment Percent"
   },
@@ -228,7 +228,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-05-09 16:00:34.475995",
+ "modified": "2025-05-13 12:28:38.169699",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",
