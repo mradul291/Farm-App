@@ -21,7 +21,7 @@ frappe.ui.form.on('Loan Application', {
         frm.refresh();
     },
 
-    onload: function(frm) {
+    onload: function (frm) {
         // Trigger calculations based on initial data available in the fields
         if (frm.doc.loan_amount && frm.doc.down_payment_percentage) {
             calculate_down_payment(frm);
@@ -31,7 +31,7 @@ frappe.ui.form.on('Loan Application', {
         }
     },
 
-    refresh: function(frm) {
+    refresh: function (frm) {
         if (!frm.doc.__islocal) {
             // If the document is not new, trigger calculations
             if (frm.doc.loan_amount && frm.doc.interest_rate && frm.doc.repayment_period) {
@@ -95,7 +95,7 @@ function calculate_total_amount_with_interest(frm) {
         let n = frm.doc.repayment_period;
 
         let emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-        emi = Math.round(emi);  
+        emi = Math.round(emi);
         let total_emi = emi * n;
 
         let down_payment = frm.doc.down_payment_amount || 0;
@@ -107,12 +107,12 @@ function calculate_total_amount_with_interest(frm) {
 
 
 frappe.ui.form.on('Loan Application', {
-    refresh: function(frm) {
+    refresh: function (frm) {
         if (frm.doc.tier_name) {
             fetch_and_set_tier_details(frm);
         }
     },
-    repayment_period: function(frm) {
+    repayment_period: function (frm) {
         update_interest_rate(frm);
     }
 });
@@ -125,7 +125,7 @@ function fetch_and_set_tier_details(frm) {
             doctype: "Tier Master",
             name: frm.doc.tier_name
         },
-        callback: function(tierResponse) {
+        callback: function (tierResponse) {
             if (tierResponse && tierResponse.message) {
                 let tierMaster = tierResponse.message;
                 let tierDetails = tierMaster.tier_details || [];
@@ -151,11 +151,13 @@ function fetch_and_set_tier_details(frm) {
     });
 }
 
+// Function to update Interest Rate based on selected Repayment Period
 function update_interest_rate(frm) {
     if (frm.doc.repayment_period && frm.doc._tier_details) {
         let selectedTenure = frm.doc.repayment_period;
 
-        let match = frm.doc._tier_details.find(entry => 
+        // Find matching record
+        let match = frm.doc._tier_details.find(entry =>
             String(entry.tenure_months) === String(selectedTenure)
         );
 
@@ -168,57 +170,73 @@ function update_interest_rate(frm) {
 }
 
 frappe.ui.form.on('Loan Application', {
-    refresh: function (frm) {
-        if (!frm.doc.mode_of_down_payment || frm.doc.mode_of_down_payment !== "Cash") {
-            frm.add_custom_button('Cash Down Payment', function () {
-                if (!frm.doc.sales_invoice) {
-                    frappe.msgprint(__('Please select a Sales Invoice before proceeding.'));
-                    return;
-                }
-
-                if (frm.doc.__unsaved) {
-                    frm.save().then(() => {
-                        initiate_payment_flow(frm);
-                    });
-                } else {
-                    initiate_payment_flow(frm);
-                }
-            });
-        }
+    refresh(frm) {
+        add_cash_down_payment_button(frm);
+    },
+    onload_post_render(frm) {
+        add_cash_down_payment_button(frm);
     }
 });
 
-function initiate_payment_flow(frm) {
-    frappe.call({
-        method: "farmer.api.loan_api.make_loan_payment_request",
-        args: {
-            dn: frm.doc.sales_invoice,
-            dt: "Sales Invoice",
-            submit_doc: 1,
-            order_type: "Shopping Cart"
-        },
-        callback: function (r) {
-            if (r.message && r.message.payment_request) {
-                frappe.call({
-                    method: "erpnext.accounts.doctype.payment_request.payment_request.make_payment_entry",
-                    args: {
-                        docname: r.message.payment_request
-                    },
-                    callback: function (res) {
-                        if (res.message) {
-                            frappe.model.sync(res.message);
+function add_cash_down_payment_button(frm) {
+    frm.clear_custom_buttons();
 
-                            frappe.db.set_value(frm.doc.doctype, frm.doc.name, "mode_of_down_payment", "Cash")
-                                .then(() => {
-                                    frm.set_value("mode_of_down_payment", "Cash");
+    frm.add_custom_button('Cash Down Payment', async function () {
+
+        // Ensure Sales Invoice is linked
+        if (!frm.doc.sales_invoice) {
+            frappe.msgprint(__('Please select a Sales Invoice before proceeding.'));
+            return;
+        }
+
+        try {
+            frappe.call({
+                method: "farmer.api.loan_api.make_loan_payment_request",
+                args: {
+                    dn: frm.doc.sales_invoice,
+                    dt: "Sales Invoice",
+                    submit_doc: 1,
+                    order_type: "Shopping Cart"
+                },
+                callback(r) {
+                    if (r.message?.payment_request) {
+                        // Proceed to create payment entry
+                        frappe.call({
+                            method: "erpnext.accounts.doctype.payment_request.payment_request.make_payment_entry",
+                            args: {
+                                docname: r.message.payment_request
+                            },
+                            callback: function (res) {
+                                if (res.message) {
+                                    // Sync the Payment Entry
+                                    frappe.model.sync(res.message);
+
+                                    // Set mode_of_payment to "Cash" (only if the doc is not submitted)
+                                    if (res.message.docstatus === 0) {
+                                        frappe.model.set_value(res.message.doctype, res.message.name, "mode_of_payment", "Cash");
+                                    }
+
+                                    // Redirect to the Payment Entry form
                                     frappe.set_route("Form", res.message.doctype, res.message.name);
-                                });
-                        }
+
+                                    // Update the Loan Application field as Cash and refresh the button
+                                    frm.set_value("mode_of_down_payment", "Cash");
+                                    frm.save().then(() => {
+                                        add_cash_down_payment_button(frm);  // Optional: your custom function to re-render the button
+                                    });
+                                }
+                            }
+
+                        });
+                    } else if (r.message?.error) {
+                        frappe.msgprint(__(r.message.message));
                     }
-                });
-            } else if (r.message && r.message.error) {
-                frappe.msgprint(__(r.message.message));
-            }
+                }
+            });
+
+        } catch (err) {
+            frappe.msgprint(__('An error occurred while saving the form.'));
         }
     });
 }
+

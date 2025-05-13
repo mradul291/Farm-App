@@ -136,6 +136,16 @@ def make_loan_payment_request(dn, dt="Sales Invoice", submit_doc=1, order_type="
         "payment_url": result.get_payment_url()
     }
 
+# def loan_payment_update(doc, method):
+#     for ref in doc.references:
+#         if ref.reference_doctype == "Sales Invoice" and ref.reference_name:
+#             loan_apps = frappe.get_all("Loan Application", filters={"sales_invoice": ref.reference_name})
+
+#             for la in loan_apps:                            
+#                 loan_doc = frappe.get_doc("Loan Application", la.name)
+#                 if not loan_doc.down_payment_check:
+#                     loan_doc.db_set("down_payment_check", 1)
+#                     loan_doc.db_set("status", "Loan Sanctioned")
 
 def loan_payment_update(doc, method):
     for ref in doc.references:
@@ -144,10 +154,15 @@ def loan_payment_update(doc, method):
 
             for la in loan_apps:
                 loan_doc = frappe.get_doc("Loan Application", la.name)
+
                 if not loan_doc.down_payment_check:
                     loan_doc.db_set("down_payment_check", 1)
+                if loan_doc.status != "Loan Sanctioned":
                     loan_doc.db_set("status", "Loan Sanctioned")
 
+                new_mode = "Cash" if doc.mode_of_payment == "Cash" else "Paystack"
+                if loan_doc.mode_of_down_payment != new_mode:
+                    loan_doc.db_set("mode_of_down_payment", new_mode)
 
 #####################################################################################################
 
