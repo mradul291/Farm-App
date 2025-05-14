@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"jfu9AHHHOL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Crops</span>\",\"col\":12}},{\"id\":\"rBSZ-dLQKk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Crops\",\"col\":3}}]",
+ "content": "[{\"id\":\"jfu9AHHHOL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Crops</span>\",\"col\":12}},{\"id\":\"HlqaTy19tr\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Crops\",\"col\":4}},{\"id\":\"Pe47w2FQ3S\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"rBSZ-dLQKk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Crops\",\"col\":3}}]",
  "creation": "2025-05-08 17:16:29.600495",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,11 +13,16 @@
  "is_hidden": 0,
  "label": "Crops",
  "links": [],
- "modified": "2025-05-08 18:04:47.421304",
+ "modified": "2025-05-14 15:37:32.301631",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Crops",
- "number_cards": [],
+ "number_cards": [
+  {
+   "label": "Total Crops",
+   "number_card_name": "Total Crops"
+  }
+ ],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
