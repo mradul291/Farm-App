@@ -95,7 +95,8 @@ def make_loan_payment_request(dn, dt="Sales Invoice", submit_doc=1, order_type="
     down_payment_amount = loan_app.down_payment_amount
 
     if not down_payment_amount or float(down_payment_amount) <= 0:
-        frappe.throw(_("Down Payment Amount is not set in the Loan Application {0}").format(loan_app.name))
+        frappe.throw(_("Please save the Loan Application to ensure the latest data is available."))
+        # frappe.throw(_("Down Payment Amount is not set in the Loan Application {0}").format(loan_app.name))
 
     # Step 4: Prepare Payment Request
     args = {
