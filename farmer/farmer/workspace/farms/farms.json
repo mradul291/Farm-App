@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"uSJHfF605l\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Farms</span>\",\"col\":12}},{\"id\":\"P7zWMqjEke\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total number of farms\",\"col\":4}},{\"id\":\"MOmAvoa9e8\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total number of crops\",\"col\":4}},{\"id\":\"sRwJk4ePt-\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"rFWWi-4cxL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Farms\",\"col\":3}},{\"id\":\"XSVO7xMzzs\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Crops\",\"col\":3}}]",
+ "content": "[{\"id\":\"uSJHfF605l\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Farms</span>\",\"col\":12}},{\"id\":\"P7zWMqjEke\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total number of farms\",\"col\":4}},{\"id\":\"MOmAvoa9e8\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total number of crops\",\"col\":4}},{\"id\":\"VhS9FozXdP\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Number of Crops in Farm\",\"col\":4}},{\"id\":\"sRwJk4ePt-\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"rFWWi-4cxL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Farms\",\"col\":3}},{\"id\":\"XSVO7xMzzs\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Crops\",\"col\":3}}]",
  "creation": "2025-05-08 16:34:31.901774",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,11 +13,15 @@
  "is_hidden": 0,
  "label": "Farms",
  "links": [],
- "modified": "2025-05-08 18:04:05.664999",
+ "modified": "2025-05-14 18:02:49.626424",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Farms",
  "number_cards": [
+  {
+   "label": "Number of Crops in Farm",
+   "number_card_name": "Number of Crops in Farm"
+  },
   {
    "label": "Total number of farms",
    "number_card_name": "Total number of farms"
