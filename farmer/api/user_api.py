@@ -687,3 +687,12 @@ def user_specific_farmer(user):
         return None
     else:
         return f"`tabFarmer Master`.owner = '{user}'"
+    
+# 14: Check for User Specific Sales Invoice  
+
+def user_specific_sales_invoice(user):
+    if not user: user = frappe.session.user
+    if "System Manager" in frappe.get_roles(user):
+        return None
+    else:
+        return f"`tabSales Invoice`.owner = '{user}'"
