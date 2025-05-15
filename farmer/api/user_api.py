@@ -3,6 +3,7 @@ from frappe import _
 from datetime import datetime, timedelta
 import math
 import json
+import time
 #Adding the Data into Farmer Master from Registration fields
 
 def create_farmer_for_user(user_email, phone, gender, location, id_type, id_number, bank_name, account_number, crops_processed, 
@@ -46,6 +47,8 @@ def create_farmer_for_user(user_email, phone, gender, location, id_type, id_numb
 
 @frappe.whitelist(allow_guest=True)
 def create_user():
+    start = time.time()
+    print("Start: create_user")
     
     data = json.loads(frappe.request.data)
 
@@ -58,6 +61,9 @@ def create_user():
         return(create_buyer_user(data))
     elif user_type == "vendor":
         return(create_vendor_user(data))
+    
+    end = time.time()
+    print(f"End: create_user | Duration: {end - start:.2f} seconds")
 
 # Functions creates Buyers user
 def create_buyer_user(data):
@@ -174,10 +180,14 @@ def create_vendor_user(data):
 # Functions creates user along with Farm and Farmer Type
 def create_user_farmer(data):
     # Required Fields
+    print("*****************************************************************************************************************************")
+    print("Step 1: Entered create_user_farmer")
+
     required_fields = ["first_name", "last_name", "email", "new_password","phone", "gender","location","site", "farm_name"]
     missing_fields = [field for field in required_fields if not data.get(field)]
     
     if missing_fields:
+        print(f"Step 2: Missing fields - {missing_fields}")
         return {"message": "Missing required fields", "status": 400, "missing_fields": missing_fields}
     
     first_name = data["first_name"]
@@ -190,7 +200,7 @@ def create_user_farmer(data):
     site = data["site"]
     farm_name = data["farm_name"]
 
-
+    print("Step 3: Required data extracted successfully")
     
     "", "","","", ""
     # Optional Fields
@@ -203,10 +213,12 @@ def create_user_farmer(data):
     
     # Check if user already exists
     if frappe.db.exists("User", email):
+        print(f"Step 4: User {email} already exists")
         return {"message": f"User {email} already exists", "status": 400}
     
     try:
         # Create User
+        print("Step 5: Creating User")
         user = frappe.get_doc({
             "doctype": "User",
             "first_name": first_name,
@@ -227,6 +239,7 @@ def create_user_farmer(data):
         # user.save(ignore_permissions=True)
         
         frappe.db.commit()
+        print("Step 6: User created and committed")
         
         # Create Farmer and Farm Records
         farmer_id = create_farmer_for_user(
@@ -234,17 +247,22 @@ def create_user_farmer(data):
             user_data["id_number"], user_data["bank_name"], user_data["account_number"], user_data["crops_processed"], 
             user_data["qty_processed_daily"], user_data["equipments_used"], user_data["unit"], site
         )
+        print(f"Step 7: Farmer created with ID {farmer_id}")
         
         farm_id = create_farm(
             farm_name, user_data["longitude"], user_data["latitude"], user_data["crops"], 
             user_data["actual_crops"], farmer_id, site, email,user_data["address"]
         )
+        print(f"Step 8: Farm created with ID {farm_id}")
         
         is_farm_updated = update_farm_in_farmer(farmer_id, farm_id)
-        
+        print(f"Step 9: Farm linked to Farmer - Status: {is_farm_updated}")
+
         if not is_farm_updated:
             return {"message": "Failed to create user", "status": 500}
         
+        print("Step 10: create_user_farmer completed successfully")
+        print("*****************************************************************************************************************************")
         return {
             "message": "User Created Successfully",
             "status": 201,
@@ -257,6 +275,7 @@ def create_user_farmer(data):
     
     except Exception as e:
         frappe.db.rollback()
+        frappe.log_error(f"Exception in create_user_farmer: {str(e)}")
         return {"message": "Internal Server Error", "status": 500, "error": str(e)}
 
 def update_farm_in_farmer(farmer_id, farm_id):
@@ -339,12 +358,8 @@ def create_farm(farm_name,longitude,latitude,crops,actual_crops,farmer_id,site, 
             "actual_crops": actual_crop_table  # Child Table field
         })
 
-        print("******************************************************************************")
-        print(address)
         farm.insert(ignore_permissions=True)  # Allow Guest
         frappe.db.set_value("Farm Master", farm.name, "owner", email)
-        print(email)
-
 
         frappe.db.commit()
 
