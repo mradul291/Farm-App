@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Orders",
  "links": [],
- "modified": "2025-05-08 19:35:05.728795",
+ "modified": "2025-05-15 16:43:55.847152",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Orders",
@@ -30,6 +30,9 @@
  "roles": [
   {
    "role": "Farmer"
+  },
+  {
+   "role": "Supplier"
   }
  ],
  "sequence_id": 25.0,

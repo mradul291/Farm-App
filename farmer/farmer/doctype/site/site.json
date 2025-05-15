@@ -8,6 +8,8 @@
   "details_section",
   "section_break_xlmg",
   "site_name",
+  "vendor",
+  "vendor_name",
   "status",
   "power_rating",
   "pue_estimate_percent",
@@ -166,11 +168,24 @@
   {
    "fieldname": "section_break_xlmg",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "vendor",
+   "fieldtype": "Link",
+   "label": "Vendor",
+   "options": "Supplier"
+  },
+  {
+   "fetch_from": "vendor.supplier_name",
+   "fieldname": "vendor_name",
+   "fieldtype": "Data",
+   "label": "Vendor Name",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-03-13 18:03:04.057726",
+ "modified": "2025-05-15 17:46:24.288405",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Site",
