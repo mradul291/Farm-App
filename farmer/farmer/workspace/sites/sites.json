@@ -9,7 +9,7 @@
    "label": "Site by Status"
   }
  ],
- "content": "[{\"id\":\"ELAV5u1T-Z\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Sites</span>\",\"col\":12}},{\"id\":\"luEn3ZCrt4\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Site by Status\",\"col\":6}},{\"id\":\"tMfv6BlsYX\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Site Overview\",\"col\":12}}]",
+ "content": "[{\"id\":\"ELAV5u1T-Z\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Sites</span>\",\"col\":12}},{\"id\":\"luEn3ZCrt4\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Site by Status\",\"col\":6}},{\"id\":\"tMfv6BlsYX\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Site Overview\",\"col\":12}},{\"id\":\"WKdBCIJ9ge\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"fT71ICvN1r\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Site\",\"col\":3}}]",
  "creation": "2025-03-12 15:25:04.307468",
  "custom_blocks": [],
  "docstatus": 0,
@@ -22,7 +22,7 @@
  "is_hidden": 0,
  "label": "Sites",
  "links": [],
- "modified": "2025-05-08 17:16:47.112860",
+ "modified": "2025-05-14 18:29:57.562417",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Sites",
@@ -37,6 +37,15 @@
   }
  ],
  "sequence_id": 26.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Site",
+   "link_to": "Site",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
  "title": "Sites"
 }
