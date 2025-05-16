@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Dash Board",
  "links": [],
- "modified": "2025-05-15 17:12:18.662283",
+ "modified": "2025-05-16 13:13:30.854515",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Dash Board",
@@ -25,6 +25,9 @@
  "roles": [
   {
    "role": "Farmer"
+  },
+  {
+   "role": "Supplier"
   }
  ],
  "sequence_id": 22.0,

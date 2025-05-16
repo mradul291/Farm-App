@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"EQuFxA-w-h\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Loans</span>\",\"col\":12}},{\"id\":\"wCz4iFvbZh\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Applied Loan\",\"col\":4}},{\"id\":\"bSmSLAXtHM\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"FX-ZRCsZpT\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Loan Application\",\"col\":3}},{\"id\":\"qHCbgcg0aD\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Loan Installment\",\"col\":3}}]",
+ "content": "[{\"id\":\"EQuFxA-w-h\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Loans</span>\",\"col\":12}},{\"id\":\"wCz4iFvbZh\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Applied Loan\",\"col\":4}},{\"id\":\"kgz_mjKhsf\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Loan Approved\",\"col\":4}},{\"id\":\"14SR0ScLrU\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Loan Rejected\",\"col\":4}},{\"id\":\"bSmSLAXtHM\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"FX-ZRCsZpT\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Loan Application\",\"col\":3}},{\"id\":\"qHCbgcg0aD\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Loan Installment\",\"col\":3}}]",
  "creation": "2025-05-08 16:15:55.790519",
  "custom_blocks": [
   {
@@ -22,14 +22,22 @@
  "is_hidden": 0,
  "label": "Loans",
  "links": [],
- "modified": "2025-05-15 16:44:36.613299",
+ "modified": "2025-05-16 10:51:56.169373",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loans",
  "number_cards": [
   {
+   "label": "Total Loan Approved",
+   "number_card_name": "Total Loan Approved"
+  },
+  {
    "label": "Total Applied Loan",
    "number_card_name": "Total Loan Applied"
+  },
+  {
+   "label": "Total Loan Rejected",
+   "number_card_name": "Total Loan Rejected"
   }
  ],
  "owner": "Administrator",
