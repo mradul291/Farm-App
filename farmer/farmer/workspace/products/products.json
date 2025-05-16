@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Products",
  "links": [],
- "modified": "2025-05-15 16:38:13.555455",
+ "modified": "2025-05-16 16:23:40.523248",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Products",
@@ -39,7 +39,7 @@
    "role": "Supplier"
   }
  ],
- "sequence_id": 24.0,
+ "sequence_id": 25.0,
  "shortcuts": [
   {
    "color": "Grey",

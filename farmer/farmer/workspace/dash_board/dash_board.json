@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"tWv7FRqF72\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Dash Board</span>\",\"col\":12}},{\"id\":\"yuu86H4o5r\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sites\",\"col\":3}},{\"id\":\"cspnWHWkRE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Crops\",\"col\":3}},{\"id\":\"uOrJ6wN8Ik\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Farms\",\"col\":3}},{\"id\":\"gw4sBa9RV9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Products\",\"col\":3}}]",
+ "content": "[{\"id\":\"zioVV4ePzv\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Dash Board</span>\",\"col\":12}},{\"id\":\"AMW2KSnhqG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sites\",\"col\":3}},{\"id\":\"8rr0TJWQGi\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Crops\",\"col\":3}},{\"id\":\"Zw4MS28SLP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Farms\",\"col\":3}},{\"id\":\"4EBqlYMWVW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Products\",\"col\":3}}]",
  "creation": "2025-03-19 14:10:49.476722",
  "custom_blocks": [],
  "docstatus": 0,
@@ -10,10 +10,10 @@
  "icon": "dashboard",
  "idx": 0,
  "indicator_color": "green",
- "is_hidden": 0,
+ "is_hidden": 1,
  "label": "Dash Board",
  "links": [],
- "modified": "2025-05-16 13:13:30.854515",
+ "modified": "2025-05-16 16:30:11.551913",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Dash Board",
@@ -30,7 +30,7 @@
    "role": "Supplier"
   }
  ],
- "sequence_id": 22.0,
+ "sequence_id": 23.0,
  "shortcuts": [
   {
    "color": "Grey",
