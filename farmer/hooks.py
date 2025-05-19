@@ -219,6 +219,9 @@ doc_events = {
     },
     "Payment Entry": {
         "on_submit": "farmer.api.loan_api.loan_payment_update"
+    },
+    "Business": {
+        "on_update": "farmer.api.warehouse_api.create_warehouses_for_business"
     }
 }
 

@@ -47,8 +47,6 @@ def create_farmer_for_user(user_email, phone, gender, location, id_type, id_numb
 
 @frappe.whitelist(allow_guest=True)
 def create_user():
-    start = time.time()
-    print("Start: create_user")
     
     data = json.loads(frappe.request.data)
 
@@ -61,9 +59,6 @@ def create_user():
         return(create_buyer_user(data))
     elif user_type == "vendor":
         return(create_vendor_user(data))
-    
-    end = time.time()
-    print(f"End: create_user | Duration: {end - start:.2f} seconds")
 
 # Functions creates Buyers user
 def create_buyer_user(data):
@@ -162,7 +157,19 @@ def create_vendor_user(data):
         })
         supplier.insert(ignore_permissions=True)
 
-        
+        # Call create_business to also create Business and Warehouse
+        frappe.get_doc({
+            "doctype": "Business",
+            "business_type": "Vendor",
+            "reference_doctype": "Supplier",
+            "reference_entity": supplier.name,
+            "email": email,
+            "user": user.name,
+            "create_warehouses": [{
+                "warehouse_name": f"{supplier.name} - {supplier_name}"
+            }]
+        }).insert(ignore_permissions=True)
+
         frappe.db.commit()
         return {
             "message": "User Created Successfully",
@@ -180,8 +187,6 @@ def create_vendor_user(data):
 # Functions creates user along with Farm and Farmer Type
 def create_user_farmer(data):
     # Required Fields
-    print("*****************************************************************************************************************************")
-    print("Step 1: Entered create_user_farmer")
 
     required_fields = ["first_name", "last_name", "email", "new_password","phone", "gender","location","site", "farm_name"]
     missing_fields = [field for field in required_fields if not data.get(field)]
@@ -248,7 +253,18 @@ def create_user_farmer(data):
             user_data["qty_processed_daily"], user_data["equipments_used"], user_data["unit"], site
         )
         print(f"Step 7: Farmer created with ID {farmer_id}")
-        
+
+        business_data = {
+            "business_type": "Farmer",
+            "reference_entity": farmer_id,
+        }
+        try:
+            create_business(business_data)
+            print("Step 7.1: create_business executed successfully")
+        except Exception as e:
+            frappe.log_error(frappe.get_traceback(), "Step 7.1: create_business FAILED")
+            print(f"Step 7.1: create_business error: {e}")
+
         farm_id = create_farm(
             farm_name, user_data["longitude"], user_data["latitude"], user_data["crops"], 
             user_data["actual_crops"], farmer_id, site, email,user_data["address"]
@@ -277,6 +293,69 @@ def create_user_farmer(data):
         frappe.db.rollback()
         frappe.log_error(f"Exception in create_user_farmer: {str(e)}")
         return {"message": "Internal Server Error", "status": 500, "error": str(e)}
+    
+
+#create Business for Farmer and Vendor
+@frappe.whitelist(allow_guest=True)
+def create_business(data=None):
+    try:
+        if not data:
+            data = frappe.form_dict
+
+        business_type = data.get("business_type")
+        reference_entity = data.get("reference_entity")
+
+        if not business_type or not reference_entity:
+            frappe.throw(_("Missing required fields: business_type and reference_entity."))
+
+        user = frappe.session.user
+        email = frappe.db.get_value("User", user, "email")
+
+        warehouse_entries = []
+        reference_doctype = ""
+
+        if business_type.lower() == "farmer":
+            reference_doctype = "Farmer Master"
+            farmer_name = frappe.db.get_value(reference_doctype, reference_entity, "farmer_name")
+            if farmer_name:
+                warehouse_name = f"{reference_entity} - {farmer_name}"
+                warehouse_entries.append({"warehouse_name": warehouse_name})
+
+        elif business_type.lower() in ["vendor", "supplier"]:
+            reference_doctype = "Supplier"
+            supplier_name = frappe.db.get_value(reference_doctype, reference_entity, "supplier_name")
+            if supplier_name:
+                warehouse_name = f"{reference_entity} - {supplier_name}"
+                warehouse_entries.append({"warehouse_name": warehouse_name})
+
+        else:
+            frappe.throw(_("Invalid business type."))
+
+        # Create Business document with child warehouses
+        business_doc = frappe.get_doc({
+            "doctype": "Business",
+            "business_type": business_type,
+            "reference_doctype": reference_doctype,
+            "reference_entity": reference_entity,
+            "email": email,
+            "user": user,
+            "create_warehouses": warehouse_entries  # child table field
+        })
+        business_doc.insert(ignore_permissions=True)
+
+        return {
+            "status": "success",
+            "message": _("Business created successfully."),
+            "business_name": business_doc.name
+        }
+
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), _("Business Creation Failed"))
+        return {
+            "status": "error",
+            "message": _("An error occurred while creating the Business."),
+            "error": str(e)
+        }
 
 def update_farm_in_farmer(farmer_id, farm_id):
     try:
