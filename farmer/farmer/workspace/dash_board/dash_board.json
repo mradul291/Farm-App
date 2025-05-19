@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"zioVV4ePzv\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Dash Board</span>\",\"col\":12}},{\"id\":\"AMW2KSnhqG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sites\",\"col\":3}},{\"id\":\"8rr0TJWQGi\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Crops\",\"col\":3}},{\"id\":\"Zw4MS28SLP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Farms\",\"col\":3}},{\"id\":\"4EBqlYMWVW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Products\",\"col\":3}}]",
+ "content": "[{\"id\":\"zioVV4ePzv\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Dash Board</span>\",\"col\":12}},{\"id\":\"AMW2KSnhqG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sites\",\"col\":3}},{\"id\":\"8rr0TJWQGi\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Crops\",\"col\":3}},{\"id\":\"Zw4MS28SLP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Farms\",\"col\":3}},{\"id\":\"4EBqlYMWVW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Products\",\"col\":3}},{\"id\":\"4iWyDaLBZ_\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loan Applications\",\"col\":3}},{\"id\":\"k2Y19nwD92\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loan Installments\",\"col\":3}}]",
  "creation": "2025-03-19 14:10:49.476722",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Dash Board",
  "links": [],
- "modified": "2025-05-16 17:33:47.229960",
+ "modified": "2025-05-19 18:01:52.144538",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Dash Board",
@@ -24,10 +24,7 @@
  "quick_lists": [],
  "roles": [
   {
-   "role": "Farmer"
-  },
-  {
-   "role": "Supplier"
+   "role": "Administrator"
   }
  ],
  "sequence_id": 23.0,
@@ -43,8 +40,24 @@
   {
    "color": "Grey",
    "doc_view": "List",
+   "label": "Loan Applications",
+   "link_to": "Loan Application",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
    "label": "Farms",
    "link_to": "Farm Master",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Loan Installments",
+   "link_to": "Loan Installments",
    "stats_filter": "[]",
    "type": "DocType"
   },

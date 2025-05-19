@@ -1,0 +1,83 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-05-19 11:01:38.829717",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "business",
+  "business_type",
+  "reference_doctype",
+  "reference_entity",
+  "column_break_haw5",
+  "create_warehouses",
+  "remark"
+ ],
+ "fields": [
+  {
+   "fieldname": "business",
+   "fieldtype": "Data",
+   "label": "Business",
+   "read_only": 1
+  },
+  {
+   "fieldname": "business_type",
+   "fieldtype": "Select",
+   "label": "Business Type\t",
+   "options": "\nFarmer\nVendor"
+  },
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Link",
+   "label": "Reference DocType\t",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "reference_entity",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference Entity\t",
+   "options": "reference_doctype"
+  },
+  {
+   "fieldname": "column_break_haw5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "remark",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Remark",
+   "read_only": 1
+  },
+  {
+   "fieldname": "create_warehouses",
+   "fieldtype": "Table",
+   "label": "Create Warehouses\t",
+   "options": "Create Warehouse"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-05-19 14:53:29.702254",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Business",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
