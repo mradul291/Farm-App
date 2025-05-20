@@ -157,20 +157,20 @@ def create_vendor_user(data):
         })
         supplier.insert(ignore_permissions=True)
 
-        # Call create_business to also create Business and Warehouse
-        frappe.get_doc({
-            "doctype": "Business",
+        # Create Business
+        business_data = {
             "business_type": "Vendor",
-            "reference_doctype": "Supplier",
             "reference_entity": supplier.name,
-            "email": email,
-            "user": user.name,
-            "create_warehouses": [{
-                "warehouse_name": f"{supplier.name} - {supplier_name}"
-            }]
-        }).insert(ignore_permissions=True)
+            "email": email
+        }
 
-        frappe.db.commit()
+        try:
+            create_business(business_data)
+            print("Step X.X: create_business for Vendor executed successfully")
+        except Exception as e:
+            frappe.log_error(frappe.get_traceback(), "create_business for Vendor FAILED")
+            print(f"create_business error: {e}")
+        
         return {
             "message": "User Created Successfully",
             "status": 201,
@@ -257,6 +257,7 @@ def create_user_farmer(data):
         business_data = {
             "business_type": "Farmer",
             "reference_entity": farmer_id,
+            "email": email
         }
         try:
             create_business(business_data)
@@ -297,19 +298,22 @@ def create_user_farmer(data):
 
 #create Business for Farmer and Vendor
 @frappe.whitelist(allow_guest=True)
-def create_business(data=None):
+def create_business(data):
+    print(f"Under the create business function *************")
     try:
         if not data:
             data = frappe.form_dict
 
         business_type = data.get("business_type")
         reference_entity = data.get("reference_entity")
+        email = data.get("email")
+
+        print(f"Values =  Business Type =  {business_type}, Referevce  Entity = {reference_entity}, Email = {email}")
 
         if not business_type or not reference_entity:
             frappe.throw(_("Missing required fields: business_type and reference_entity."))
 
         user = frappe.session.user
-        email = frappe.db.get_value("User", user, "email")
 
         warehouse_entries = []
         reference_doctype = ""
@@ -335,13 +339,16 @@ def create_business(data=None):
         business_doc = frappe.get_doc({
             "doctype": "Business",
             "business_type": business_type,
-            "reference_doctype": reference_doctype,
+            "reference_doctype": reference_doctype, 
             "reference_entity": reference_entity,
             "email": email,
             "user": user,
             "create_warehouses": warehouse_entries  # child table field
         })
         business_doc.insert(ignore_permissions=True)
+        frappe.db.set_value("Business", business_doc.name, "owner", email)
+        
+        frappe.db.commit()
 
         return {
             "status": "success",
@@ -354,7 +361,7 @@ def create_business(data=None):
         return {
             "status": "error",
             "message": _("An error occurred while creating the Business."),
-            "error": str(e)
+            "error": str(e) 
         }
 
 def update_farm_in_farmer(farmer_id, farm_id):
@@ -519,6 +526,13 @@ def create_or_update_website_item(doc, method):
         for field in website_item_fields:
             if field in item_fields:
                 website_item_doc.set(field, doc.get(field))
+        
+        # Custom logic to set default_warehouse from item_defaults
+        if doc.item_defaults:
+            # Prefer the first matching company or the first row in general
+            first_default = doc.item_defaults[0]  # or apply custom company filter if needed
+            if first_default.default_warehouse:
+                website_item_doc.website_warehouse = first_default.default_warehouse
         
         website_item_doc.save(ignore_permissions=True)
 
@@ -790,3 +804,20 @@ def user_specific_sales_invoice(user):
         return None
     else:
         return f"`tabSales Invoice`.owner = '{user}'"
+    
+# 15: Check for User Specific Business  
+def user_specific_business(user):
+    if not user:
+        user = frappe.session.user
+    if "System Manager" in frappe.get_roles(user):
+        return None
+    return f"`tabBusiness`.owner = '{user}'"
+
+# 16: Check for User Specific Warehouse 
+def user_specific_warehouse(user):
+    if not user:
+        user = frappe.session.user
+    if "System Manager" in frappe.get_roles(user):
+        return None
+    return f"`tabWarehouse`.owner = '{user}'"
+
