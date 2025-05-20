@@ -9,6 +9,7 @@
   "business_type",
   "reference_doctype",
   "reference_entity",
+  "email",
   "column_break_haw5",
   "create_warehouses",
   "remark"
@@ -54,11 +55,17 @@
    "fieldtype": "Table",
    "label": "Create Warehouses\t",
    "options": "Create Warehouse"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-19 14:53:29.702254",
+ "modified": "2025-05-20 16:26:46.702622",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Business",
