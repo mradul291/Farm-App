@@ -206,9 +206,10 @@ permission_query_conditions = {
     # "Crops Master": "farmer.api.user_api.user_specific_crops",
     "Sales Order": "farmer.api.user_api.user_specific_sales_order",
     "Farmer Master": "farmer.api.user_api.user_specific_farmer",
-    "Sales Invoice": "farmer.api.user_api.user_specific_sales_invoice",
+    # "Sales Invoice": "farmer.api.user_api.user_specific_sales_invoice",
     "Business": "farmer.api.user_api.user_specific_business",
-    "Warehouse": "farmer.api.user_api.user_specific_warehouse"
+    "Warehouse": "farmer.api.user_api.user_specific_warehouse",
+    "Sales Order": "farmer.api.user_api.get_permission_query_conditions"
 }
 
 doc_events = {
@@ -238,12 +239,13 @@ override_whitelisted_methods = {
      "farmer.api.user_api.fetch_site_list": "farmer.api.user_api.fetch_site_list",
      "farmer.api.user_api.get_financing_availability": "farmer.api.user_api.get_financing_availability",
      "farmer.api.user_api.create_sales_order": "farmer.api.user_api.create_sales_order",
-
+    #  "farmer.api.user_api.fetch_sales_orders_by_view": "farmer.api.user_api.fetch_sales_orders_by_view",
 
      "farmer.api.loan_api.make_loan_payment_request": "farmer.api.loan_api.make_loan_payment_request",
      "farmer.api.loan_api.make_installment_payment_request": "farmer.api.loan_api.make_installment_payment_request",
      "farmer.api.loan_api.create_invoice_from_sales_order": "farmer.api.loan_api.create_invoice_from_sales_order",
-     "farmer.api.loan_api.refresh_loan_installments": "farmer.api.loan_api.refresh_loan_installments",
+     "farmer.api.loan_api.refresh_loan_installments": "farmer.api.loan_api.refresh_loan_installments"
+
 }
 
 
