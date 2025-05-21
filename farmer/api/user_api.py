@@ -532,7 +532,8 @@ def create_or_update_website_item(doc, method):
             # Prefer the first matching company or the first row in general
             first_default = doc.item_defaults[0]  # or apply custom company filter if needed
             if first_default.default_warehouse:
-                website_item_doc.website_warehouse = first_default.default_warehouse
+                # website_item_doc.website_warehouse = first_default.default_warehouse
+                website_item_doc.website_warehouse = "All Warehouses - FWH"
         
         website_item_doc.save(ignore_permissions=True)
 

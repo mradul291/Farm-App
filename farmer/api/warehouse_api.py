@@ -10,6 +10,7 @@ def create_warehouses_for_business(doc, method):
                 "warehouse_name": row.warehouse_name,
                 "is_group": 0,
                 "custom_business": doc.name,
+                "parent_warehouse": "All Warehouses - FWH",
                 "company": "Farmwarehouse",
             })
             warehouse.insert(ignore_permissions=True)
