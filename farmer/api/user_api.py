@@ -796,15 +796,7 @@ def user_specific_farmer(user):
         return None
     else:
         return f"`tabFarmer Master`.owner = '{user}'"
-    
-# 14: Check for User Specific Sales Invoice  
 
-def user_specific_sales_invoice(user):
-    if not user: user = frappe.session.user
-    if "System Manager" in frappe.get_roles(user):
-        return None
-    else:
-        return f"`tabSales Invoice`.owner = '{user}'"
     
 # 15: Check for User Specific Business  
 def user_specific_business(user):
@@ -821,4 +813,68 @@ def user_specific_warehouse(user):
     if "System Manager" in frappe.get_roles(user):
         return None
     return f"`tabWarehouse`.owner = '{user}'"
+
+    
+# # 14: Check for User Specific Sales Invoice  
+
+# def user_specific_sales_invoice(user):
+#     if not user: user = frappe.session.user
+#     if "System Manager" in frappe.get_roles(user):
+#         return None
+#     else:
+#         return f"`tabSales Invoice`.owner = '{user}'"
+
+# # 17: Check for User Specific Sales Invoice 
+# def user_specific_delivery_note(user):
+#     if not user:
+#         user = frappe.session.user
+#     if "System Manager" in frappe.get_roles(user):
+#         return None
+#     return f"`tabWarehouse`.owner = '{user}'"
+
+
+def get_permission_query_conditions(user):
+    if not user or user == "Administrator":
+        return ""
+
+    return f"""
+        EXISTS (
+            SELECT 1
+            FROM `tabSales Order Item` soi
+            JOIN `tabItem` i ON soi.item_code = i.name
+            WHERE soi.parent = `tabSales Order`.name
+            AND i.owner = {frappe.db.escape(user)}
+        )
+    """
+
+
+# @frappe.whitelist()
+# def fetch_sales_orders_by_view(view_type):
+#     user = frappe.session.user
+
+#     if view_type == "outgoing":
+#         query = f"""
+#             SELECT name, customer, transaction_date, status, owner
+#             FROM `tabSales Order`
+#             WHERE owner = {frappe.db.escape(user)}
+#             ORDER BY modified DESC
+#         """
+#     else:
+#         # Default to incoming
+#         query = f"""
+#             SELECT so.name, so.customer, so.transaction_date, so.status, so.owner
+#             FROM `tabSales Order` so
+#             WHERE EXISTS (
+#                 SELECT 1
+#                 FROM `tabSales Order Item` soi
+#                 JOIN `tabItem` i ON soi.item_code = i.name
+#                 WHERE soi.parent = so.name
+#                 AND i.owner = {frappe.db.escape(user)}
+#             )
+#             ORDER BY so.modified DESC
+#         """
+
+#     results = frappe.db.sql(query, as_dict=True)
+#     return results
+
 
