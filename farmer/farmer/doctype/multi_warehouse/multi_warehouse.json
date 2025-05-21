@@ -12,6 +12,7 @@
   {
    "fieldname": "warehouse",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Warehouse",
    "options": "Warehouse"
   }
@@ -19,7 +20,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-20 19:16:36.994429",
+ "modified": "2025-05-21 10:43:55.567851",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Multi Warehouse",
