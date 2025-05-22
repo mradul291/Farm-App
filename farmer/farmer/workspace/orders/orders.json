@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"mHUhbGEJ_J\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Orders</span>\",\"col\":12}},{\"id\":\"z6Oep28Cpa\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Orders\",\"col\":4}},{\"id\":\"7eZTNRTFbz\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"thadjU4f-x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Orders\",\"col\":3}}]",
+ "content": "[{\"id\":\"mHUhbGEJ_J\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Orders</span>\",\"col\":12}},{\"id\":\"z6Oep28Cpa\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Orders\",\"col\":4}},{\"id\":\"5KqLeC3skM\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Complete Orders\",\"col\":4}},{\"id\":\"HorB5ydrp0\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Incomplete Orders\",\"col\":4}},{\"id\":\"7eZTNRTFbz\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"thadjU4f-x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Orders\",\"col\":3}}]",
  "creation": "2025-05-08 16:39:43.890370",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,14 +13,22 @@
  "is_hidden": 0,
  "label": "Orders",
  "links": [],
- "modified": "2025-05-16 16:23:40.595668",
+ "modified": "2025-05-22 10:50:35.963608",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Orders",
  "number_cards": [
   {
+   "label": "Complete Orders",
+   "number_card_name": "Complete Orders"
+  },
+  {
    "label": "Total Orders",
    "number_card_name": "Total Orders-1"
+  },
+  {
+   "label": "Incomplete Orders",
+   "number_card_name": "Incomplete Orders"
   }
  ],
  "owner": "Administrator",
