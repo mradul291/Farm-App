@@ -848,33 +848,3 @@ def get_permission_query_conditions(user):
     """
 
 
-# @frappe.whitelist()
-# def fetch_sales_orders_by_view(view_type):
-#     user = frappe.session.user
-
-#     if view_type == "outgoing":
-#         query = f"""
-#             SELECT name, customer, transaction_date, status, owner
-#             FROM `tabSales Order`
-#             WHERE owner = {frappe.db.escape(user)}
-#             ORDER BY modified DESC
-#         """
-#     else:
-#         # Default to incoming
-#         query = f"""
-#             SELECT so.name, so.customer, so.transaction_date, so.status, so.owner
-#             FROM `tabSales Order` so
-#             WHERE EXISTS (
-#                 SELECT 1
-#                 FROM `tabSales Order Item` soi
-#                 JOIN `tabItem` i ON soi.item_code = i.name
-#                 WHERE soi.parent = so.name
-#                 AND i.owner = {frappe.db.escape(user)}
-#             )
-#             ORDER BY so.modified DESC
-#         """
-
-#     results = frappe.db.sql(query, as_dict=True)
-#     return results
-
-
