@@ -197,10 +197,6 @@ app_include_js = "/assets/farmer/js/redirect.js"
 
 define_csrf = 1
 
-# doctype_list_js = {
-#     "Sales Order": "public/js/sales_order_list.js"
-# }
-
 
 permission_query_conditions = {
     "Item": "farmer.api.user_api.item_permission_query_conditions",
@@ -214,7 +210,8 @@ permission_query_conditions = {
     # "Sales Invoice": "farmer.api.user_api.user_specific_sales_invoice",
     "Business": "farmer.api.user_api.user_specific_business",
     "Warehouse": "farmer.api.user_api.user_specific_warehouse",
-    "Sales Order": "farmer.api.user_api.get_permission_query_conditions"
+    "Sales Order": "farmer.api.user_api.get_permission_query_conditions",
+    "Sales Invoice": "farmer.api.user_api.get_permission_query_conditions_sales_invoice"
 }
 
 doc_events = {
@@ -244,7 +241,6 @@ override_whitelisted_methods = {
      "farmer.api.user_api.fetch_site_list": "farmer.api.user_api.fetch_site_list",
      "farmer.api.user_api.get_financing_availability": "farmer.api.user_api.get_financing_availability",
      "farmer.api.user_api.create_sales_order": "farmer.api.user_api.create_sales_order",
-    #  "farmer.api.user_api.get_sales_orders": "farmer.api.user_api.get_sales_orders",
 
 
      "farmer.api.loan_api.make_loan_payment_request": "farmer.api.loan_api.make_loan_payment_request",

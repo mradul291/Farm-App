@@ -847,4 +847,16 @@ def get_permission_query_conditions(user):
         )
     """
 
+def get_permission_query_conditions_sales_invoice(user):
+    if not user or user == "Administrator":
+        return ""
 
+    return f"""
+        EXISTS (
+            SELECT 1
+            FROM `tabSales Invoice Item` sii
+            JOIN `tabItem` i ON sii.item_code = i.name
+            WHERE sii.parent = `tabSales Invoice`.name
+            AND i.owner = {frappe.db.escape(user)}
+        )
+    """

@@ -22,7 +22,7 @@
  "is_hidden": 0,
  "label": "Loans",
  "links": [],
- "modified": "2025-05-16 16:23:40.892518",
+ "modified": "2025-05-22 11:03:01.068284",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loans",
@@ -47,9 +47,6 @@
  "roles": [
   {
    "role": "Farmer"
-  },
-  {
-   "role": "Supplier"
   }
  ],
  "sequence_id": 30.0,
