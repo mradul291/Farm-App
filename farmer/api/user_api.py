@@ -832,7 +832,6 @@ def user_specific_warehouse(user):
 #         return None
 #     return f"`tabWarehouse`.owner = '{user}'"
 
-
 def get_permission_query_conditions(user):
     if not user or user == "Administrator":
         return ""
@@ -860,3 +859,16 @@ def get_permission_query_conditions_sales_invoice(user):
             AND i.owner = {frappe.db.escape(user)}
         )
     """
+def user_specific_delivery_note(user):
+    if not user:
+        user = frappe.session.user
+    if "System Manager" in frappe.get_roles(user):
+        return None
+    return f"`tabDelivery Note`.owner = '{user}'"
+
+def user_specific_shipment(user):
+    if not user:
+        user = frappe.session.user
+    if "System Manager" in frappe.get_roles(user):
+        return None
+    return f"`tabShipment`.owner = '{user}'"

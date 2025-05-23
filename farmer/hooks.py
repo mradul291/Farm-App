@@ -211,7 +211,9 @@ permission_query_conditions = {
     "Business": "farmer.api.user_api.user_specific_business",
     "Warehouse": "farmer.api.user_api.user_specific_warehouse",
     "Sales Order": "farmer.api.user_api.get_permission_query_conditions",
-    "Sales Invoice": "farmer.api.user_api.get_permission_query_conditions_sales_invoice"
+    "Sales Invoice": "farmer.api.user_api.get_permission_query_conditions_sales_invoice",
+    "Delivery Note": "farmer.api.user_api.user_specific_delivery_note",
+    "Shipment": "farmer.api.user_api.user_specific_shipment",
 }
 
 doc_events = {
@@ -227,8 +229,12 @@ doc_events = {
     },
     "Business": {
         "on_update": "farmer.api.warehouse_api.create_warehouses_for_business"
+    },
+    "Warehouse": {
+        "after_insert": "farmer.api.warehouse_api.link_warehouse_to_business"
     }
-}
+
+}                                                                                                                                                                                                        
 
 # Overriding Methods
 # ------------------------------
@@ -246,7 +252,9 @@ override_whitelisted_methods = {
      "farmer.api.loan_api.make_loan_payment_request": "farmer.api.loan_api.make_loan_payment_request",
      "farmer.api.loan_api.make_installment_payment_request": "farmer.api.loan_api.make_installment_payment_request",
      "farmer.api.loan_api.create_invoice_from_sales_order": "farmer.api.loan_api.create_invoice_from_sales_order",
-     "farmer.api.loan_api.refresh_loan_installments": "farmer.api.loan_api.refresh_loan_installments"
+     "farmer.api.loan_api.refresh_loan_installments": "farmer.api.loan_api.refresh_loan_installments",
+
+    #  "farmer.api.otp_api.send_otp": "farmer.api.otp_api.send_otp"
 
 }
 
