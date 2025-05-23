@@ -607,6 +607,7 @@ def get_financing_availability(sales_order):
 
     return {"items": items_data}
 
+
 # API 8: Check for User specific Loan Application
 
 def loan_application_permission_query_conditions(user):
