@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"mHUhbGEJ_J\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Orders</span>\",\"col\":12}},{\"id\":\"z6Oep28Cpa\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Orders\",\"col\":4}},{\"id\":\"5KqLeC3skM\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Complete Orders\",\"col\":4}},{\"id\":\"HorB5ydrp0\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Incomplete Orders\",\"col\":4}},{\"id\":\"7eZTNRTFbz\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"thadjU4f-x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Orders\",\"col\":3}},{\"id\":\"BwwnQceUMz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Invoices\",\"col\":3}}]",
+ "content": "[{\"id\":\"mHUhbGEJ_J\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Orders</span>\",\"col\":12}},{\"id\":\"z6Oep28Cpa\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Orders\",\"col\":4}},{\"id\":\"5KqLeC3skM\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Complete Orders\",\"col\":4}},{\"id\":\"HorB5ydrp0\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Incomplete Orders\",\"col\":4}},{\"id\":\"7eZTNRTFbz\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"thadjU4f-x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Orders\",\"col\":3}},{\"id\":\"BwwnQceUMz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Invoices\",\"col\":3}},{\"id\":\"SUDZWsxXmi\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Delivery Notes\",\"col\":3}},{\"id\":\"17PaTBRpp3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shipments\",\"col\":3}}]",
  "creation": "2025-05-08 16:39:43.890370",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Orders",
  "links": [],
- "modified": "2025-05-22 11:14:40.213724",
+ "modified": "2025-05-23 15:38:41.319545",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Orders",
@@ -45,6 +45,22 @@
  ],
  "sequence_id": 26.0,
  "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Delivery Notes",
+   "link_to": "Delivery Note",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Shipments",
+   "link_to": "Shipment",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
   {
    "color": "Grey",
    "doc_view": "List",
