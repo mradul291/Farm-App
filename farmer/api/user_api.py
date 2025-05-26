@@ -95,7 +95,8 @@ def create_buyer_user(data):
             "roles": [{"role": "Customer"}]
         })
         user.insert(ignore_permissions=True)
-        
+        frappe.db.set_value("User", user.name, "owner", email)
+
         # # Assign "Farmer" role
         # user.append("roles", {"role": "Customer"})
         # user.save(ignore_permissions=True)
@@ -148,6 +149,7 @@ def create_vendor_user(data):
             "roles": [{"role": "Supplier"}]
         })
         user.insert(ignore_permissions=True)
+        frappe.db.set_value("User", user.name, "owner", email)
 
         # Create Supplier 
         supplier = frappe.get_doc({
@@ -156,7 +158,6 @@ def create_vendor_user(data):
             "supplier_type": "Company" if account_type == "Company" else "Individual"
         })
         supplier.insert(ignore_permissions=True)
-
         # Create Business
         business_data = {
             "business_type": "Vendor",
@@ -238,6 +239,7 @@ def create_user_farmer(data):
             "roles": [{"role": "Farmer"}]
         })
         user.insert(ignore_permissions=True)
+        frappe.db.set_value("User", user.name, "owner", email)
         
         # # Assign "Farmer" role
         # user.append("roles", {"role": "Farmer"})
@@ -626,13 +628,17 @@ def loan_application_permission_query_conditions(user):
 
 @frappe.whitelist(allow_guest=True)  # Requires user authentication
 def upload_profile_picture():
+    print("***********************************UPload File Called*****************************************")
     """Upload an image and set it as the user's profile picture using File doctype"""
     user_type = frappe.form_dict.get("user_type")
 
     user_email = frappe.form_dict.get("user_email")  # Get the logged-in user
     farmer_name = frappe.form_dict.get("farmer_id")  # Add as attachment then add to field - documents - Doctype - Farm Master
+    supplier_id = frappe.form_dict.get("supplier_id")
     farm_name = frappe.form_dict.get("farm_name")  # Add in attachment () Doctype - Farmer Master
-
+    
+    print(f"Supplier Id: {supplier_id}")
+    print(f"Farmer Id: {farmer_name}")
 
     uploaded_file = frappe.request.files.get("profile_image")
     uploaded_farmer_id = frappe.request.files.get("id_document")
@@ -672,36 +678,95 @@ def upload_profile_picture():
             frappe.log_error(frappe.get_traceback(), "Profile Picture Upload Failed")
             return {"error": f"Failed to upload image: {str(e)}","status":500}
     
+
+    # if not uploaded_farmer_id:
+    #     farmer_id_url =  {"error": "No Id Document uploaded."}
+    # else:
+    #     try:
+    #         # Read file data
+    #         file_data = uploaded_farmer_id.read()
+    #         filename = uploaded_farmer_id.filename
+    #         file_path = f"/files/{filename}"
+    #         if user_type == "vendor":
+    #             attached_doc = "Supplier"
+    #             if supplier_id in [None, "undefined", ""]:
+    #                 frappe.throw("Supplier ID is missing or invalid.")
+    #             attached_to_name = supplier_id
+    #         else:
+    #             attached_doc = "Farmer Master"
+    #             attached_to_name = farmer_name
+    #         # Save file in File doctype
+    #         file_doc = frappe.get_doc({
+    #             'doctype': 'File',
+    #             'file_name': filename,
+    #             'attached_to_doctype': attached_doc, 
+    #             'attached_to_name': attached_to_name , 
+    #             'file_url': file_path,
+    #             'is_private': 0, 
+    #             'content': file_data  
+    #         })
+    #         file_doc.insert(ignore_permissions=True)
+
+    #         farmer_id_url = file_doc.file_url
+    #         frappe.db.commit()
+
+    #     except Exception as e:
+    #         frappe.log_error(frappe.get_traceback(), "Profile Picture Upload Failed")
+    #         return {"error": f"Failed to upload image: {str(e)}","status":500}
+    
     if not uploaded_farmer_id:
-        farmer_id_url =  {"error": "No Id Document uploaded."}
+        farmer_id_url = {"error": "No ID document uploaded."}
     else:
         try:
-            # Read file data
             file_data = uploaded_farmer_id.read()
             filename = uploaded_farmer_id.filename
             file_path = f"/files/{filename}"
-            attached_doc = 'Farmer Master'
-            if user_type == "vendor":
-                attached_doc = "Supplier"
-            # Save file in File doctype
+
+        # Always attach ID document to User (in addition to other docs if needed)
             file_doc = frappe.get_doc({
                 'doctype': 'File',
                 'file_name': filename,
-                'attached_to_doctype': attached_doc,  # Attach to User doctype
-                'attached_to_name': farmer_name ,  # Attach to the logged-in user's document
-                'file_url': file_path,  # File storage path
-                'is_private': 0,  # Set to 1 if you want private file access
-                'content': file_data  # Convert to base64
+                'attached_to_doctype': 'User',
+                'attached_to_name': user_email,
+                'file_url': file_path,
+                'is_private': 0,
+                'content': file_data
             })
             file_doc.insert(ignore_permissions=True)
 
             farmer_id_url = file_doc.file_url
             frappe.db.commit()
 
+        # Optional: Also attach to Supplier or Farmer Master if desired
+            if user_type == "vendor" and supplier_id not in [None, "undefined", ""]:
+                additional_file_doc = frappe.get_doc({
+                'doctype': 'File',
+                'file_name': filename,
+                'attached_to_doctype': "Supplier",
+                'attached_to_name': supplier_id,
+                'file_url': file_path,
+                'is_private': 0,
+                'content': file_data
+                })
+                additional_file_doc.insert(ignore_permissions=True)
+
+            elif user_type != "vendor" and farmer_name:
+                additional_file_doc = frappe.get_doc({
+                'doctype': 'File',
+                'file_name': filename,
+                'attached_to_doctype': "Farmer Master",
+                'attached_to_name': farmer_name,
+                'file_url': file_path,
+                'is_private': 0,
+                'content': file_data
+                })
+                additional_file_doc.insert(ignore_permissions=True)
+
+                frappe.db.commit()
+
         except Exception as e:
-            frappe.log_error(frappe.get_traceback(), "Profile Picture Upload Failed")
-            return {"error": f"Failed to upload image: {str(e)}","status":500}
-    
+            return {"error": f"Failed to upload ID Document: {str(e)}", "status": 500}
+
     if not uploaded_farm_doc:
         farm_document_url =  {"error": "No image file uploaded."}
     else:
@@ -873,3 +938,10 @@ def user_specific_shipment(user):
     if "System Manager" in frappe.get_roles(user):
         return None
     return f"`tabShipment`.owner = '{user}'"
+
+def user_specific_user(user):
+    if not user:
+        user = frappe.session.user
+    if "System Manager" in frappe.get_roles(user):
+        return None
+    return f"`tabUser`.owner = '{user}'"

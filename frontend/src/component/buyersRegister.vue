@@ -13,10 +13,10 @@
       <a class="text-green-600" @click="$emit('goBack')" href="#">
         <i class="fas fa-arrow-left"></i> Back home
       </a>
-      <a class="text-gray-600" href="#">
+      <p class="text-center text-gray-600 mt-4">
         Already have an account?
-        <a class="text-green-600" href="/login">Log in</a>
-      </a>
+        <a class="text-green-500" href="/login">Log in</a>
+      </p>
     </div>
     <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md">
       <h2 class="text-2xl font-semibold text-center mb-4">Create Account</h2>
