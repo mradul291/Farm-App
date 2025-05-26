@@ -13,10 +13,10 @@
       <a class="text-green-600" @click="$emit('goBack')" href="#">
         <i class="fas fa-arrow-left"></i> Back home
       </a>
-      <a class="text-gray-600" href="#">
+      <p class="text-center text-gray-600 mt-4">
         Already have an account?
-        <a class="text-green-600" href="/login">Log in</a>
-      </a>
+        <a class="text-green-500" href="/login">Log in</a>
+      </p>
     </div>
     <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md">
       <h2 class="text-2xl font-semibold text-center mb-4">Create Account</h2>
@@ -537,7 +537,7 @@ export default {
     },
     'form.company_name'(value) {
       if (value && this.form.account_type === 'Company') {
-        this.errors.account_type = 'Company name is required'
+        this.errors.company_name = value ? '' : 'Company name is required'
       } else {
         this.errors.account_type = ''
         delete this.errors.account_type
@@ -622,6 +622,7 @@ export default {
         return err
       }
     },
+    
     async upload_file() {
       try {
         const formData = new FormData()
@@ -632,6 +633,8 @@ export default {
 
         formData.append('user_email', this.response.user_id)
         formData.append('farmer_id', this.response.farmer_id)
+
+        formData.append('supplier_id', this.response.supplier_id) 
 
         formData.append('profile_image', this.form.profilePicture)
         formData.append('id_document', this.form.idDocument)

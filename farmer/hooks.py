@@ -214,6 +214,7 @@ permission_query_conditions = {
     "Sales Invoice": "farmer.api.user_api.get_permission_query_conditions_sales_invoice",
     "Delivery Note": "farmer.api.user_api.user_specific_delivery_note",
     "Shipment": "farmer.api.user_api.user_specific_shipment",
+    "User": "farmer.api.user_api.user_specific_user"
 }
 
 doc_events = {
@@ -233,7 +234,6 @@ doc_events = {
     "Warehouse": {
         "after_insert": "farmer.api.warehouse_api.link_warehouse_to_business"
     }
-
 }                                                                                                                                                                                                        
 
 # Overriding Methods

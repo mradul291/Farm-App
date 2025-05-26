@@ -957,3 +957,37 @@ function calculate_quantity(frm, cdt, cdn) {
         frappe.msgprint(__("Max Rating can't be Zero"));
     }
 }
+
+frappe.ui.form.on('Site', {
+    refresh: function(frm) {
+        if (frm.is_new()) return;  // Don't fetch for unsaved docs
+
+        // Clear existing data
+        frm.clear_table('assigned_farmer');
+
+        // Fetch Farmer Masters where site == current site
+        frappe.call({
+            method: 'frappe.client.get_list',
+            args: {
+                doctype: 'Farmer Master',
+                filters: {
+                    site: frm.doc.name
+                },
+                fields: ['name', 'farmer_name', 'status'],
+                limit_page_length: 100
+            },
+            callback: function(response) {
+                const farmers = response.message || [];
+
+                farmers.forEach(row => {
+                    let child = frm.add_child('assigned_farmer');
+                    child.farmer_name = row.name;
+                    child.farmer = row.farmer_name
+                    child.status = row.status;
+                });
+
+                frm.refresh_field('assigned_farmer');
+            }
+        });
+    }
+});

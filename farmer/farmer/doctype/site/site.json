@@ -106,7 +106,8 @@
    "fieldname": "assigned_farmer",
    "fieldtype": "Table",
    "label": "Assigned Farmer",
-   "options": "Farmer Table"
+   "options": "Farmer Table",
+   "read_only": 1
   },
   {
    "fieldname": "possible_crops",
@@ -185,7 +186,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-15 17:46:24.288405",
+ "modified": "2025-05-26 18:16:00.486455",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Site",

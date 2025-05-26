@@ -181,6 +181,10 @@ frappe.ui.form.on('Loan Application', {
 function add_cash_down_payment_button(frm) {
     frm.clear_custom_buttons();
 
+    if(frm.doc.down_payment_check){
+        return;
+    }
+
     frm.add_custom_button('Cash Down Payment', async function () {
 
         // Ensure Sales Invoice is linked

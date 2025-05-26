@@ -7,13 +7,14 @@
  "engine": "InnoDB",
  "field_order": [
   "farmer_name",
+  "farmer",
   "status"
  ],
  "fields": [
   {
    "fieldname": "farmer_name",
    "fieldtype": "Link",
-   "label": "Farmer Name",
+   "label": "Farmer",
    "options": "Farmer Master"
   },
   {
@@ -21,12 +22,18 @@
    "fieldname": "status",
    "fieldtype": "Data",
    "label": "Status"
+  },
+  {
+   "fetch_from": "farmer_name.farmer_name",
+   "fieldname": "farmer",
+   "fieldtype": "Data",
+   "label": "Farmer Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-03-12 11:56:37.717033",
+ "modified": "2025-05-26 18:19:27.688516",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Farmer Table",
