@@ -81,3 +81,42 @@ frappe.ui.form.on('Farmer Master', {
         });
     }
 });
+
+frappe.ui.form.on('Farmer Master', {
+    refresh: function(frm) {
+        if (frm.is_new()) return;
+
+        // Step 1: Get farmer email from linked User
+        frappe.db.get_value('User', frm.doc.farmer, 'email', (r) => {
+            if (!r || !r.email) return;
+
+            const farmer_email = r.email;
+
+            // Step 2: Clear existing order table
+            frm.clear_table('farmer_order');
+
+            // Step 3: Fetch Sales Orders owned by the same farmer email
+            frappe.call({
+                method: 'frappe.client.get_list',
+                args: {
+                    doctype: 'Sales Order',
+                    filters: {
+                        owner: farmer_email  // You can also add `farmer: frm.doc.name` if field exists
+                    },
+                    fields: ['name'],  // Add more if needed
+                    limit_page_length: 100
+                },
+                callback: function(res) {
+                    const orders = res.message || [];
+
+                    orders.forEach(order => {
+                        let row = frm.add_child('farmer_order');
+                        row.order_id = order.name;
+                    });
+
+                    frm.refresh_field('farmer_order');
+                }
+            });
+        });
+    }
+});

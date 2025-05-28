@@ -58,6 +58,7 @@ function no_of_equipments(frm) {
 
     frm.set_value('equipments', equipments.size);
     frm.refresh_field('equipments');
+    
 }
 
 // Client Script (Doctype: PUE Sponsor)
@@ -183,3 +184,55 @@ function calculate_row_value_and_total(frm, cdt, cdn) {
         }
     });
 }
+
+
+frappe.ui.form.on('PUE Sponsor', {
+    refresh: function(frm) {
+        if (frm.is_new()) return;
+
+        // Step 1: Extract item codes from sponsored_equipments
+        let itemCodes = [];
+
+        const getItemCodes = frm.doc.sponsored_equipments.map(row => {
+            return new Promise(resolve => {
+                frappe.db.get_value('Website Item', row.equipment, 'item_code', (r) => {
+                    if (r && r.item_code) {
+                        itemCodes.push(r.item_code);
+                    }
+                    resolve();
+                });
+            });
+        });
+
+        // Step 2: After all item_codes are fetched, find Loan Applications
+        Promise.all(getItemCodes).then(() => {
+            if (!itemCodes.length) return;
+
+            // Clear the existing sponsor_loans table
+            frm.clear_table('sponsor_loans');
+
+            // Step 3: Fetch Loan Applications with matching item_code
+            frappe.call({
+                method: 'frappe.client.get_list',
+                args: {
+                    doctype: 'Loan Application',
+                    filters: [
+                        ['item_code', 'in', itemCodes]
+                    ],
+                    fields: ['name'],
+                    limit_page_length: 100
+                },
+                callback: function(res) {
+                    const loans = res.message || [];
+
+                    loans.forEach(loan => {
+                        let row = frm.add_child('sponsor_loans');
+                        row.loan_id = loan.name;
+                    });
+
+                    frm.refresh_field('sponsor_loans');
+                }
+            });
+        });
+    }
+});
