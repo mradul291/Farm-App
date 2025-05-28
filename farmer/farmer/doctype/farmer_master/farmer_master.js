@@ -39,3 +39,45 @@ frappe.ui.form.on('Farmer Master', {
         }
     }
 });
+
+
+frappe.ui.form.on('Farmer Master', {
+    refresh: function(frm) {
+        if (frm.is_new()) return;
+
+        // Get farmer email from linked User
+        frappe.db.get_value('User', frm.doc.farmer, 'email', (r) => {
+            if (!r || !r.email) return;
+
+            const farmer_email = r.email;
+
+            // Clear existing loan_table
+            frm.clear_table('loan_table');
+
+            // Fetch loan applications owned by this email
+            frappe.call({
+                method: 'frappe.client.get_list',
+                args: {
+                    doctype: 'Loan Application',
+                    filters: {
+                        owner: farmer_email
+                    },
+                    fields: ['name', 'status', 'creation'], // Add more fields as needed
+                    limit_page_length: 100
+                },
+                callback: function(res) {
+                    const loans = res.message || [];
+
+                    loans.forEach(loan => {
+                        let row = frm.add_child('loan_table');
+                        row.loan_id = loan.name;
+                        row.status = loan.status;
+                        row.date = frappe.datetime.str_to_obj(loan.creation);
+                    });
+
+                    frm.refresh_field('loan_table');
+                }
+            });
+        });
+    }
+});

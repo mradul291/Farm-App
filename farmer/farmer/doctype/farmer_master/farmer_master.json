@@ -30,7 +30,7 @@
   "section_break_dz6e",
   "farms",
   "loans",
-  "loan",
+  "loan_table",
   "tasks",
   "task",
   "products",
@@ -103,11 +103,6 @@
    "fieldname": "loans",
    "fieldtype": "Tab Break",
    "label": "Loans"
-  },
-  {
-   "fieldname": "loan",
-   "fieldtype": "Data",
-   "label": "Loan"
   },
   {
    "fieldname": "tasks",
@@ -224,11 +219,17 @@
    "fieldtype": "Table",
    "label": "Product Section",
    "options": "Farmer Product List"
+  },
+  {
+   "fieldname": "loan_table",
+   "fieldtype": "Table",
+   "label": "Loans",
+   "options": "Loan Table"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-03-28 19:24:12.152249",
+ "modified": "2025-05-27 16:41:26.776806",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Farmer Master",
