@@ -20,7 +20,9 @@
   "sponsored_equipments_section",
   "sponsored_equipments",
   "tab_break_v3ku",
-  "loan"
+  "vvb",
+  "sponsored_loans",
+  "sponsor_loans"
  ],
  "fields": [
   {
@@ -81,11 +83,6 @@
    "label": "Loans"
   },
   {
-   "fieldname": "loan",
-   "fieldtype": "Data",
-   "label": "Loan"
-  },
-  {
    "fieldname": "equipments",
    "fieldtype": "Data",
    "label": "Equipment",
@@ -100,11 +97,25 @@
   {
    "fieldname": "column_break_ndb6",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "vvb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "sponsored_loans",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sponsor_loans",
+   "fieldtype": "Table",
+   "label": "Sponsored Loans",
+   "options": "Sponsored Loans Table"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-03-28 12:21:27.773332",
+ "modified": "2025-05-28 18:50:42.861934",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "PUE Sponsor",

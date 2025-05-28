@@ -12,6 +12,7 @@
   {
    "fieldname": "product_id",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Product ID",
    "options": "Website Item"
   },
@@ -19,13 +20,14 @@
    "fetch_from": "product_id.item_name",
    "fieldname": "product_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Product Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-03-28 15:59:44.162211",
+ "modified": "2025-05-28 17:33:07.746390",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Farmer Product List",

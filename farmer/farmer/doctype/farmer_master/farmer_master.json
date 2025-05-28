@@ -37,7 +37,7 @@
   "products_section",
   "product_section",
   "orders",
-  "order",
+  "farmer_order",
   "repayments",
   "repayment"
  ],
@@ -123,11 +123,6 @@
    "fieldname": "orders",
    "fieldtype": "Tab Break",
    "label": "Orders"
-  },
-  {
-   "fieldname": "order",
-   "fieldtype": "Data",
-   "label": "Order"
   },
   {
    "fieldname": "repayments",
@@ -218,18 +213,27 @@
    "fieldname": "product_section",
    "fieldtype": "Table",
    "label": "Product Section",
-   "options": "Farmer Product List"
+   "options": "Farmer Product List",
+   "read_only": 1
   },
   {
    "fieldname": "loan_table",
    "fieldtype": "Table",
    "label": "Loans",
-   "options": "Loan Table"
+   "options": "Loan Table",
+   "read_only": 1
+  },
+  {
+   "fieldname": "farmer_order",
+   "fieldtype": "Table",
+   "label": "Order",
+   "options": "Farmer Orders",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-27 16:41:26.776806",
+ "modified": "2025-05-28 17:53:35.817602",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Farmer Master",
