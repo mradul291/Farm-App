@@ -982,11 +982,77 @@ frappe.ui.form.on('Site', {
                 farmers.forEach(row => {
                     let child = frm.add_child('assigned_farmer');
                     child.farmer_name = row.name;
-                    child.farmer = row.farmer_name
+                    child.farmer = row.farmer_name;
                     child.status = row.status;
                 });
 
                 frm.refresh_field('assigned_farmer');
+            }
+        });
+    }
+});
+
+
+
+
+//***************************************************************************************** */
+
+frappe.ui.form.on('Site', {
+    refresh: function(frm) {
+        if (frm.is_new()) return;
+
+        frm.clear_table('actual_crops');
+
+        // Step 1: Get Farmer Masters linked to this site
+        frappe.call({
+            method: 'frappe.client.get_list',
+            args: {
+                doctype: 'Farmer Master',
+                filters: { site: frm.doc.name },
+                fields: ['name'],
+                limit_page_length: 100
+            },
+            callback: function(response) {
+                let farmers = response.message || [];
+                let allCropNames = new Set();
+                let completed = 0;
+
+                if (farmers.length === 0) {
+                    frm.refresh_field('actual_crops');
+                    return;
+                }
+
+                // Step 2: For each farmer, fetch full doc with farms child table
+                farmers.forEach(farmer => {
+                    frappe.call({
+                        method: 'frappe.client.get',
+                        args: {
+                            doctype: 'Farmer Master',
+                            name: farmer.name
+                        },
+                        callback: function(docRes) {
+                            let farmerDoc = docRes.message;
+                            if (farmerDoc.farms) {
+                                farmerDoc.farms.forEach(farm => {
+                                    if (farm.crops) {
+                                        allCropNames.add(farm.crops);
+                                    }
+                                });
+                            }
+
+                            completed++;
+
+                            // Step 3: After all farmers fetched, add unique crops
+                            if (completed === farmers.length) {
+                                allCropNames.forEach(crop => {
+                                    let row = frm.add_child('actual_crops');
+                                    row.crop_name = crop;
+                                });
+                                frm.refresh_field('actual_crops');
+                            }
+                        }
+                    });
+                });
             }
         });
     }

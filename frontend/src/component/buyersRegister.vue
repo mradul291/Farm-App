@@ -1,64 +1,40 @@
 <template>
   <!-- Loader Overlay -->
-  <div
-    v-if="loading"
-    class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-40"
-  >
-    <div
-      class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"
-    ></div>
+  <div v-if="loading" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-40">
+    <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
   </div>
   <div class="container mx-auto p-4">
     <div class="flex justify-between items-center mb-6">
       <a class="text-green-600" @click="$emit('goBack')" href="#">
         <i class="fas fa-arrow-left"></i> Back home
       </a>
-      <p class="text-center text-gray-600 mt-4">
+      <a class="text-gray-600" href="#">
         Already have an account?
-        <a class="text-green-500" href="/login">Log in</a>
-      </p>
+        <a class="text-green-600" href="/login">Log in</a>
+      </a>
     </div>
     <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md">
       <h2 class="text-2xl font-semibold text-center mb-4">Create Account</h2>
-      <form class="multiform" @submit.prevent="handleSubmit">
+      <form class="multiform" @submit.prevent="verifyOtpBackend">
         <div v-if="step === 1">
           <p class="text-center text-gray-600 mb-8">Personal Information</p>
           <div class="grid md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label class="block text-gray-700" for="first-name"
-                >First Name *</label
-              >
-              <input
-                class="w-full border p-2 rounded mt-1"
-                :class="{
-                  'border-red-500': errors.firstName,
-                  'border-gray-300': !errors.firstName,
-                }"
-                id="first-name"
-                placeholder="First Name"
-                type="text"
-                v-model="form.firstName"
-                required
-              />
+              <label class="block text-gray-700" for="first-name">First Name *</label>
+              <input class="w-full border p-2 rounded mt-1" :class="{
+                'border-red-500': errors.firstName,
+                'border-gray-300': !errors.firstName,
+              }" id="first-name" placeholder="First Name" type="text" v-model="form.firstName" required />
               <p v-if="errors.firstName" class="text-red-500 text-sm mt-1">
                 {{ errors.firstName }}
               </p>
             </div>
             <div>
-              <label class="block text-gray-700" for="last-name"
-                >Last Name *</label
-              >
-              <input
-                class="w-full border p-2 rounded mt-1"
-                :class="{
-                  'border-red-500': errors.lastName,
-                  'border-gray-300': !errors.lastName,
-                }"
-                id="last-name"
-                placeholder="Last Name"
-                type="text"
-                v-model="form.lastName"
-              />
+              <label class="block text-gray-700" for="last-name">Last Name *</label>
+              <input class="w-full border p-2 rounded mt-1" :class="{
+                'border-red-500': errors.lastName,
+                'border-gray-300': !errors.lastName,
+              }" id="last-name" placeholder="Last Name" type="text" v-model="form.lastName" />
               <p v-if="errors.lastName" class="text-red-500 text-sm mt-1">
                 {{ errors.lastName }}
               </p>
@@ -67,18 +43,10 @@
 
           <div class="mb-4">
             <label class="block text-gray-700" for="email">Email</label>
-            <input
-              class="w-full border p-2 rounded mt-1"
-              :class="{
-                'border-red-500': errors.email,
-                'border-gray-300': !errors.email,
-              }"
-              id="email"
-              placeholder="Email"
-              type="email"
-              v-model="form.email"
-              required
-            />
+            <input class="w-full border p-2 rounded mt-1" :class="{
+              'border-red-500': errors.email,
+              'border-gray-300': !errors.email,
+            }" id="email" placeholder="Email" type="email" v-model="form.email" required />
             <p v-if="errors.email" class="text-red-500 text-sm mt-1">
               {{ errors.email }}
             </p>
@@ -87,28 +55,16 @@
           <div class="mb-4">
             <label class="block text-gray-700" for="phone">Phone *</label>
             <div class="flex">
-              <select
-                class="border p-2 rounded-l"
-                :class="{
-                  'border-red-500': errors.phone,
-                  'border-gray-300': !errors.phone,
-                }"
-                v-model="form.phoneCode"
-              >
+              <select class="border p-2 rounded-l" :class="{
+                'border-red-500': errors.phone,
+                'border-gray-300': !errors.phone,
+              }" v-model="form.phoneCode">
                 <option value="+234">+234</option>
               </select>
-              <input
-                class="w-full border p-2 rounded-r"
-                :class="{
-                  'border-red-500': errors.phone,
-                  'border-gray-300': !errors.phone,
-                }"
-                id="phone"
-                placeholder="Phone Number"
-                type="text"
-                v-model="form.phone"
-                required
-              />
+              <input class="w-full border p-2 rounded-r" :class="{
+                'border-red-500': errors.phone,
+                'border-gray-300': !errors.phone,
+              }" id="phone" placeholder="Phone Number" type="text" v-model="form.phone" required />
             </div>
             <p v-if="errors.phone" class="text-red-500 text-sm mt-1">
               {{ errors.phone }}
@@ -118,19 +74,10 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
               <label class="block text-gray-700" for="age-group">Age *</label>
-              <input
-                type="number"
-                id="age-group"
-                class="w-full border p-2 rounded mt-1"
-                :class="{
-                  'border-red-500': errors.age,
-                  'border-gray-300': !errors.age,
-                }"
-                placeholder="Enter Age"
-                min="1"
-                v-model="form.age"
-                required
-              />
+              <input type="number" id="age-group" class="w-full border p-2 rounded mt-1" :class="{
+                'border-red-500': errors.age,
+                'border-gray-300': !errors.age,
+              }" placeholder="Enter Age" min="1" v-model="form.age" required />
               <p v-if="errors.age" class="text-red-500 text-sm mt-1">
                 {{ errors.age }}
               </p>
@@ -138,23 +85,9 @@
             <div>
               <label class="block text-gray-700">Gender *</label>
               <div class="flex items-center mt-1">
-                <input
-                  class="mr-2"
-                  id="male"
-                  name="gender"
-                  type="radio"
-                  value="Male"
-                  v-model="form.gender"
-                />
+                <input class="mr-2" id="male" name="gender" type="radio" value="Male" v-model="form.gender" />
                 <label class="mr-4" for="male">Male</label>
-                <input
-                  class="mr-2"
-                  id="female"
-                  name="gender"
-                  type="radio"
-                  value="Female"
-                  v-model="form.gender"
-                />
+                <input class="mr-2" id="female" name="gender" type="radio" value="Female" v-model="form.gender" />
                 <label for="female">Female</label>
               </div>
               <p v-if="errors.gender" class="text-red-500 text-sm mt-1">
@@ -168,17 +101,9 @@
               Upload profile picture (optional)
             </label>
             <div class="flex items-center mt-1">
-              <img
-                id="profilePic"
-                alt="Profile picture"
-                class="w-10 h-10 rounded-full mr-4"
-                :src="this.profilePictureUrl"
-              />
-              <input
-                type="file"
-                id="fileInput"
-                @change="changeProfilePicture"
-              />
+              <img id="profilePic" alt="Profile picture" class="w-10 h-10 rounded-full mr-4"
+                :src="this.profilePictureUrl" />
+              <input type="file" id="fileInput" @change="changeProfilePicture" />
               <!-- <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded">
                     Change Picture
                   </button> -->
@@ -189,10 +114,7 @@
             <!-- <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded">
                   Back
                 </button> -->
-            <button
-              class="bg-green-600 text-white px-4 py-2 rounded ml-auto"
-              @click="nextStep"
-            >
+            <button class="bg-green-600 text-white px-4 py-2 rounded ml-auto" @click="nextStep">
               Continue
             </button>
           </div>
@@ -204,22 +126,12 @@
           <div class="mb-4">
             <label class="block text-gray-700" for="password">Password *</label>
             <div class="relative">
-              <input
-                class="w-full border p-2 rounded mt-1"
-                :class="{
-                  'border-red-500': errors.password,
-                  'border-gray-300': !errors.password,
-                }"
-                id="password"
-                placeholder="••••••••••••"
-                type="password"
-                v-model="form.password"
-              />
-              <button
-                class="absolute right-2 top-2 text-gray-600"
-                type="button"
-                @click="togglePasswordVisibility('password')"
-              >
+              <input class="w-full border p-2 rounded mt-1" :class="{
+                'border-red-500': errors.password,
+                'border-gray-300': !errors.password,
+              }" id="password" placeholder="••••••••••••" type="password" v-model="form.password" />
+              <button class="absolute right-2 top-2 text-gray-600" type="button"
+                @click="togglePasswordVisibility('password')">
                 <i class="fas fa-eye"></i>
               </button>
             </div>
@@ -229,26 +141,14 @@
           </div>
 
           <div class="mb-4">
-            <label class="block text-gray-700" for="confirm-password"
-              >Confirm password *</label
-            >
+            <label class="block text-gray-700" for="confirm-password">Confirm password *</label>
             <div class="relative">
-              <input
-                class="w-full border p-2 rounded mt-1"
-                :class="{
-                  'border-red-500': errors.confirmPassword,
-                  'border-gray-300': !errors.confirmPassword,
-                }"
-                id="confirm-password"
-                placeholder="••••••••••••"
-                type="password"
-                v-model="form.confirmPassword"
-              />
-              <button
-                class="absolute right-2 top-2 text-gray-600"
-                type="button"
-                @click="togglePasswordVisibility('confirm-password')"
-              >
+              <input class="w-full border p-2 rounded mt-1" :class="{
+                'border-red-500': errors.confirmPassword,
+                'border-gray-300': !errors.confirmPassword,
+              }" id="confirm-password" placeholder="••••••••••••" type="password" v-model="form.confirmPassword" />
+              <button class="absolute right-2 top-2 text-gray-600" type="button"
+                @click="togglePasswordVisibility('confirm-password')">
                 <i class="fas fa-eye"></i>
               </button>
             </div>
@@ -266,26 +166,62 @@
             </ul>
           </div>
           <div class="flex justify-between">
-            <button
-              class="bg-gray-200 text-gray-700 px-4 py-2 rounded"
-              @click="previousStep"
-            >
+            <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded" @click="previousStep">
               Back
             </button>
-            <button
-              class="bg-green-600 text-white px-4 py-2 rounded"
-              @click="submitForm"
-            >
-              Submit
+            <button class="bg-green-600 text-white px-4 py-2 rounded" @click="OtpVerification">
+              Continue
             </button>
           </div>
         </div>
+
+        <div v-if="step === 3">
+          <h2 class="text-2xl font-semibold text-center mb-4">Verify OTP</h2>
+          <p class="text-gray-600 text-center mb-4">
+            An OTP has been sent to your phone. Please enter it below.
+          </p>
+
+          <div class="mb-4">
+            <label class="block text-gray-700" for="otp">Enter OTP *</label>
+            <div class="flex space-x-2">
+              <input class="flex-1 border p-2 rounded" :class="{
+                'border-red-500': errors.otp,
+                'border-gray-300': !errors.otp,
+              }" id="otp" placeholder="Enter OTP" type="text" v-model="form.otp" maxlength="4" />
+            </div>
+            <p v-if="errors.otp" class="text-red-500 text-sm mt-1">
+              {{ errors.otp }}
+            </p>
+          </div>
+
+          <div class="flex justify-between items-center">
+            <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded" @click="previousStep">
+              Back
+            </button>
+            <button class="bg-green-600 text-white px-4 py-2 rounded">
+              Verify OTP & Submit
+            </button>
+          </div>
+
+          <div class="text-center mt-4">
+            <p class="text-sm text-gray-500">
+              Didn't receive the OTP?
+              <button class="text-blue-600 hover:underline ml-1" type="button" @click="sendOtp">
+                Resend
+              </button>
+            </p>
+          </div>
+        </div>
+
       </form>
     </div>
   </div>
 </template>
+
 <script>
+
 const baseUrl = import.meta.env.VITE_BASE_URL
+
 import { useToast } from 'vue-toastification'
 // import { useToast } from 'vue-toastification'
 
@@ -317,6 +253,10 @@ export default {
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrsaTeFqurvUDvMYOcgZAd-JPf-dtLogrrog&s', // Placeholder profile image
       showPassword: false,
       showConfirmPassword: false,
+      pin_id: '',
+      otp: '',
+      otpVerified: false,
+      verificationMessage: "",
       errors: {},
       response: {
         user_id: '',
@@ -475,6 +415,7 @@ export default {
 
         const data = (await response.json()).message
 
+
         if (data && data.status == 200) {
           console.log('Upload successful:', data.message)
           return true
@@ -591,15 +532,17 @@ export default {
         this.profilePictureUrl = e.target.result
       }
       reader.readAsDataURL(file)
+
       // this.profilePictureUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrsaTeFqurvUDvMYOcgZAd-JPf-dtLogrrog&s' // Change to uploaded image
 
       // handleFileUpload()
     },
     async handleSubmit() {
       if (this.validateStep()) {
-        if (this.step === 2) {
+        if (this.step === 3) {
           this.loading = true
           try {
+
             const respo = await this.registerUser() // Call registerUser and get response
             console.log({ respo })
 
@@ -634,6 +577,101 @@ export default {
         console.log('Form validation failed:', this.errors, this.validateStep())
       }
     },
+
+    OtpVerification() {
+      this.errors = {};
+
+      if (!this.form.password) {
+        this.errors.password = 'Password is required';
+      } else if (!this.validatePassword(this.form.password)) {
+        this.errors.password = 'Password does not meet requirements';
+      }
+
+      if (!this.form.confirmPassword) {
+        this.errors.confirmPassword = 'Please confirm your password';
+      } else if (this.form.password !== this.form.confirmPassword) {
+        this.errors.confirmPassword = 'Passwords do not match';
+      }
+
+      if (Object.keys(this.errors).length > 0) return;
+      this.form.otp = "";
+      
+      this.step = 3;
+      this.sendOtp();
+      this.toast.success("OTP sent successfully.");
+    },
+
+    async sendOtp() {
+      console.log("Sending OTP...");
+
+      const apiUrl = `${baseUrl}/api/method/farmer.api.otp_api.send_otp`;
+      const payload = {
+        phone_number: "+2347038039197" // Bind dynamically as needed
+      };
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const text = await response.text();
+        const data = JSON.parse(text);
+        console.log("Raw OTP Response:", data);
+
+        if (data.message && data.message.pin_id) {
+          console.log("OTP sent successfully:", data.message.otp);
+          this.pin_id = data.message.pin_id;
+          this.otp = data.message.otp
+        } else {
+          console.error("OTP sending failed:", data);
+          this.errors.otp = "Failed to send OTP.";
+        }
+      } catch (err) {
+        console.error("Send OTP error:", err);
+        this.errors.otp = "Network error. Please try again.";
+      }
+    },
+
+    validatePassword(password) {
+      const regex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+      return regex.test(password);
+    },
+
+    async verifyOtpBackend() {
+      try {
+        const response = await fetch(`${baseUrl}/api/method/farmer.api.otp_api.verify_otp`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            pin_id: this.pin_id,
+            otp: this.form.otp // use OTP from the input field
+          })
+        });
+
+        const data = await response.json();
+        console.log("Verification response:", data);
+
+        if (data.message && data.message.message && data.message.message.verified === true) {
+          console.log("OTP verified. Proceeding with registration.", data.message.message.verified);
+          this.handleSubmit(); // <- call your registration logic
+        } else {
+          console.log("Not Verified OTP", data.message.message.verified);
+          this.errors.otp = "Invalid OTP. Please try again.";
+          return
+        }
+      } catch (error) {
+        console.error("OTP verific  ation failed:", error);
+        this.errors.otp = "OTP verification failed. Please try again later.";
+      }
+    },
+
   },
   name: 'buyerRegister',
 }

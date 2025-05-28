@@ -112,6 +112,7 @@
   {
    "fieldname": "possible_crops",
    "fieldtype": "Table MultiSelect",
+   "hidden": 1,
    "label": "Possible Crops",
    "options": "Possible Crop"
   },
@@ -186,7 +187,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-26 18:16:00.486455",
+ "modified": "2025-05-27 12:48:57.365985",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Site",

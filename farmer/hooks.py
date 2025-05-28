@@ -236,10 +236,12 @@ doc_events = {
     }
 }                                                                                                                                                                                                        
 
+
 # Overriding Methods
 # ------------------------------
 
 override_whitelisted_methods = {
+    # User Api's
      "farmer.api.user_api.create_user": "farmer.api.user_api.create_user",
      "farmer.api.user_api.login": "farmer.api.user_api.login",
      "farmer.api.user_api.create_farm": "farmer.api.user_api.create_farm",
@@ -248,14 +250,15 @@ override_whitelisted_methods = {
      "farmer.api.user_api.get_financing_availability": "farmer.api.user_api.get_financing_availability",
      "farmer.api.user_api.create_sales_order": "farmer.api.user_api.create_sales_order",
 
-
+    # Loan Api's
      "farmer.api.loan_api.make_loan_payment_request": "farmer.api.loan_api.make_loan_payment_request",
      "farmer.api.loan_api.make_installment_payment_request": "farmer.api.loan_api.make_installment_payment_request",
      "farmer.api.loan_api.create_invoice_from_sales_order": "farmer.api.loan_api.create_invoice_from_sales_order",
      "farmer.api.loan_api.refresh_loan_installments": "farmer.api.loan_api.refresh_loan_installments",
 
-    #  "farmer.api.otp_api.send_otp": "farmer.api.otp_api.send_otp"
-
+    # Test Api's
+     "farmer.api.otp_api.send_otp": "farmer.api.otp_api.send_otp",
+     "farmer.api.otp_api.verify_otp": "farmer.api.otp_api.verify_otp"
 }
 
 
