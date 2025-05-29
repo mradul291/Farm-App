@@ -38,7 +38,9 @@
   "section_break_o1gf",
   "remarks",
   "route",
-  "published"
+  "published",
+  "emis_tab",
+  "emis"
  ],
  "fields": [
   {
@@ -222,13 +224,24 @@
    "fieldtype": "Select",
    "label": "Mode Of Down payment",
    "options": "\nPaystack\nCash"
+  },
+  {
+   "fieldname": "emis_tab",
+   "fieldtype": "Tab Break",
+   "label": "EMI's"
+  },
+  {
+   "fieldname": "emis",
+   "fieldtype": "Table",
+   "label": "EMIs",
+   "options": "Loan EMIs"
   }
  ],
  "has_web_view": 1,
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-05-26 16:43:45.347880",
+ "modified": "2025-05-29 12:51:28.903282",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",

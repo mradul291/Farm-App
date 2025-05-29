@@ -197,6 +197,7 @@ app_include_js = "/assets/farmer/js/redirect.js"
 
 define_csrf = 1
 
+# doctype_js = {"Sales Order": "public/js/sales_order.js"}
 
 permission_query_conditions = {
     "Item": "farmer.api.user_api.item_permission_query_conditions",
@@ -260,7 +261,6 @@ override_whitelisted_methods = {
      "farmer.api.otp_api.send_otp": "farmer.api.otp_api.send_otp",
      "farmer.api.otp_api.verify_otp": "farmer.api.otp_api.verify_otp"
 }
-
 
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,

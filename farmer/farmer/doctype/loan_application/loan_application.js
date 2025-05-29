@@ -244,3 +244,56 @@ function add_cash_down_payment_button(frm) {
     });
 }
 
+
+
+//Test 
+
+frappe.ui.form.on('Loan Application', {
+    refresh: function(frm) {
+        if (frm.doc.name) {
+            fetch_installments_and_populate_emis(frm);
+        }
+    }
+});
+
+async function fetch_installments_and_populate_emis(frm) {
+    // Clear existing EMI rows
+    frm.clear_table('emis');
+
+    try {
+        const result = await frappe.db.get_list('Loan Installments', {
+            filters: {
+                applicant: frm.doc.name
+            },
+            fields: ['name']
+        });
+
+        if (result.length === 0) {
+            return;
+        }
+
+        // Assuming one-to-one relationship (fetching first match)
+        const installment_doc = await frappe.db.get_doc('Loan Installments', result[0].name);
+
+        if (installment_doc.installments && installment_doc.installments.length > 0) {
+            installment_doc.installments.forEach(installment => {
+                const row = frm.add_child('emis');
+                row.installment_id     = installment.installment_id;
+                row.installment_number = installment.installment_number;
+                row.due_date           = installment.due_date;
+                row.installment_amount = installment.installment_amount;
+                row.principal_amount   = installment.principal_amount;
+                row.interest_amount    = installment.interest_amount;
+                row.paid_status        = installment.paid_status;
+                row.payment_date       = installment.payment_date;
+                row.payment_link       = installment.payment_link;
+                row.payment_request    = installment.payment_request;
+                row.mode_of_payment    = installment.mode_of_payment;
+            });
+
+            frm.refresh_field('emis');
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
