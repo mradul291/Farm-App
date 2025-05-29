@@ -34,6 +34,7 @@ def create_farmer_for_user(user_email, phone, gender, location, id_type, id_numb
 
         })
         farmer.insert(ignore_permissions=True)
+        frappe.db.set_value("Farmer Master", farmer.name, "owner", user_email)
         frappe.db.commit()
         frappe.logger().info(f"Farmer Master created for user {user_email}")
 
@@ -898,11 +899,16 @@ def user_specific_warehouse(user):
 #         return None
 #     return f"`tabWarehouse`.owner = '{user}'"
 
+
+
+
+
+
 def get_permission_query_conditions(user):
     if not user or user == "Administrator":
         return ""
 
-    return f"""
+    incoming_condition = f"""
         EXISTS (
             SELECT 1
             FROM `tabSales Order Item` soi
@@ -911,6 +917,11 @@ def get_permission_query_conditions(user):
             AND i.owner = {frappe.db.escape(user)}
         )
     """
+    outgoing_condition = f"`tabSales Order`.owner = {frappe.db.escape(user)}"
+    return f"({incoming_condition}) OR ({outgoing_condition})"
+    
+
+    
 
 def get_permission_query_conditions_sales_invoice(user):
     if not user or user == "Administrator":
