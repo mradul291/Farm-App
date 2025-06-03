@@ -1,0 +1,112 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "DEL-AGNT-.####",
+ "creation": "2025-06-02 14:39:26.532354",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "agent_type",
+  "full_name",
+  "phone_number",
+  "email",
+  "column_break_kaqk",
+  "identification_number",
+  "status",
+  "address",
+  "vehicle_information_section",
+  "vehicle_name",
+  "vehicle_number",
+  "vehicle_capacity"
+ ],
+ "fields": [
+  {
+   "fieldname": "agent_type",
+   "fieldtype": "Select",
+   "label": "Agent Type",
+   "options": "Individual\nCompany"
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "label": "Full Name"
+  },
+  {
+   "fieldname": "phone_number",
+   "fieldtype": "Data",
+   "label": "Phone Number\t"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Link",
+   "label": "Email\t",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_kaqk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "identification_number",
+   "fieldtype": "Data",
+   "label": "National ID / License"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nInactive\nSuspended"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Data",
+   "label": "Address",
+   "options": "Address"
+  },
+  {
+   "fieldname": "vehicle_information_section",
+   "fieldtype": "Section Break",
+   "label": "Vehicle Information"
+  },
+  {
+   "fieldname": "vehicle_name",
+   "fieldtype": "Data",
+   "label": "Vehicle Name"
+  },
+  {
+   "fieldname": "vehicle_number",
+   "fieldtype": "Data",
+   "label": "Vehicle Number"
+  },
+  {
+   "fieldname": "vehicle_capacity",
+   "fieldtype": "Data",
+   "label": "Capacity (Kg / Volume)"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-02 15:24:46.519861",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Delivery Agent",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

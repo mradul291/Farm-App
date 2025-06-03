@@ -110,12 +110,13 @@
    "fieldname": "sponsor_loans",
    "fieldtype": "Table",
    "label": "Sponsored Loans",
-   "options": "Sponsored Loans Table"
+   "options": "Sponsored Loans Table",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-28 18:50:42.861934",
+ "modified": "2025-05-30 18:30:01.950969",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "PUE Sponsor",

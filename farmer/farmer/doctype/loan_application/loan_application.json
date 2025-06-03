@@ -177,13 +177,15 @@
   {
    "fieldname": "route",
    "fieldtype": "Data",
-   "label": "Route"
+   "label": "Route",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "published",
    "fieldtype": "Check",
-   "label": "Published"
+   "label": "Published",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -223,7 +225,8 @@
    "fieldname": "mode_of_down_payment",
    "fieldtype": "Select",
    "label": "Mode Of Down payment",
-   "options": "\nPaystack\nCash"
+   "options": "\nPaystack\nCash",
+   "read_only": 1
   },
   {
    "fieldname": "emis_tab",
@@ -241,7 +244,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-05-29 12:51:28.903282",
+ "modified": "2025-05-30 15:06:40.945252",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",
