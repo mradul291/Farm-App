@@ -38,7 +38,6 @@ def create_warehouses_for_business(doc, method):
             frappe.db.set_value("Warehouse", warehouse.name, "owner", doc.email)
             frappe.db.commit()
 
-
 def link_warehouse_to_business(doc, method):
     if frappe.flags.in_import or frappe.flags.in_patch or frappe.flags.in_test:
         return
