@@ -1014,19 +1014,19 @@ export default {
 
       try {
         const response = await fetch(
-          `${baseUrl}/api/resource/Equipment Master?fields=["name"]&limit_page_length=1000`,
+          `${baseUrl}/api/method/farmer.api.user_api.get_all_equipment_items`,
           {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
           },
         )
         const data = await response.json()
-        if (data && data.data) {
-          this.equipmentList = data.data.map((equipment) => equipment)
-          console.log('data', this.equipmentList)
+        if (data && data.message && Array.isArray(data.message.items)) {
+          this.equipmentList = data.message.items.map((equipment) => equipment);
+          console.log('data', this.equipmentList);
         } else {
-          this.errors.currentEquipment = 'Unexpected response format'
-          this.errors.desiredEquipment = 'Unexpected response format'
+          this.errors.currentEquipment = 'Unexpected response format';
+          this.errors.desiredEquipment = 'Unexpected response format';
         }
       } catch (err) {
         this.errors.currentEquipment = 'Failed to fetch Equipment'
@@ -1368,8 +1368,8 @@ export default {
       }
     },
     handleEnter() {
-     this.nextStep();
-  },
+      this.nextStep();
+    },
     previousStep() {
       if (this.step > 1) {
         this.step--

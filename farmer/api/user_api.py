@@ -583,7 +583,29 @@ def fetch_site_list():
             "message": "Failed to fetch site list"
         }
 
+# API : Get all Equipments but with Filter
+
+@frappe.whitelist(allow_guest=True)
+def get_all_equipment_items():
+    try:
+        equipment_items = frappe.get_all(
+            "Item",
+            filters={"item_group": "Equipment"},
+            fields=["name", "item_name"]
+        )
+        return {
+            "status": "Success",
+            "items": equipment_items
+        }
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Equipment Items Fetch Error")
+        return {
+            "status": "Failed",
+            "message": f"Error occurred: {str(e)}"
+        }
+
 # API 5: Check for the Farmer Specific Items
+
 
 def item_permission_query_conditions(user):
     if not user: user = frappe.session.user
