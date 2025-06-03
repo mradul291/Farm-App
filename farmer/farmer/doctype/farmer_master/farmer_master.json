@@ -180,9 +180,9 @@
   },
   {
    "fieldname": "crops_processed",
-   "fieldtype": "Link",
+   "fieldtype": "Table MultiSelect",
    "label": "Crops Processed",
-   "options": "Crops Master"
+   "options": "Possible Crop"
   },
   {
    "fieldname": "qty_processed_daily",
@@ -191,8 +191,9 @@
   },
   {
    "fieldname": "equipments_used",
-   "fieldtype": "Data",
-   "label": "Equipments Used"
+   "fieldtype": "Link",
+   "label": "Equipments Used",
+   "options": "Item"
   },
   {
    "fieldname": "section_break_naws",
@@ -233,7 +234,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-29 15:28:00.925080",
+ "modified": "2025-06-03 18:16:16.910006",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Farmer Master",

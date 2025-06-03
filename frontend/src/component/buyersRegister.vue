@@ -15,7 +15,7 @@
     </div>
     <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md">
       <h2 class="text-2xl font-semibold text-center mb-4">Create Account</h2>
-      <form class="multiform" @submit.prevent="verifyOtpBackend">
+      <form class="multiform" @keydown.enter.prevent="handleEnter" @submit.prevent="verifyOtpBackend">
         <div v-if="step === 1">
           <p class="text-center text-gray-600 mb-8">Personal Information</p>
           <div class="grid md:grid-cols-2 gap-4 mb-4">
@@ -501,6 +501,9 @@ export default {
         this.step++
       }
     },
+    handleEnter() {
+    this.nextStep();
+  },
     previousStep() {
       if (this.step > 1) {
         this.step--
