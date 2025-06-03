@@ -181,7 +181,7 @@ frappe.ui.form.on('Loan Application', {
 function add_cash_down_payment_button(frm) {
     frm.clear_custom_buttons();
 
-    if(frm.doc.down_payment_check){
+    if(frm.doc.down_payment_check || frm.doc.status === "Rejected" ){
         return;
     }
 
@@ -297,3 +297,16 @@ async function fetch_installments_and_populate_emis(frm) {
         console.error(error);
     }
 }
+
+
+frappe.ui.form.on('Loan Application', {
+    before_save: function(frm) {
+        if (
+            frm.doc.status === 'Under Review' &&
+            frm.doc.remarks &&
+            frm.doc.remarks.trim() !== ''
+        ) {
+            frm.set_value('status', 'Make Down Payment');
+        }
+    }
+});

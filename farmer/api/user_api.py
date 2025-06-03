@@ -118,7 +118,7 @@ def create_buyer_user(data):
         return {"message": "Internal Server Error", "status": 500, "error": str(e)}
 
 def create_vendor_user(data):
-    required_fields = ["first_name", "last_name", "email", "new_password","phone", "gender","account_type"]
+    required_fields = ["first_name", "last_name", "email", "location","new_password","phone", "gender","account_type"]
     missing_fields = [field for field in required_fields if not data.get(field)]
     
     if missing_fields:
@@ -130,6 +130,7 @@ def create_vendor_user(data):
     password = data["new_password"]
     phone = data["phone"]
     gender = data["gender"]
+    location = data["location"]
     account_type = data["account_type"]
     supplier_name = data.get("company_name") if account_type == "Company" else f"{first_name} {last_name}"
 
@@ -146,6 +147,7 @@ def create_vendor_user(data):
             "email": email,
             "phone": phone,
             "gender": gender,
+            "location": location,
             "send_welcome_email": 0,
             "enabled": 1,
             "new_password": password,
@@ -187,11 +189,7 @@ def create_vendor_user(data):
     except Exception as e:
         frappe.db.rollback()
         return {"message": "Internal Server Error", "status": 500, "error": str(e)}
- 
- 
- 
- 
- 
+  
 def create_delivery_agent_user(data):
     required_fields = [
         "first_name", "last_name", "email", "new_password",
@@ -272,13 +270,7 @@ def create_delivery_agent_user(data):
             "status": 500,
             "error": str(e)
         }
-
-      
-      
-      
-      
-      
-# Functions creates user along with Farm and Farmer Type
+     
 def create_user_farmer(data):
     # Required Fields
 
@@ -717,8 +709,6 @@ def loan_application_permission_query_conditions(user):
     return f"`tabLoan Application`.owner = '{user}'"
 
 
-# API 9: 
-
 @frappe.whitelist(allow_guest=True)  # Requires user authentication
 def upload_profile_picture():
     print("***********************************UPload File Called*****************************************")
@@ -928,16 +918,6 @@ def user_specific_loan_installments(user):
     else:
         return f"`tabLoan Installments`.owner = '{user}'"
     
-# # 11: Check for User Specific Crops  
-
-# def user_specific_crops(user):
-#     if not user: user = frappe.session.user
-#     if "System Manager" in frappe.get_roles(user):
-#         return None
-#     else:
-#         return f"`tabCrops Master`.owner = '{user}'"
-    
-
 # 12: Check for User Specific Sales Orders  
 
 def user_specific_sales_order(user):
@@ -972,29 +952,6 @@ def user_specific_warehouse(user):
     if "System Manager" in frappe.get_roles(user):
         return None
     return f"`tabWarehouse`.owner = '{user}'"
-
-    
-# # 14: Check for User Specific Sales Invoice  
-
-# def user_specific_sales_invoice(user):
-#     if not user: user = frappe.session.user
-#     if "System Manager" in frappe.get_roles(user):
-#         return None
-#     else:
-#         return f"`tabSales Invoice`.owner = '{user}'"
-
-# # 17: Check for User Specific Sales Invoice 
-# def user_specific_delivery_note(user):
-#     if not user:
-#         user = frappe.session.user
-#     if "System Manager" in frappe.get_roles(user):
-#         return None
-#     return f"`tabWarehouse`.owner = '{user}'"
-
-
-
-
-
 
 def get_permission_query_conditions(user):
     if not user or user == "Administrator":

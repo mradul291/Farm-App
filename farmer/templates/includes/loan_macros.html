@@ -1,6 +1,22 @@
 {% macro loan_row(loan) %}
+
+{% set status_style = "color: #333; background-color: #E0E0E0;" %} {# Grey + Dark Gray Text #}
+{% if loan.status == "Under Review" %}
+{% set status_style = "color: #333; background-color: #E0E0E0;" %} {# Grey #}
+{% elif loan.status == "Make Down Payment" %}
+{% set status_style = "color: #01579B; background-color: #B3E5FC;" %} {# Blue Text on Light Blue #}
+{% elif loan.status == "Loan Sanctioned" %}
+{% set status_style = "color: #2E7D32; background-color: #C8E6C9;" %} {# Dark Green Text #}
+{% elif loan.status == "Approved" %}
+{% set status_style = "color: #1B5E20; background-color: #A5D6A7;" %} {# Deeper Green #}
+{% elif loan.status == "Rejected" %}
+{% set status_style = "color: #C62828; background-color: #FFCDD2;" %} {# Dark Red Text #}
+{% endif %}
+
+
 <div style="width: 100%; margin: auto; font-family: Arial, sans-serif;">
-  <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #ddd;">
+  <div
+    style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #ddd;">
     <!-- Loan ID and Applicant -->
     <div style="flex: 2;">
       <a href="/{{ loan.route }}" style="font-weight: bold; text-decoration: none; color: black; font-size: 16px;">
@@ -9,12 +25,11 @@
       <p style="color: gray; font-size: 12px; margin: 2px 0;">{{ loan.applicant_name }}</p>
     </div>
 
-    <!-- Status -->
-    <div style="flex: 1; text-align: center;">
-      <span style="background-color: #E0F7FA; padding: 5px 10px; border-radius: 5px; font-size: 12px; color: #007BFF;">
-        {{ loan.status or "-" }}
-      </span>
-    </div>
+    <!--Status-->
+    <span style="{{ status_style }} padding: 5px 10px; border-radius: 5px; font-size: 12px; white-space: nowrap;">
+      {{ loan.status or "-" }}
+    </span>
+
 
     <!-- Remarks -->
     <div style="flex: 2; text-align: center;">
