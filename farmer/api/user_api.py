@@ -60,6 +60,8 @@ def create_user():
         return(create_buyer_user(data))
     elif user_type == "vendor":
         return(create_vendor_user(data))
+    elif user_type == "delivery_agent":
+        return (create_delivery_agent_user(data))
 
 # Functions creates Buyers user
 def create_buyer_user(data):
@@ -185,7 +187,97 @@ def create_vendor_user(data):
     except Exception as e:
         frappe.db.rollback()
         return {"message": "Internal Server Error", "status": 500, "error": str(e)}
-       
+ 
+ 
+ 
+ 
+ 
+def create_delivery_agent_user(data):
+    required_fields = [
+        "first_name", "last_name", "email", "new_password",
+        "phone", "agent_type", "vehicle_name", "vehicle_number"
+    ]
+    missing_fields = [field for field in required_fields if not data.get(field)]
+    
+    if missing_fields:
+        return {
+            "message": "Missing required fields",
+            "status": 400,
+            "missing_fields": missing_fields
+        }
+
+    first_name = data["first_name"]
+    last_name = data["last_name"]
+    email = data["email"]
+    password = data["new_password"]
+    phone = data["phone"]
+    agent_type = data["agent_type"]  # "Individual" or "Company"
+    full_name = f"{first_name} {last_name}" if agent_type == "Individual" else data.get("company_name", "")
+    vehicle_name = data.get("vehicle_name")
+    vehicle_number = data.get("vehicle_number")
+    vehicle_capacity = data.get("vehicle_capacity")
+    identification_number = data.get("identification_number")
+    address = data.get("address")
+    status = data.get("status", "Active")
+
+    # Check if User already exists
+    if frappe.db.exists("User", email):
+        return {"message": f"User {email} already exists", "status": 400}
+
+    try:
+        # Step 1: Create User
+        user = frappe.get_doc({
+            "doctype": "User",
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "phone": phone,
+            "send_welcome_email": 0,
+            "enabled": 1,
+            "new_password": password,
+            "roles": [{"role": "Delivery Agent"}]
+        })
+        user.insert(ignore_permissions=True)
+        frappe.db.set_value("User", user.name, "owner", email)
+
+        # Step 2: Create Delivery Agent
+        delivery_agent = frappe.get_doc({
+            "doctype": "Delivery Agent",
+            "agent_type": agent_type,
+            "full_name": full_name,
+            "phone_number": phone,
+            "email": email,
+            "identification_number": identification_number,
+            "vehicle_name": vehicle_name,
+            "vehicle_number": vehicle_number,
+            "vehicle_capacity": vehicle_capacity,
+            "address": address,
+            "status": status
+        })
+        delivery_agent.insert(ignore_permissions=True)
+
+        return {
+            "message": "Delivery Agent Created Successfully",
+            "status": 201,
+            "data": {
+                "user_id": user.name,
+                "delivery_agent_id": delivery_agent.name
+            }
+        }
+
+    except Exception as e:
+        frappe.db.rollback()
+        return {
+            "message": "Internal Server Error",
+            "status": 500,
+            "error": str(e)
+        }
+
+      
+      
+      
+      
+      
 # Functions creates user along with Farm and Farmer Type
 def create_user_farmer(data):
     # Required Fields
@@ -920,14 +1012,11 @@ def get_permission_query_conditions(user):
     outgoing_condition = f"`tabSales Order`.owner = {frappe.db.escape(user)}"
     return f"({incoming_condition}) OR ({outgoing_condition})"
     
-
-    
-
 def get_permission_query_conditions_sales_invoice(user):
     if not user or user == "Administrator":
         return ""
 
-    return f"""
+    incoming_condition = f"""
         EXISTS (
             SELECT 1
             FROM `tabSales Invoice Item` sii
@@ -936,6 +1025,9 @@ def get_permission_query_conditions_sales_invoice(user):
             AND i.owner = {frappe.db.escape(user)}
         )
     """
+    outgoing_condition = f"`tabSales Invoice`.owner = {frappe.db.escape(user)}"
+    return f"({incoming_condition}) OR ({outgoing_condition})"
+    
 def user_specific_delivery_note(user):
     if not user:
         user = frappe.session.user

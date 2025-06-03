@@ -234,6 +234,12 @@ doc_events = {
     },
     "Warehouse": {
         "after_insert": "farmer.api.warehouse_api.link_warehouse_to_business"
+    },
+    "Sales Order": {
+        "on_submit": "farmer.api.notification_api.notify_item_owners"
+    },
+    "Shipment": {
+        "on_submit": "farmer.api.notification_api.notify_buyer_shipment_update"
     }
 }                                                                                                                                                                                                        
 
