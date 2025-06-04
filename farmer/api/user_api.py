@@ -9,11 +9,18 @@ import time
 def create_farmer_for_user(user_email, phone, gender, location, id_type, id_number, bank_name, account_number, crops_processed, 
                            qty_processed_daily, equipments_used, unit, site):
     try:
-        print("FIRST STEP")
         # Check if Farmer Master already exists
         if frappe.db.exists("Farmer Master", {"farmer": user_email}):
             frappe.logger().info(f"Farmer already exists for user {user_email}")
-            return
+            return  
+        
+        crops_processed_list = []
+        if crops_processed:
+            for crop in crops_processed.split(','):
+                crops_processed_list.append({
+                "doctype": "Possible Crop",  # use your actual child doctype name
+                "crop_name": crop.strip()
+        })
 
         # Create Farmer Master entry
         farmer = frappe.get_doc({
@@ -26,7 +33,7 @@ def create_farmer_for_user(user_email, phone, gender, location, id_type, id_numb
             "id_number": id_number,
             "bank_name": bank_name,
             "account_number": account_number,
-            "crops_processed": crops_processed,
+            "crops_processed": crops_processed_list,
             "qty_processed_daily": qty_processed_daily,
             "equipments_used": equipments_used,
             "unit": unit,
@@ -34,23 +41,9 @@ def create_farmer_for_user(user_email, phone, gender, location, id_type, id_numb
 
         })
         farmer.insert(ignore_permissions=True)
-        business_data = {
-            "business_type": "Farmer",
-            "reference_entity": farmer.name,
-            "email": user_email
-        }
-        try:
-            create_business(business_data)
-            print("Step 7.1: create_business executed successfully")
-        except Exception as e:
-            frappe.log_error(frappe.get_traceback(), "Step 7.1: create_business FAILED")
-            print(f"Step 7.1: create_business error: {e}")
-            
-            
         frappe.db.set_value("Farmer Master", farmer.name, "owner", user_email)
         frappe.db.commit()
         frappe.logger().info(f"Farmer Master created for user {user_email}")
-
         return farmer.name
 
     except Exception as e:
@@ -354,6 +347,18 @@ def create_user_farmer(data):
         )
         print(f"Step 7: Farmer created with ID {farmer_id}")
 
+        business_data = {
+            "business_type": "Farmer",
+            "reference_entity": farmer_id,
+            "email": email
+        }
+        try:
+            create_business(business_data)
+            print("Step 7.1: create_business executed successfully")
+        except Exception as e:
+            frappe.log_error(frappe.get_traceback(), "Step 7.1: create_business FAILED")
+            print(f"Step 7.1: create_business error: {e}")
+
         farm_id = create_farm(
             farm_name, user_data["longitude"], user_data["latitude"], user_data["crops"], 
             user_data["actual_crops"], farmer_id, site, email,user_data["address"]
@@ -377,6 +382,8 @@ def create_user_farmer(data):
                 "farm_id": farm_id
             }
         }
+        
+        
     
     except Exception as e:
         frappe.db.rollback()

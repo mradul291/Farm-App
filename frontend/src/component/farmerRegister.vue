@@ -1072,15 +1072,15 @@ export default {
           bank_name: this.form.bankName,
           account_number: this.form.bankAccountNumber,
           crops_processed:
-            this.form.processor === 'Yes' ? this.form.crop || '' : '',
+            this.form.processor === 'Yes' ? (this.form.crop || '') : '',
           qty_processed_daily:
-            this.form.processor === 'Yes' ? this.form.quantity || '' : '',
+            this.form.processor === 'Yes' ? Number(this.form.quantity || '') : '',
           equipments_used:
             this.form.processor === 'Yes'
-              ? this.form.currentEquipment || ''
+              ? (this.form.currentEquipment || '')
               : '',
           unit:
-            this.form.processor === 'Yes' ? this.form.quantityUnit || '' : '',
+            this.form.processor === 'Yes' ? (this.form.quantityUnit || '') : '',
           site: this.form.site,
           farm_name: this.form.farmName,
           longitude: this.form.longitude,
