@@ -199,7 +199,7 @@ def create_vendor_user(data):
 def create_delivery_agent_user(data):
     required_fields = [
         "first_name", "last_name", "email", "new_password",
-        "phone", "agent_type", "vehicle_name", "vehicle_number"
+        "phone", "gender", "location","site"
     ]
     missing_fields = [field for field in required_fields if not data.get(field)]
     
@@ -215,8 +215,11 @@ def create_delivery_agent_user(data):
     email = data["email"]
     password = data["new_password"]
     phone = data["phone"]
-    agent_type = data["agent_type"]  # "Individual" or "Company"
-    full_name = f"{first_name} {last_name}" if agent_type == "Individual" else data.get("company_name", "")
+    gender = data["gender"]
+    location = data["location"]
+    site = data["site"]
+    agent_type = data.get("agent_type", "Individual")  # Provide default if missing
+    full_name = f"{first_name} {last_name}"
     vehicle_name = data.get("vehicle_name")
     vehicle_number = data.get("vehicle_number")
     vehicle_capacity = data.get("vehicle_capacity")
@@ -236,6 +239,8 @@ def create_delivery_agent_user(data):
             "last_name": last_name,
             "email": email,
             "phone": phone,
+            "gender": gender,
+            "location": location,
             "send_welcome_email": 0,
             "enabled": 1,
             "new_password": password,
@@ -251,11 +256,12 @@ def create_delivery_agent_user(data):
             "full_name": full_name,
             "phone_number": phone,
             "email": email,
+            "address": location,
+            "site": site,
             "identification_number": identification_number,
             "vehicle_name": vehicle_name,
             "vehicle_number": vehicle_number,
             "vehicle_capacity": vehicle_capacity,
-            "address": address,
             "status": status
         })
         delivery_agent.insert(ignore_permissions=True)
@@ -324,7 +330,7 @@ def create_user_farmer(data):
             "phone": phone,
             "gender": gender,
             "location": location,
-            "send_welcome_email": 1,
+            "send_welcome_email": 0,
             "enabled": 1,
             "new_password": password,
             "roles": [{"role": "Farmer"}]
@@ -390,7 +396,6 @@ def create_user_farmer(data):
         frappe.log_error(f"Exception in create_user_farmer: {str(e)}")
         return {"message": "Internal Server Error", "status": 500, "error": str(e)}
     
-
 #create Business for Farmer and Vendor
 @frappe.whitelist(allow_guest=True)
 def create_business(data):
@@ -570,7 +575,6 @@ def get_all_crops():
             "message": f"Error occurred: {str(e)}"
         }
     
-
 # API 4: Get All Sites List
 
 @frappe.whitelist(allow_guest=True)
@@ -613,7 +617,6 @@ def get_all_equipment_items():
         }
 
 # API 5: Check for the Farmer Specific Items
-
 
 def item_permission_query_conditions(user):
     if not user: user = frappe.session.user
@@ -724,7 +727,6 @@ def get_financing_availability(sales_order):
 
     return {"items": items_data}
 
-
 # API 8: Check for User specific Loan Application
 
 def loan_application_permission_query_conditions(user):
@@ -737,7 +739,6 @@ def loan_application_permission_query_conditions(user):
       
     # Regular users can only see their own Loan Applications
     return f"`tabLoan Application`.owner = '{user}'"
-
 
 @frappe.whitelist(allow_guest=True)  # Requires user authentication
 def upload_profile_picture():
@@ -965,8 +966,7 @@ def user_specific_farmer(user):
         return None
     else:
         return f"`tabFarmer Master`.owner = '{user}'"
-
-    
+   
 # 15: Check for User Specific Business  
 def user_specific_business(user):
     if not user:
