@@ -14,6 +14,7 @@
   "identification_number",
   "status",
   "address",
+  "site",
   "vehicle_information_section",
   "vehicle_name",
   "vehicle_number",
@@ -49,6 +50,7 @@
   {
    "fieldname": "identification_number",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "National ID / License"
   },
   {
@@ -65,8 +67,8 @@
   },
   {
    "fieldname": "vehicle_information_section",
-   "fieldtype": "Section Break",
-   "label": "Vehicle Information"
+   "fieldtype": "Tab Break",
+   "label": "Vehicle Info"
   },
   {
    "fieldname": "vehicle_name",
@@ -82,11 +84,17 @@
    "fieldname": "vehicle_capacity",
    "fieldtype": "Data",
    "label": "Capacity (Kg / Volume)"
+  },
+  {
+   "fieldname": "site",
+   "fieldtype": "Link",
+   "label": "Site",
+   "options": "Site"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-02 15:24:46.519861",
+ "modified": "2025-06-04 17:27:55.273315",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Delivery Agent",
