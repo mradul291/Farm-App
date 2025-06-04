@@ -34,6 +34,19 @@ def create_farmer_for_user(user_email, phone, gender, location, id_type, id_numb
 
         })
         farmer.insert(ignore_permissions=True)
+        business_data = {
+            "business_type": "Farmer",
+            "reference_entity": farmer.name,
+            "email": user_email
+        }
+        try:
+            create_business(business_data)
+            print("Step 7.1: create_business executed successfully")
+        except Exception as e:
+            frappe.log_error(frappe.get_traceback(), "Step 7.1: create_business FAILED")
+            print(f"Step 7.1: create_business error: {e}")
+            
+            
         frappe.db.set_value("Farmer Master", farmer.name, "owner", user_email)
         frappe.db.commit()
         frappe.logger().info(f"Farmer Master created for user {user_email}")
@@ -341,18 +354,6 @@ def create_user_farmer(data):
         )
         print(f"Step 7: Farmer created with ID {farmer_id}")
 
-        business_data = {
-            "business_type": "Farmer",
-            "reference_entity": farmer_id,
-            "email": email
-        }
-        try:
-            create_business(business_data)
-            print("Step 7.1: create_business executed successfully")
-        except Exception as e:
-            frappe.log_error(frappe.get_traceback(), "Step 7.1: create_business FAILED")
-            print(f"Step 7.1: create_business error: {e}")
-
         farm_id = create_farm(
             farm_name, user_data["longitude"], user_data["latitude"], user_data["crops"], 
             user_data["actual_crops"], farmer_id, site, email,user_data["address"]
@@ -395,7 +396,7 @@ def create_business(data):
         reference_entity = data.get("reference_entity")
         email = data.get("email")
 
-        print(f"Values =  Business Type =  {business_type}, Referevce  Entity = {reference_entity}, Email = {email}")
+        print(f"Values =  Business Type =  {business_type}, Reference  Entity = {reference_entity}, Email = {email}")
 
         if not business_type or not reference_entity:
             frappe.throw(_("Missing required fields: business_type and reference_entity."))
