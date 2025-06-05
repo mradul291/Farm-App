@@ -1016,11 +1016,23 @@ def get_permission_query_conditions_sales_invoice(user):
     return f"({incoming_condition}) OR ({outgoing_condition})"
     
 def user_specific_delivery_note(user):
-    if not user:
-        user = frappe.session.user
-    if "System Manager" in frappe.get_roles(user):
-        return None
-    return f"`tabDelivery Note`.owner = '{user}'"
+    if not user or user == "Administrator":
+        return ""
+
+    user = frappe.db.escape(user)
+
+    incoming_condition = f"""
+        EXISTS (
+            SELECT 1
+            FROM `tabDelivery Note Item` dni
+            JOIN `tabItem` i ON dni.item_code = i.name
+            WHERE dni.parent = `tabDelivery Note`.name
+            AND i.owner = {user}
+        )
+    """
+
+    return incoming_condition
+
 
 def user_specific_shipment(user):
     if not user:
@@ -1035,7 +1047,6 @@ def user_specific_user(user):
     if "System Manager" in frappe.get_roles(user):
         return None
     return f"`tabUser`.owner = '{user}'"
-
 
 
 @frappe.whitelist()
