@@ -112,7 +112,7 @@ frappe.ui.form.on('Loan Installments', {
             
             // If all are Paid, update the parent status
             if (allPaid) {
-                frm.set_value('status', 'In Active');
+                frm.set_value('status', 'Completed');
                 frm.save();
             }
         }

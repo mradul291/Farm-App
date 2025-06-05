@@ -158,7 +158,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-06-04 19:01:27.097475",
+ "modified": "2025-06-05 11:51:24.744765",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Installments",
@@ -188,7 +188,7 @@
   },
   {
    "color": "Gray",
-   "title": "In Active"
+   "title": "Completed"
   }
  ]
 }
