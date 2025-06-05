@@ -15,6 +15,7 @@
   "status",
   "address",
   "site",
+  "area",
   "vehicle_information_section",
   "vehicle_name",
   "vehicle_number",
@@ -88,13 +89,20 @@
   {
    "fieldname": "site",
    "fieldtype": "Link",
-   "label": "Site",
+   "label": "Coverage Area",
    "options": "Site"
+  },
+  {
+   "fetch_from": "site.site_name",
+   "fieldname": "area",
+   "fieldtype": "Data",
+   "label": "Area",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-04 17:27:55.273315",
+ "modified": "2025-06-04 18:02:25.860933",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Delivery Agent",

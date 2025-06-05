@@ -158,7 +158,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-04-21 14:48:29.108805",
+ "modified": "2025-06-04 19:01:27.097475",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Installments",
@@ -181,5 +181,14 @@
  "route": "loan-installments",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [
+  {
+   "color": "Green",
+   "title": "Active"
+  },
+  {
+   "color": "Gray",
+   "title": "In Active"
+  }
+ ]
 }

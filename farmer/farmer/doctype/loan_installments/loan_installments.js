@@ -104,3 +104,17 @@ frappe.ui.form.on('Loan Installments', {
     }
 });
 
+frappe.ui.form.on('Loan Installments', {
+    refresh(frm) {
+        // Check if all installment rows are marked as Paid
+        if (frm.doc.installments && frm.doc.installments.length > 0) {
+            const allPaid = frm.doc.installments.every(row => row.paid_status === 'Paid');
+            
+            // If all are Paid, update the parent status
+            if (allPaid) {
+                frm.set_value('status', 'In Active');
+                frm.save();
+            }
+        }
+    }
+});

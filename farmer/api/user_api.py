@@ -1035,3 +1035,32 @@ def user_specific_user(user):
     if "System Manager" in frappe.get_roles(user):
         return None
     return f"`tabUser`.owner = '{user}'"
+
+
+
+@frappe.whitelist()
+def get_total_user_crops_card():
+    user = frappe.session.user
+
+    farmer = frappe.get_value("Farmer Master", {"farmer": user}, "name")
+    if not farmer:
+        return {"value": 0, "fieldtype": "Int"}
+
+    farm_rows = frappe.get_all(
+        "Farm Table", 
+        filters={"parent": farmer, "parenttype": "Farmer Master"},
+        fields=["crops"]
+    )
+
+    # Split entries like "Maize,Carrots" into individual crops
+    unique_crops = set()
+    for row in farm_rows:
+        crops_raw = row.get("crops", "")
+        if crops_raw:
+            crops_split = [crop.strip() for crop in crops_raw.split(",") if crop.strip()]
+            unique_crops.update(crops_split)
+
+    return {
+        "value": len(unique_crops),
+        "fieldtype": "Int"
+    }
