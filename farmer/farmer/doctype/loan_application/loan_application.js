@@ -70,7 +70,7 @@ frappe.ui.form.on('Loan Application', {
     before_workflow_action: function (frm) {
         const action = frm.selected_workflow_action;
         if (action === "Approve" && !frm.doc.down_payment_check) {
-            frappe.throw(__('User has not completed the Down Payment yet. Try after refreshing the page'));
+            frappe.throw(__('Please refresh the page and try again.'));
         }
     }
 });
