@@ -126,64 +126,76 @@ frappe.ui.form.on('Sponsored Equipments Table', {
 });
 
 // Function to calculate value for one row and total
+
 function calculate_row_value_and_total(frm, cdt, cdn) {
-    const row = locals[cdt][cdn];
+	const row = locals[cdt][cdn];
 
-    if (!row.equipment || !row.quantity) {
-        return;
-    }
+	if (!row.equipment_name || !row.quantity) return;
 
-    // Step 1: Fetch item_code from Website Item
-    frappe.call({
-        method: 'frappe.client.get',
-        args: {
-            doctype: "Website Item",
-            name: row.equipment
-        },
-        callback: function (res) {
-            if (res.message && res.message.item_code) {
-                const item_code = res.message.item_code;
+	const item_code = row.equipment_name;
 
-                // Step 2: Fetch price_list_rate from Item Price
-                frappe.call({
-                    method: 'frappe.client.get_value',
-                    args: {
-                        doctype: "Item Price",
-                        filters: {
-                            item_code: item_code
-                        },
-                        fieldname: "price_list_rate"
-                    },
-                    callback: function (res2) {
-                        if (res2.message && res2.message.price_list_rate) {
-                            const rate = parseFloat(res2.message.price_list_rate);
-                            const qty = parseFloat(row.quantity || 0);
-                            const row_value = rate * qty;
+	frappe.call({
+		method: 'frappe.client.get_value',
+		args: {
+			doctype: "Item Price",
+			filters: { item_code: item_code },
+			fieldname: "price_list_rate"
+		},
+		callback: function (res2) {
+			if (!res2.message || !res2.message.price_list_rate) {
+				frappe.msgprint(`Price not found for item: ${item_code}`);
+				return;
+			}
 
-                            // Set a temporary field if you want to show row total (optional)
-                            frappe.model.set_value(cdt, cdn, "row_value", row_value);
+			const rate = parseFloat(res2.message.price_list_rate);
+			const qty = parseFloat(row.quantity || 0);
+			const row_value = rate * qty;
 
-                            // Step 3: Recalculate total of all rows
-                            let total = 0;
-                            frm.doc.sponsored_equipments.forEach(function (r) {
-                                if (r.equipment && r.quantity) {
-                                    total += (r.row_value || 0);
-                                }
-                            });
+			frappe.model.set_value(cdt, cdn, "row_value", row_value);
 
-                            frm.set_value("total_value", total);
-                            frm.refresh_field("total_value");
-                        } else {
-                            frappe.msgprint(`Price not found for item: ${item_code}`);
-                        }
-                    }
-                });
-            } else {
-                frappe.msgprint(`Item Code not found in Website Item: ${row.equipment}`);
-            }
-        }
-    });
+			// Recalculate total after a brief wait
+			setTimeout(() => {
+				let total = 0;
+				let completed = 0;
+				const rows = frm.doc.sponsored_equipments || [];
+
+				if (rows.length === 0) {
+					frm.set_value("total_value", 0);
+					return;
+				}
+
+				rows.forEach((r) => {
+					if (!r.equipment_name || !r.quantity) {
+						completed++;
+						if (completed === rows.length) frm.set_value("total_value", total);
+						return;
+					}
+
+					frappe.call({
+						method: 'frappe.client.get_value',
+						args: {
+							doctype: "Item Price",
+							filters: { item_code: r.equipment_name },
+							fieldname: "price_list_rate"
+						},
+						callback: function (res_price) {
+							const price = parseFloat(res_price.message?.price_list_rate || 0);
+							const qty = parseFloat(r.quantity || 0);
+							total += price * qty;
+
+							completed++;
+							if (completed === rows.length) {
+								frm.set_value("total_value", total);
+							}
+						}
+					});
+				});
+			}, 200);
+		}
+	});
 }
+
+
 
 
 frappe.ui.form.on('PUE Sponsor', {
