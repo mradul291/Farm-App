@@ -28,25 +28,99 @@ def mark_financing_available(website_item):
         return {"status": "error", "message": str(e)}
 
 
+# def update_sponsor_discount_usage(doc, method=None):
+# 	"""Reduce PUE Sponsor quantities from any relevant sponsor doc based on items sold with discount"""
+
+# 	for item in doc.items:
+# 		if not item.discount_percentage or not item.item_code:
+# 			continue
+
+# 		remaining_qty_to_deduct = item.qty
+
+# 		# Fetch all sponsored equipment rows for this item_code, sorted by oldest first
+# 		rows = frappe.get_all(
+# 			"Sponsored Equipments Table",
+# 			fields=["name", "parent", "quantity", "equipment_name"],
+# 			filters={"equipment_name": item.item_code, "quantity": [">", 0]},
+# 			order_by="modified asc"
+# 		)
+
+# 		for row in rows:
+# 			if remaining_qty_to_deduct <= 0:
+# 				break
+
+# 			qty_to_deduct = min(row.quantity, remaining_qty_to_deduct)
+
+# 			# Load the parent PUE Sponsor doc
+# 			sponsor_doc = frappe.get_doc("PUE Sponsor", row.parent)
+
+# 			# Find and update the specific child row
+# 			for child in sponsor_doc.sponsored_equipments:
+# 				if child.name == row.name:
+# 					child.quantity -= qty_to_deduct
+# 					remaining_qty_to_deduct -= qty_to_deduct
+# 					break
+
+# 			# Save after each doc modification
+# 			sponsor_doc.save(ignore_permissions=True)
+
+# 	if frappe.db:
+# 		frappe.db.commit()
+
+
+
 def update_sponsor_discount_usage(doc, method=None):
-	"""Reduce PUE Sponsor quantities based on items sold with discount"""
+	"""Reduce sponsored item quantities and update total_value using item_code directly"""
 
-	pue_sponsor = frappe.get_all("PUE Sponsor", limit=1, order_by="modified desc")
-	if not pue_sponsor:
-		return
+	modified_parents = set()
 
-	sponsor_doc = frappe.get_doc("PUE Sponsor", pue_sponsor[0].name)
-	discount_map = {row.equipment_name: row for row in sponsor_doc.sponsored_equipments}
-
-	changed = False
 	for item in doc.items:
-		row = discount_map.get(item.item_code)
-		if row and row.quantity > 0 and item.discount_percentage:
-			# Calculate how many units used from sponsor stock
-			used_qty = min(item.qty, row.quantity)
-			row.quantity -= used_qty
-			changed = True
+		if not item.discount_percentage or not item.item_code:
+			continue
 
-	if changed:
+		remaining_qty_to_deduct = item.qty
+
+		# Get all matching rows across all sponsors with available qty
+		rows = frappe.get_all(
+			"Sponsored Equipments Table",
+			fields=["name", "parent", "quantity", "equipment_name"],
+			filters={"equipment_name": item.item_code, "quantity": [">", 0]},
+			order_by="modified asc"
+		)
+
+		for row in rows:
+			if remaining_qty_to_deduct <= 0:
+				break
+
+			qty_to_deduct = min(row.quantity, remaining_qty_to_deduct)
+			sponsor_doc = frappe.get_doc("PUE Sponsor", row.parent)
+
+			for child in sponsor_doc.sponsored_equipments:
+				if child.name == row.name:
+					child.quantity -= qty_to_deduct
+					remaining_qty_to_deduct -= qty_to_deduct
+					break
+
+			modified_parents.add(sponsor_doc.name)
+			sponsor_doc.save(ignore_permissions=True)
+
+	# Recalculate total_value for all modified docs
+	for parent in modified_parents:
+		sponsor_doc = frappe.get_doc("PUE Sponsor", parent)
+		total = 0
+
+		for row in sponsor_doc.sponsored_equipments:
+			if not row.quantity or not row.equipment_name:
+				continue
+
+			# Directly use equipment_name (item_code) to get price
+			price = frappe.db.get_value("Item Price", {"item_code": row.equipment_name}, "price_list_rate")
+			if not price:
+				continue
+
+			total += price * row.quantity
+
+		sponsor_doc.total_value = total
 		sponsor_doc.save(ignore_permissions=True)
-		frappe.db.commit()
+
+	frappe.db.commit()
