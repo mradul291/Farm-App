@@ -215,7 +215,7 @@ permission_query_conditions = {
     "Sales Invoice": "farmer.api.user_api.get_permission_query_conditions_sales_invoice",
     "Delivery Note": "farmer.api.user_api.user_specific_delivery_note",
     "Shipment": "farmer.api.user_api.user_specific_shipment",
-    "User": "farmer.api.user_api.user_specific_user"
+    "User": "farmer.api.user_api.user_specific_user",
 }
 
 doc_events = {
@@ -239,8 +239,13 @@ doc_events = {
         "on_submit": "farmer.api.notification_api.notify_item_owners"
     },
     "Shipment": {
-        "on_submit": "farmer.api.notification_api.notify_buyer_shipment_update"
-    }
+        "on_update": "farmer.api.delivery_api.notify_agent_on_assignment",
+        "on_submit": "farmer.api.notification_api.notify_shipment_delivery",
+        "before_submit": "farmer.api.delivery_api.before_submit"
+    },
+    "Quotation": {
+		"on_submit": "farmer.api.sponsor_api.update_sponsor_discount_usage"
+	}
 }                                                                                                                                                                                                        
 
 
