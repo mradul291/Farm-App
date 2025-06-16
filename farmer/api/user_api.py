@@ -169,6 +169,8 @@ def create_vendor_user(data):
             "supplier_type": "Company" if account_type == "Company" else "Individual"
         })
         supplier.insert(ignore_permissions=True)
+        frappe.db.set_value("Supplier", supplier.name, "owner", email)
+        frappe.db.commit()
         # Create Business
         business_data = {
             "business_type": "Vendor",
@@ -265,6 +267,8 @@ def create_delivery_agent_user(data):
             "status": status
         })
         delivery_agent.insert(ignore_permissions=True)
+        frappe.db.set_value("Delivery Agent", delivery_agent.name, "owner", email)
+        frappe.db.commit()
 
         return {
             "message": "Delivery Agent Created Successfully",
@@ -1034,12 +1038,44 @@ def user_specific_delivery_note(user):
     return incoming_condition
 
 
-def user_specific_shipment(user):
+
+
+# def user_specific_shipment(user):
+#     if not user:
+#         user = frappe.session.user
+#     if "System Manager" in frappe.get_roles(user):
+#         return None
+#     return f"`tabShipment`.owner = '{user}'"
+
+
+
+def user_specific_shipment(user=None):
     if not user:
         user = frappe.session.user
+
     if "System Manager" in frappe.get_roles(user):
         return None
+
+    # Get all delivery agent names linked to this user
+    delivery_agents = frappe.get_all(
+        "Delivery Agent",
+        filters={"email": user},
+        pluck="name"
+    )
+
+    # If user is a Delivery Agent, allow access to linked shipments
+    if delivery_agents:
+        agent_conditions = ", ".join([f"'{d}'" for d in delivery_agents])
+        return f"""(
+            `tabShipment`.owner = '{user}'
+            OR `tabShipment`.custom_agent IN ({agent_conditions})
+        )"""
+
+    # Default fallback — only show owned records
     return f"`tabShipment`.owner = '{user}'"
+
+
+
 
 def user_specific_user(user):
     if not user:
@@ -1047,6 +1083,8 @@ def user_specific_user(user):
     if "System Manager" in frappe.get_roles(user):
         return None
     return f"`tabUser`.owner = '{user}'"
+
+
 
 
 @frappe.whitelist()

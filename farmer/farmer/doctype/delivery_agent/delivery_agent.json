@@ -6,20 +6,37 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "profile_details_section",
   "agent_type",
   "full_name",
   "phone_number",
   "email",
+  "address",
   "column_break_kaqk",
+  "identification_type",
   "identification_number",
   "status",
-  "address",
   "site",
   "area",
   "vehicle_information_section",
-  "vehicle_name",
-  "vehicle_number",
-  "vehicle_capacity"
+  "vehicle_type",
+  "vehicle_plate_number",
+  "column_break_1boo",
+  "capacity",
+  "license_certification",
+  "tab_break_xgj7",
+  "delivery_zones_section",
+  "delivery_zones",
+  "availability_schedule_section",
+  "availability_schedule",
+  "assignment_and_history_tab",
+  "current_assignments_section",
+  "current_assignments",
+  "completed_deliveries_section",
+  "completed_deliveries",
+  "performance_tab",
+  "performance_metrics_section",
+  "performance_rating"
  ],
  "fields": [
   {
@@ -51,8 +68,7 @@
   {
    "fieldname": "identification_number",
    "fieldtype": "Data",
-   "hidden": 1,
-   "label": "National ID / License"
+   "label": "Identification Number\t"
   },
   {
    "fieldname": "status",
@@ -68,23 +84,8 @@
   },
   {
    "fieldname": "vehicle_information_section",
-   "fieldtype": "Tab Break",
+   "fieldtype": "Section Break",
    "label": "Vehicle Info"
-  },
-  {
-   "fieldname": "vehicle_name",
-   "fieldtype": "Data",
-   "label": "Vehicle Name"
-  },
-  {
-   "fieldname": "vehicle_number",
-   "fieldtype": "Data",
-   "label": "Vehicle Number"
-  },
-  {
-   "fieldname": "vehicle_capacity",
-   "fieldtype": "Data",
-   "label": "Capacity (Kg / Volume)"
   },
   {
    "fieldname": "site",
@@ -98,11 +99,118 @@
    "fieldtype": "Data",
    "label": "Area",
    "read_only": 1
+  },
+  {
+   "fieldname": "identification_type",
+   "fieldtype": "Select",
+   "label": "Identification Type\t",
+   "options": "Select\nNational ID\nDriver\u2019s License\nCooperative ID"
+  },
+  {
+   "fieldname": "profile_details_section",
+   "fieldtype": "Section Break",
+   "label": "Profile Details"
+  },
+  {
+   "fieldname": "vehicle_type",
+   "fieldtype": "Select",
+   "label": "Vehicle Type\t",
+   "options": "Motorcycle\nTricycle\nVan\nTruck"
+  },
+  {
+   "fieldname": "vehicle_plate_number",
+   "fieldtype": "Data",
+   "label": "Vehicle Plate Number\t"
+  },
+  {
+   "description": "(kg)",
+   "fieldname": "capacity",
+   "fieldtype": "Float",
+   "label": "Capacity"
+  },
+  {
+   "fieldname": "column_break_1boo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "license_certification",
+   "fieldtype": "Attach",
+   "label": "License / Certification\t"
+  },
+  {
+   "fieldname": "tab_break_xgj7",
+   "fieldtype": "Tab Break",
+   "label": "Operational Info"
+  },
+  {
+   "fieldname": "delivery_zones",
+   "fieldtype": "Data",
+   "label": "Delivery Zones\t"
+  },
+  {
+   "fieldname": "delivery_zones_section",
+   "fieldtype": "Section Break",
+   "label": "Delivery Zones"
+  },
+  {
+   "fieldname": "availability_schedule_section",
+   "fieldtype": "Section Break",
+   "label": "Availability Schedule"
+  },
+  {
+   "fieldname": "availability_schedule",
+   "fieldtype": "Table",
+   "label": "Availability Schedule",
+   "options": "Delivery Agent Availability"
+  },
+  {
+   "fieldname": "assignment_and_history_tab",
+   "fieldtype": "Tab Break",
+   "label": "Assignment and History"
+  },
+  {
+   "fieldname": "current_assignments_section",
+   "fieldtype": "Section Break",
+   "label": "Current Assignments"
+  },
+  {
+   "fieldname": "current_assignments",
+   "fieldtype": "Table",
+   "label": "Current Assignments",
+   "options": "Delivery Agent Shipment Summary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "completed_deliveries_section",
+   "fieldtype": "Section Break",
+   "label": "Completed Deliveries"
+  },
+  {
+   "fieldname": "completed_deliveries",
+   "fieldtype": "Table",
+   "label": "Completed Deliveries",
+   "options": "Delivery Agent Shipment Summary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "performance_tab",
+   "fieldtype": "Tab Break",
+   "label": "Performance"
+  },
+  {
+   "fieldname": "performance_metrics_section",
+   "fieldtype": "Section Break",
+   "label": "Performance Metrics"
+  },
+  {
+   "fieldname": "performance_rating",
+   "fieldtype": "Rating",
+   "label": "Performance Rating"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-04 18:02:25.860933",
+ "modified": "2025-06-10 16:30:51.321550",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Delivery Agent",
