@@ -35,7 +35,7 @@ def get_shipments_by_agent(agent_name):
 
 def before_submit(self, method):
     if self.custom_delivery_status != "In Transit":
-        frappe.throw("Shipment must be picked up before submission.")
+        frappe.throw("Shipment must be picked up / In Transit before submission.")
     
     if not self.custom_proof_of_delivery:
         frappe. throw("Proof of Delivery is required.")
@@ -45,8 +45,7 @@ def before_submit(self, method):
 
     self.custom_delivery_status = "Delivered"
 
-
-def on_submit(self):
+def on_submit(self, method=None):
     recipients = []
 
     if self.delivery_contact_email:
@@ -63,6 +62,16 @@ def on_submit(self):
 
 
 def notify_agent_on_assignment(doc, method):
+    # Skip if custom_delivery_status is not Assigned to Agent
+    if doc.custom_delivery_status != "Assigned to Agent":
+        return
+
+    # Ensure email is only sent when status transitions to "Assigned to Agent"
+    old_doc = doc.get_doc_before_save()
+    if old_doc and old_doc.custom_delivery_status == "Assigned to Agent":
+        return  # Status didn't change, skip
+
+    # Proceed if agent email is available
     if not doc.custom_agent_email:
         return
 

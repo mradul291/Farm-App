@@ -31,7 +31,7 @@ def notify_item_owners(doc, method):
             message=message
         )
 
- 
+#Not Required
 # def notify_shipment_update(doc, method):
 #     if not doc.delivery_contact_name:
 #         return
@@ -68,47 +68,6 @@ def notify_item_owners(doc, method):
 #     )
 
 
-def notify_shipment_delivery(doc, method):
-    recipients = []
 
-    # Customer Email from Contact
-    if doc.delivery_contact_name:
-        try:
-            contact = frappe.get_doc("Contact", doc.delivery_contact_name)
-            if contact.email_id:
-                recipients.append(contact.email_id)
-        except frappe.DoesNotExistError:
-            pass
-
-    # Vendor Email (assuming this is also a contact)
-    if doc.pickup_contact_person:
-        try:
-            vendor_contact = frappe.get_doc("Contact", doc.pickup_contact_person)
-            if vendor_contact.email_id:
-                recipients.append(vendor_contact.email_id)
-        except frappe.DoesNotExistError:
-            pass
-
-    if not recipients:
-        return
-
-    subject = f"Shipment {doc.name} Delivered"
-    message = f"""
-        <h3>Shipment Delivery Confirmation</h3>
-        <p>Dear Recipient,</p>
-        <p>Shipment <strong>{doc.name}</strong> has been successfully delivered.</p>
-        <ul>
-            <li><strong>Delivered To:</strong> {doc.delivery_contact_name}</li>
-            <li><strong>Pickup Date:</strong> {doc.pickup_date or "N/A"}</li>
-        </ul>
-        <p>Thank you for using our service.</p>
-        <p>Best regards,<br>Farmwarehouse Team</p>
-    """
-
-    frappe.sendmail(
-        recipients=recipients,
-        subject=subject,
-        message=message
-    )
 
     
