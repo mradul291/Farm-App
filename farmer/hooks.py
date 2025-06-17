@@ -240,7 +240,7 @@ doc_events = {
     },
     "Shipment": {
         "on_update": "farmer.api.delivery_api.notify_agent_on_assignment",
-        "on_submit": "farmer.api.notification_api.notify_shipment_delivery",
+        "on_submit": "farmer.api.delivery_api.on_submit",
         "before_submit": "farmer.api.delivery_api.before_submit"
     },
     "Quotation": {
