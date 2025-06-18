@@ -22,7 +22,8 @@
   "tab_break_v3ku",
   "vvb",
   "sponsored_loans",
-  "sponsor_loans"
+  "sponsor_loans",
+  "amended_from"
  ],
  "fields": [
   {
@@ -112,11 +113,21 @@
    "label": "Sponsored Loans",
    "options": "Sponsored Loans Table",
    "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "PUE Sponsor",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-30 18:30:01.950969",
+ "modified": "2025-06-18 11:00:31.000034",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "PUE Sponsor",

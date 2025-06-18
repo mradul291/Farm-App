@@ -82,3 +82,45 @@ def update_sponsor_discount_usage(doc, method=None):
 		sponsor_doc.save(ignore_permissions=True)
 
 	frappe.db.commit()
+
+#Sponsor Logs Debit Product Data
+def update_sponsor_usage_on_invoice_submit(doc, method):
+    for item in doc.items:
+        if not item.item_code:
+            continue
+
+        # Get eligible sponsor row with remaining quantity
+        sponsor_row = frappe.get_all(
+            "Sponsored Equipments Table",
+            filters={
+                "equipment_name": item.item_code,
+                "initial_quantity": [">", "availed_quantity"]
+            },
+            fields=["name", "parent", "equipment_name", "initial_quantity", "availed_quantity", "discount"],
+            order_by="modified asc",
+            limit_page_length=1
+        )
+
+        if sponsor_row:
+            row = sponsor_row[0]
+            remaining_qty = row.initial_quantity - row.availed_quantity
+            apply_qty = min(item.qty, remaining_qty)
+
+            # Update availed_quantity
+            frappe.db.set_value("Sponsored Equipments Table", row["name"],
+                                "availed_quantity", row["availed_quantity"] + apply_qty)
+
+            # Insert log
+            frappe.get_doc({
+                "doctype": "Sponsor Equipments Logs",
+                "equipment_name": row["equipment_name"],
+                "quantity": apply_qty,
+                "discount": row["discount"],
+                "operation": "Debited",
+                "user": frappe.session.user,
+                "reference_type": doc.doctype,
+                "reference_name": doc.name,
+                "sponsor": row["parent"],
+                "remarks": "Sponsor discount used on sales invoice"
+            }).insert(ignore_permissions=True)
+
