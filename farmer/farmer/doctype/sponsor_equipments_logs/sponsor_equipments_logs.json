@@ -1,0 +1,107 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "SPONSOR-LOG-.####",
+ "creation": "2025-06-17 14:57:24.898418",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "equipment_name",
+  "quantity",
+  "discount",
+  "operation",
+  "user",
+  "column_break_dogk",
+  "reference_type",
+  "reference_name",
+  "sponsor",
+  "timestamp",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "equipment_name",
+   "fieldtype": "Link",
+   "label": "Equipment",
+   "options": "Item"
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Float",
+   "label": "Quantity"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Data",
+   "label": "User"
+  },
+  {
+   "fieldname": "column_break_dogk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "reference_type",
+   "fieldtype": "Data",
+   "label": "Reference Type\t"
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Data",
+   "label": "Reference Name\t"
+  },
+  {
+   "fieldname": "sponsor",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Sponsor\t",
+   "options": "PUE Sponsor"
+  },
+  {
+   "fieldname": "timestamp",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Timestamp"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "operation",
+   "fieldtype": "Select",
+   "label": "Operation",
+   "options": "Credited\nDebited"
+  },
+  {
+   "fieldname": "discount",
+   "fieldtype": "Float",
+   "label": "Discount"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-18 12:53:14.367573",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Sponsor Equipments Logs",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

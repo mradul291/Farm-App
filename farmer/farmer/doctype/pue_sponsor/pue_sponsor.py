@@ -36,3 +36,57 @@ class PUESponsor(Document):
 				frappe.throw(_(f"Item '{row.equipment_name}' is duplicated in this document. Please use it only once."))
 			else:
 				local_items.add(row.equipment_name)
+
+	def on_update(self):
+		for row in self.sponsored_equipments:
+			current_qty = row.quantity or 0
+			original_row = row.get("__original") or {}
+			original_qty = original_row.get("quantity") or 0
+   
+			# Set initial_quantity only once on first credit
+			if not row.get("__islocal") and not row.initial_quantity:
+				row.initial_quantity = original_qty or current_qty
+    
+				frappe.db.set_value("Sponsored Equipments Table", row.name, "initial_quantity", row.initial_quantity)
+   
+			# Skip if quantity not changed
+			if current_qty == original_qty and row.is_logged:
+				continue
+
+			# Case 1: New row added
+			if not row.is_logged and current_qty > 0:
+				if not row.availed_quantity:
+					row.availed_quantity = 0  # Reset on first credit
+
+				frappe.get_doc({
+					"doctype": "Sponsor Equipments Logs",
+					"equipment_name": row.equipment_name,
+					"quantity": current_qty,
+					"discount": row.discount,
+					"operation": "Credited",
+					"user": frappe.session.user,
+					"reference_type": self.doctype,
+					"reference_name": self.name,
+					"sponsor": self.name,
+					"remarks": "Sponsor equipment added to pool"
+				}).insert(ignore_permissions=True)
+
+				row.is_logged = 1
+
+			# Case 2: Row was already logged, but quantity increased
+			elif row.is_logged and current_qty > original_qty:
+				additional_qty = current_qty - original_qty
+				row.initial_quantity += additional_qty
+
+				frappe.get_doc({
+					"doctype": "Sponsor Equipments Logs",
+					"equipment_name": row.equipment_name,
+					"quantity": additional_qty,
+					"discount": row.discount,
+					"operation": "Credited",
+					"user": frappe.session.user,
+					"reference_type": self.doctype,
+					"reference_name": self.name,
+					"sponsor": self.name,
+					"remarks": f"Additional quantity credited: {additional_qty}"
+				}).insert(ignore_permissions=True)

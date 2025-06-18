@@ -245,7 +245,10 @@ doc_events = {
     },
     "Quotation": {
 		"on_submit": "farmer.api.sponsor_api.update_sponsor_discount_usage"
-	}
+	},
+    "Sales Invoice": {
+        "on_submit": "farmer.api.sponsor_api.update_sponsor_usage_on_invoice_submit"
+    }
 }                                                                                                                                                                                                        
 
 
