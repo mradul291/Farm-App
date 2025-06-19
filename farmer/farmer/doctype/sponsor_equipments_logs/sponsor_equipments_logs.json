@@ -23,17 +23,20 @@
    "fieldname": "equipment_name",
    "fieldtype": "Link",
    "label": "Equipment",
-   "options": "Item"
+   "options": "Item",
+   "read_only": 1
   },
   {
    "fieldname": "quantity",
    "fieldtype": "Float",
-   "label": "Quantity"
+   "label": "Quantity",
+   "read_only": 1
   },
   {
    "fieldname": "user",
    "fieldtype": "Data",
-   "label": "User"
+   "label": "User",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_dogk",
@@ -42,46 +45,53 @@
   {
    "fieldname": "reference_type",
    "fieldtype": "Data",
-   "label": "Reference Type\t"
+   "label": "Reference Type\t",
+   "read_only": 1
   },
   {
    "fieldname": "reference_name",
    "fieldtype": "Data",
-   "label": "Reference Name\t"
+   "label": "Reference Name\t",
+   "read_only": 1
   },
   {
    "fieldname": "sponsor",
    "fieldtype": "Link",
    "hidden": 1,
    "label": "Sponsor\t",
-   "options": "PUE Sponsor"
+   "options": "PUE Sponsor",
+   "read_only": 1
   },
   {
    "fieldname": "timestamp",
    "fieldtype": "Datetime",
    "hidden": 1,
-   "label": "Timestamp"
+   "label": "Timestamp",
+   "read_only": 1
   },
   {
    "fieldname": "remarks",
    "fieldtype": "Small Text",
-   "label": "Remarks"
+   "label": "Remarks",
+   "read_only": 1
   },
   {
    "fieldname": "operation",
    "fieldtype": "Select",
    "label": "Operation",
-   "options": "Credited\nDebited"
+   "options": "Credited\nDebited",
+   "read_only": 1
   },
   {
    "fieldname": "discount",
    "fieldtype": "Float",
-   "label": "Discount"
+   "label": "Discount(%)",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-18 12:53:14.367573",
+ "modified": "2025-06-19 13:06:46.383660",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Sponsor Equipments Logs",
