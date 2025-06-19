@@ -244,7 +244,8 @@ doc_events = {
         "before_submit": "farmer.api.delivery_api.before_submit"
     },
     "Sales Invoice": {
-        "on_submit": "farmer.api.sponsor_api.update_sponsor_quantities_on_invoice_submit"
+        "on_submit": "farmer.api.sponsor_api.update_sponsor_quantities_on_invoice_submit",
+        "on_cancel": "farmer.api.sponsor_api.reverse_sponsor_usage_on_invoice_cancel"
     }
 }                                                                                                                                                                                                        
 

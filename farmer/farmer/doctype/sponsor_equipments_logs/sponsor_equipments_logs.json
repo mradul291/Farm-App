@@ -79,7 +79,7 @@
    "fieldname": "operation",
    "fieldtype": "Select",
    "label": "Operation",
-   "options": "Credited\nDebited",
+   "options": "Credited\nDebited\nCancelled",
    "read_only": 1
   },
   {
@@ -91,7 +91,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-19 13:06:46.383660",
+ "modified": "2025-06-19 18:37:09.115547",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Sponsor Equipments Logs",
