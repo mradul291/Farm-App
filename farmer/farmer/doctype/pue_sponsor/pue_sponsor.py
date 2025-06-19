@@ -1,5 +1,3 @@
-# Copyright (c) 2025, chirag and contributors
-# For license information, please see license.txt
 
 # import frappe
 import frappe
@@ -10,6 +8,7 @@ from frappe.model.document import Document
 class PUESponsor(Document):
 	
 	def validate(self):
+     # --- Step 1: Validate unique usage of equipment_name ---
 		used_items = set()
 
 	# Get all equipment_name already used across all other PUE Sponsor docs
@@ -37,56 +36,47 @@ class PUESponsor(Document):
 			else:
 				local_items.add(row.equipment_name)
 
-	def on_update(self):
+
+	# # --- Step 2: Handle quantity changes and logging ---
 		for row in self.sponsored_equipments:
-			current_qty = row.quantity or 0
-			original_row = row.get("__original") or {}
-			original_qty = original_row.get("quantity") or 0
-   
-			# Set initial_quantity only once on first credit
-			if not row.get("__islocal") and not row.initial_quantity:
-				row.initial_quantity = original_qty or current_qty
-    
-				frappe.db.set_value("Sponsored Equipments Table", row.name, "initial_quantity", row.initial_quantity)
-   
-			# Skip if quantity not changed
-			if current_qty == original_qty and row.is_logged:
-				continue
-
-			# Case 1: New row added
-			if not row.is_logged and current_qty > 0:
-				if not row.availed_quantity:
-					row.availed_quantity = 0  # Reset on first credit
-
-				frappe.get_doc({
-					"doctype": "Sponsor Equipments Logs",
-					"equipment_name": row.equipment_name,
-					"quantity": current_qty,
-					"discount": row.discount,
-					"operation": "Credited",
-					"user": frappe.session.user,
-					"reference_type": self.doctype,
-					"reference_name": self.name,
-					"sponsor": self.name,
-					"remarks": "Sponsor equipment added to pool"
-				}).insert(ignore_permissions=True)
-
+			if not row.is_logged and row.quantity and row.equipment_name:
+				# Initialize credit tracking
+				row.initial_quantity = row.quantity
+				row.availed_quantity = 0
+				row.remaining_quantity = row.quantity
 				row.is_logged = 1
 
-			# Case 2: Row was already logged, but quantity increased
-			elif row.is_logged and current_qty > original_qty:
-				additional_qty = current_qty - original_qty
-				row.initial_quantity += additional_qty
-
+			# Create Credit Log
 				frappe.get_doc({
 					"doctype": "Sponsor Equipments Logs",
 					"equipment_name": row.equipment_name,
-					"quantity": additional_qty,
+					"quantity": row.quantity,
 					"discount": row.discount,
 					"operation": "Credited",
 					"user": frappe.session.user,
 					"reference_type": self.doctype,
 					"reference_name": self.name,
-					"sponsor": self.name,
-					"remarks": f"Additional quantity credited: {additional_qty}"
+					"remarks": "Sponsor equipment credited on sponsor setup"
 				}).insert(ignore_permissions=True)
+ 
+
+	def on_update(self):
+		for row in self.sponsored_equipments:
+			if not row.equipment:
+				continue
+
+			try:
+				web_item = frappe.get_doc("Website Item", row.equipment)
+
+				# If remaining quantity is zero or less, reset discount to 0
+				if row.remaining_quantity <= 0:
+					web_item.pue_discount = 0
+				else:
+					web_item.pue_discount = row.discount or 0
+
+				web_item.save(ignore_permissions=True)
+
+			except frappe.DoesNotExistError:
+				frappe.logger().warning(f"Website Item '{row.equipment}' not found.")
+			except Exception as e:
+				frappe.logger().error(f"Failed to update PUE discount for '{row.equipment}': {e}")

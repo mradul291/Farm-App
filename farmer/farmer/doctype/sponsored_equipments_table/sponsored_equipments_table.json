@@ -13,6 +13,7 @@
   "quantity",
   "availed_quantity",
   "initial_quantity",
+  "reserved_quantity",
   "remaining_quantity",
   "tier",
   "female_discount",
@@ -96,9 +97,9 @@
   {
    "fieldname": "remaining_quantity",
    "fieldtype": "Int",
-   "hidden": 1,
    "in_list_view": 1,
-   "label": "Remaining Quantity\t"
+   "label": "Remaining Quantity\t",
+   "read_only": 1
   },
   {
    "fieldname": "initial_quantity",
@@ -106,12 +107,19 @@
    "hidden": 1,
    "label": "Initial Quantity",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "reserved_quantity",
+   "fieldtype": "Float",
+   "label": "Reserved Quantity",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-18 15:40:51.138018",
+ "modified": "2025-06-19 12:37:26.585351",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Sponsored Equipments Table",

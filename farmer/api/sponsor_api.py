@@ -27,100 +27,43 @@ def mark_financing_available(website_item):
         frappe.log_error(frappe.get_traceback(), "Failed to update Website Item")
         return {"status": "error", "message": str(e)}
 
-def update_sponsor_discount_usage(doc, method=None):
-	"""Reduce sponsored item quantities and update total_value using item_code directly"""
 
-	modified_parents = set()
-
+def update_sponsor_quantities_on_invoice_submit(doc, method):
 	for item in doc.items:
-		if not item.discount_percentage or not item.item_code:
+		if not item.item_code:
 			continue
 
-		remaining_qty_to_deduct = item.qty
-
-		# Get all matching rows across all sponsors with available qty
-		rows = frappe.get_all(
+		sponsor_row = frappe.get_all(
 			"Sponsored Equipments Table",
-			fields=["name", "parent", "quantity", "equipment_name"],
-			filters={"equipment_name": item.item_code, "quantity": [">", 0]},
-			order_by="modified asc"
+			filters={"equipment_name": item.item_code},
+			fields=["name", "parent", "equipment_name", "initial_quantity", "availed_quantity", "quantity", "discount"],
+			order_by="modified asc",
+			limit_page_length=1
 		)
 
-		for row in rows:
-			if remaining_qty_to_deduct <= 0:
-				break
+		if not sponsor_row:
+			continue
 
-			qty_to_deduct = min(row.quantity, remaining_qty_to_deduct)
-			sponsor_doc = frappe.get_doc("PUE Sponsor", row.parent)
+		row = sponsor_row[0]
+		row_name = row["name"]
+		apply_qty = item.qty
 
-			for child in sponsor_doc.sponsored_equipments:
-				if child.name == row.name:
-					child.quantity -= qty_to_deduct
-					remaining_qty_to_deduct -= qty_to_deduct
-					break
+		new_availed = row["availed_quantity"] + apply_qty
+		frappe.db.set_value("Sponsored Equipments Table", row_name, "availed_quantity", new_availed)
 
-			modified_parents.add(sponsor_doc.name)
-			sponsor_doc.save(ignore_permissions=True)
+		remaining_qty = (row["quantity"] or 0) - new_availed
+		frappe.db.set_value("Sponsored Equipments Table", row_name, "remaining_quantity", remaining_qty)
 
-	# Recalculate total_value for all modified docs
-	for parent in modified_parents:
-		sponsor_doc = frappe.get_doc("PUE Sponsor", parent)
-		total = 0
-
-		for row in sponsor_doc.sponsored_equipments:
-			if not row.quantity or not row.equipment_name:
-				continue
-
-			# Directly use equipment_name (item_code) to get price
-			price = frappe.db.get_value("Item Price", {"item_code": row.equipment_name}, "price_list_rate")
-			if not price:
-				continue
-
-			total += price * row.quantity
-
-		sponsor_doc.total_value = total
-		sponsor_doc.save(ignore_permissions=True)
+		frappe.get_doc({
+			"doctype": "Sponsor Equipments Logs",
+			"equipment_name": row["equipment_name"],
+			"quantity": apply_qty,
+			"discount": row["discount"],
+			"operation": "Debited",
+			"user": frappe.session.user,
+			"reference_type": doc.doctype,
+			"reference_name": doc.name,
+			"remarks": "Sponsor discount used on Sales Invoice"
+		}).insert(ignore_permissions=True)
 
 	frappe.db.commit()
-
-#Sponsor Logs Debit Product Data
-def update_sponsor_usage_on_invoice_submit(doc, method):
-    for item in doc.items:
-        if not item.item_code:
-            continue
-
-        # Get eligible sponsor row with remaining quantity
-        sponsor_row = frappe.get_all(
-            "Sponsored Equipments Table",
-            filters={
-                "equipment_name": item.item_code,
-                "initial_quantity": [">", "availed_quantity"]
-            },
-            fields=["name", "parent", "equipment_name", "initial_quantity", "availed_quantity", "discount"],
-            order_by="modified asc",
-            limit_page_length=1
-        )
-
-        if sponsor_row:
-            row = sponsor_row[0]
-            remaining_qty = row.initial_quantity - row.availed_quantity
-            apply_qty = min(item.qty, remaining_qty)
-
-            # Update availed_quantity
-            frappe.db.set_value("Sponsored Equipments Table", row["name"],
-                                "availed_quantity", row["availed_quantity"] + apply_qty)
-
-            # Insert log
-            frappe.get_doc({
-                "doctype": "Sponsor Equipments Logs",
-                "equipment_name": row["equipment_name"],
-                "quantity": apply_qty,
-                "discount": row["discount"],
-                "operation": "Debited",
-                "user": frappe.session.user,
-                "reference_type": doc.doctype,
-                "reference_name": doc.name,
-                "sponsor": row["parent"],
-                "remarks": "Sponsor discount used on sales invoice"
-            }).insert(ignore_permissions=True)
-
