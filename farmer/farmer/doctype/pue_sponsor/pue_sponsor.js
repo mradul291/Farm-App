@@ -15,36 +15,35 @@ frappe.ui.form.on("Sponsored Equipments", {
     }
 });
 
+
 // Function to calculate total quantity
 function calculate_total_quantity(frm) {
-    let total_qty = 0;
-    let item_totals = {}; // Store total quantity per equipment
+    let total_remaining_qty = 0;
+    let item_totals = {};
 
-    // Loop through child table and sum up quantity
     frm.doc.sponsored_equipments.forEach(row => {
-        total_qty += row.quantity || 0;
+        const remaining = row.remaining_quantity || 0;
+        total_remaining_qty += remaining;
 
-        // Sum quantity for each unique item
         if (row.equipment) {
             if (!item_totals[row.equipment]) {
                 item_totals[row.equipment] = 0;
             }
-            item_totals[row.equipment] += row.quantity || 0;
+            item_totals[row.equipment] += remaining;
         }
     });
 
-    // Set the calculated value in the total_quantity field of the main doctype
-    frm.set_value("total_quantity", total_qty);
+    frm.set_value("total_quantity", total_remaining_qty);
 
-    // Update total_for_item field in each row of the child table
     frm.doc.sponsored_equipments.forEach(row => {
         if (row.equipment) {
             frappe.model.set_value(row.doctype, row.name, "total_for_item", item_totals[row.equipment]);
         }
     });
 
-    frm.refresh_field("sponsored_equipments"); // Refresh the child table to show updated values
+    frm.refresh_field("sponsored_equipments");
 }
+
 
 // Function to calculate the number of unique equipments
 function no_of_equipments(frm) {
@@ -61,7 +60,7 @@ function no_of_equipments(frm) {
     
 }
 
-// Client Script (Doctype: PUE Sponsor)
+// Enable Financing on the item added in the PUE Sponsor
 frappe.ui.form.on('Sponsored Equipments Table', {
     equipment: function (frm, cdt, cdn) {
         let row = locals[cdt][cdn];
@@ -126,7 +125,6 @@ frappe.ui.form.on('Sponsored Equipments Table', {
 });
 
 // Function to calculate value for one row and total
-
 function calculate_row_value_and_total(frm, cdt, cdn) {
 	const row = locals[cdt][cdn];
 
@@ -196,55 +194,75 @@ function calculate_row_value_and_total(frm, cdt, cdn) {
 }
 
 
+// frappe.ui.form.on('PUE Sponsor', {
+//     refresh: function(frm) {
+//         if (frm.is_new()) return;
 
+//         // Step 1: Extract item codes from sponsored_equipments
+//         let itemCodes = [];
 
+//         const getItemCodes = frm.doc.sponsored_equipments.map(row => {
+//             return new Promise(resolve => {
+//                 frappe.db.get_value('Website Item', row.equipment, 'item_code', (r) => {
+//                     if (r && r.item_code) {
+//                         itemCodes.push(r.item_code);
+//                     }
+//                     resolve();
+//                 });
+//             });
+//         });
+
+//         // Step 2: After all item_codes are fetched, find Loan Applications
+//         Promise.all(getItemCodes).then(() => {
+//             if (!itemCodes.length) return;
+
+//             // Clear the existing sponsor_loans table
+//             frm.clear_table('sponsor_loans');
+
+//             // Step 3: Fetch Loan Applications with matching item_code
+//             frappe.call({
+//                 method: 'frappe.client.get_list',
+//                 args: {
+//                     doctype: 'Loan Application',
+//                     filters: [
+//                         ['item_code', 'in', itemCodes]
+//                     ],
+//                     fields: ['name'],
+//                     limit_page_length: 100
+//                 },
+//                 callback: function(res) {
+//                     const loans = res.message || [];
+
+//                     loans.forEach(loan => {
+//                         let row = frm.add_child('sponsor_loans');
+//                         row.loan_id = loan.name;
+//                     });
+
+//                     frm.refresh_field('sponsor_loans');
+//                 }
+//             });
+//         });
+//     }
+// });
 frappe.ui.form.on('PUE Sponsor', {
     refresh: function(frm) {
         if (frm.is_new()) return;
 
-        // Step 1: Extract item codes from sponsored_equipments
-        let itemCodes = [];
-
-        const getItemCodes = frm.doc.sponsored_equipments.map(row => {
-            return new Promise(resolve => {
-                frappe.db.get_value('Website Item', row.equipment, 'item_code', (r) => {
-                    if (r && r.item_code) {
-                        itemCodes.push(r.item_code);
-                    }
-                    resolve();
-                });
-            });
-        });
-
-        // Step 2: After all item_codes are fetched, find Loan Applications
-        Promise.all(getItemCodes).then(() => {
-            if (!itemCodes.length) return;
-
-            // Clear the existing sponsor_loans table
-            frm.clear_table('sponsor_loans');
-
-            // Step 3: Fetch Loan Applications with matching item_code
-            frappe.call({
-                method: 'frappe.client.get_list',
-                args: {
-                    doctype: 'Loan Application',
-                    filters: [
-                        ['item_code', 'in', itemCodes]
-                    ],
-                    fields: ['name'],
-                    limit_page_length: 100
-                },
-                callback: function(res) {
-                    const loans = res.message || [];
-
-                    loans.forEach(loan => {
-                        let row = frm.add_child('sponsor_loans');
-                        row.loan_id = loan.name;
+        frappe.call({
+            method: 'farmer.api.sponsor_api.get_qualified_loan_applications',
+            args: {
+                sponsor_name: frm.doc.name
+            },
+            callback: function(r) {
+                if (r.message) {
+                    frm.clear_table('sponsor_loans');
+                    r.message.forEach(loan_name => {
+                        const row = frm.add_child('sponsor_loans');
+                        row.loan_id = loan_name;
                     });
-
                     frm.refresh_field('sponsor_loans');
                 }
-            });
+            }
         });
     }
 });

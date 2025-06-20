@@ -134,3 +134,74 @@ def recalculate_total_value(pue_sponsor_name):
 
 	sponsor_doc.total_value = total_value
 	sponsor_doc.save(ignore_permissions=True)
+
+#Debit Log creation on the Loan Payment
+def apply_sponsor_discount_on_payment(doc, method):
+	for ref in doc.references:
+		if ref.reference_doctype != "Sales Invoice" or not ref.reference_name:
+			continue
+
+		invoice = frappe.get_doc("Sales Invoice", ref.reference_name)
+
+		if invoice.status == "Partly Paid":
+			log_exists = frappe.db.exists("Sponsor Equipments Logs", {
+				"reference_type": "Sales Invoice",
+				"reference_name": invoice.name,
+				"operation": "Debited"
+			})
+			if not log_exists:
+				update_sponsor_quantities_on_invoice_submit(invoice, method=None)
+
+#Handling multiple hooks
+def handle_payment_entry_submit(doc, method):
+    from farmer.api.loan_api import loan_payment_update
+    from farmer.api.sponsor_api import apply_sponsor_discount_on_payment
+
+    # Call both functions
+    loan_payment_update(doc, method)
+    apply_sponsor_discount_on_payment(doc, method)
+
+
+#Fetch List of Loans who Availed Discount on Loan 
+@frappe.whitelist()
+def get_qualified_loan_applications(sponsor_name):
+    sponsor = frappe.get_doc("PUE Sponsor", sponsor_name)
+
+    # Step 1: Build a map of item_code → discount
+    item_discount_map = {
+        row.equipment_name: float(row.discount or 0)
+        for row in sponsor.sponsored_equipments
+        if row.equipment_name and row.discount is not None
+    }
+
+    if not item_discount_map:
+        return []
+
+    item_codes = list(item_discount_map.keys())
+
+    # Step 2: Get Loan Applications with item_code in sponsored items
+    loan_apps = frappe.get_all("Loan Application",
+        filters={"item_code": ["in", item_codes]},
+        fields=["name", "item_code", "sales_invoice"]
+    )
+
+    qualified_loans = []
+
+    # Step 3: For each Loan Application, check if its Sales Invoice has item with matching discount
+    for loan in loan_apps:
+        if not loan.sales_invoice:
+            continue
+
+        try:
+            invoice = frappe.get_doc("Sales Invoice", loan.sales_invoice)
+        except frappe.DoesNotExistError:
+            continue
+
+        for item in invoice.items:
+            if item.item_code == loan.item_code:
+                expected_discount = item_discount_map.get(loan.item_code)
+                if float(item.discount_percentage or 0) == expected_discount:
+                    qualified_loans.append(loan.name)
+                    break
+
+    return qualified_loans
