@@ -227,7 +227,7 @@ doc_events = {
         "on_update": "farmer.api.loan_api.create_loan_installments"
     },
     "Payment Entry": {
-        "on_submit": "farmer.api.loan_api.loan_payment_update"
+        "on_submit": "farmer.api.sponsor_api.handle_payment_entry_submit",
     },
     "Business": {
         "on_update": "farmer.api.warehouse_api.create_warehouses_for_business"
@@ -273,7 +273,10 @@ override_whitelisted_methods = {
 
     # Test Api's
      "farmer.api.otp_api.send_otp": "farmer.api.otp_api.send_otp",
-     "farmer.api.otp_api.verify_otp": "farmer.api.otp_api.verify_otp"
+     "farmer.api.otp_api.verify_otp": "farmer.api.otp_api.verify_otp",
+     
+    # Sponsor Api's
+     "farmer.api.sponsor_api.get_qualified_loan_applications": "farmer.api.sponsor_api.get_qualified_loan_applications"
 }
 
 # each overriding function accepts a `data` argument;
