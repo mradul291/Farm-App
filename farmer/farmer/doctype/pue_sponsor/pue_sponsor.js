@@ -5,16 +5,19 @@ frappe.ui.form.on("PUE Sponsor", {
     },
 });
 
-frappe.ui.form.on("Sponsored Equipments", {
+frappe.ui.form.on('Sponsored Equipments Table', {
+    equipment: function (frm, cdt, cdn) {
+        calculate_row_value_and_total(frm, cdt, cdn);
+        no_of_equipments(frm);
+    },
     quantity: function (frm, cdt, cdn) {
+        calculate_row_value_and_total(frm, cdt, cdn);
         calculate_total_quantity(frm);
     },
-    equipment: function (frm, cdt, cdn) {
-        calculate_total_quantity(frm);
-        no_of_equipments(frm);
+    sponsored_equipments_remove: function (frm) {
+        recalculate_total_value(frm);
     }
 });
-
 
 // Function to calculate total quantity
 function calculate_total_quantity(frm) {
@@ -44,7 +47,6 @@ function calculate_total_quantity(frm) {
     frm.refresh_field("sponsored_equipments");
 }
 
-
 // Function to calculate the number of unique equipments
 function no_of_equipments(frm) {
     let equipments = new Set();
@@ -59,70 +61,6 @@ function no_of_equipments(frm) {
     frm.refresh_field('equipments');
     
 }
-
-// Enable Financing on the item added in the PUE Sponsor
-frappe.ui.form.on('Sponsored Equipments Table', {
-    equipment: function (frm, cdt, cdn) {
-        let row = locals[cdt][cdn];
-        if (row.equipment) {
-            frappe.call({
-                method: 'farmer.api.sponsor_api.mark_financing_available',
-                args: {
-                    website_item: row.equipment
-                },
-                callback: function (r) {
-                    if (r.message && r.message.status === "success") {
-                        frappe.msgprint(__('Financing enabled for: ') + row.equipment);
-                    }
-                }
-            });
-
-            // Second: Fetch tier from linked Item via Website Item
-            frappe.call({
-                method: 'frappe.client.get',
-                args: {
-                    doctype: "Website Item",
-                    name: row.equipment
-                },
-                callback: function (res) {
-                    if (res.message && res.message.item_code) {
-                        const item_code = res.message.item_code;
-
-                        frappe.call({
-                            method: 'frappe.client.get_value',
-                            args: {
-                                doctype: "Item",
-                                filters: {
-                                    name: item_code
-                                },
-                                fieldname: "tier"
-                            },
-                            callback: function (res2) {
-                                if (res2.message && res2.message.tier) {
-                                    frappe.model.set_value(cdt, cdn, "tier", res2.message.tier);
-                                }
-                            }
-                        });
-                    }
-                }
-            });
-        }
-    }
-});
-
-
-
-frappe.ui.form.on('Sponsored Equipments Table', {
-    equipment: function (frm, cdt, cdn) {
-        calculate_row_value_and_total(frm, cdt, cdn);
-        no_of_equipments(frm);
-        
-    },
-    quantity: function (frm, cdt, cdn) {
-        calculate_row_value_and_total(frm, cdt, cdn);
-        calculate_total_quantity(frm);
-    }
-});
 
 // Function to calculate value for one row and total
 function calculate_row_value_and_total(frm, cdt, cdn) {
@@ -193,57 +131,97 @@ function calculate_row_value_and_total(frm, cdt, cdn) {
 	});
 }
 
+function recalculate_total_value(frm) {
+    let total = 0;
+    const rows = frm.doc.sponsored_equipments || [];
 
-// frappe.ui.form.on('PUE Sponsor', {
-//     refresh: function(frm) {
-//         if (frm.is_new()) return;
+    if (rows.length === 0) {
+        frm.set_value("total_value", 0);
+        return;
+    }
 
-//         // Step 1: Extract item codes from sponsored_equipments
-//         let itemCodes = [];
+    let completed = 0;
 
-//         const getItemCodes = frm.doc.sponsored_equipments.map(row => {
-//             return new Promise(resolve => {
-//                 frappe.db.get_value('Website Item', row.equipment, 'item_code', (r) => {
-//                     if (r && r.item_code) {
-//                         itemCodes.push(r.item_code);
-//                     }
-//                     resolve();
-//                 });
-//             });
-//         });
+    rows.forEach((r) => {
+        if (!r.equipment_name || !r.quantity) {
+            completed++;
+            if (completed === rows.length) frm.set_value("total_value", total);
+            return;
+        }
 
-//         // Step 2: After all item_codes are fetched, find Loan Applications
-//         Promise.all(getItemCodes).then(() => {
-//             if (!itemCodes.length) return;
+        frappe.call({
+            method: 'frappe.client.get_value',
+            args: {
+                doctype: "Item Price",
+                filters: { item_code: r.equipment_name },
+                fieldname: "price_list_rate"
+            },
+            callback: function (res_price) {
+                const price = parseFloat(res_price.message?.price_list_rate || 0);
+                const qty = parseFloat(r.quantity || 0);
+                total += price * qty;
 
-//             // Clear the existing sponsor_loans table
-//             frm.clear_table('sponsor_loans');
+                completed++;
+                if (completed === rows.length) {
+                    frm.set_value("total_value", total);
+                }
+            }
+        });
+    });
+}
 
-//             // Step 3: Fetch Loan Applications with matching item_code
-//             frappe.call({
-//                 method: 'frappe.client.get_list',
-//                 args: {
-//                     doctype: 'Loan Application',
-//                     filters: [
-//                         ['item_code', 'in', itemCodes]
-//                     ],
-//                     fields: ['name'],
-//                     limit_page_length: 100
-//                 },
-//                 callback: function(res) {
-//                     const loans = res.message || [];
 
-//                     loans.forEach(loan => {
-//                         let row = frm.add_child('sponsor_loans');
-//                         row.loan_id = loan.name;
-//                     });
+// Enable Financing on the item added in the PUE Sponsor
+frappe.ui.form.on('Sponsored Equipments Table', {
+    equipment: function (frm, cdt, cdn) {
+        let row = locals[cdt][cdn];
+        if (row.equipment) {
+            frappe.call({
+                method: 'farmer.api.sponsor_api.mark_financing_available',
+                args: {
+                    website_item: row.equipment
+                },
+                callback: function (r) {
+                    if (r.message && r.message.status === "success") {
+                        frappe.msgprint(__('Financing enabled for: ') + row.equipment);
+                    }
+                }
+            });
 
-//                     frm.refresh_field('sponsor_loans');
-//                 }
-//             });
-//         });
-//     }
-// });
+            // Second: Fetch tier from linked Item via Website Item
+            frappe.call({
+                method: 'frappe.client.get',
+                args: {
+                    doctype: "Website Item",
+                    name: row.equipment
+                },
+                callback: function (res) {
+                    if (res.message && res.message.item_code) {
+                        const item_code = res.message.item_code;
+
+                        frappe.call({
+                            method: 'frappe.client.get_value',
+                            args: {
+                                doctype: "Item",
+                                filters: {
+                                    name: item_code
+                                },
+                                fieldname: "tier"
+                            },
+                            callback: function (res2) {
+                                if (res2.message && res2.message.tier) {
+                                    frappe.model.set_value(cdt, cdn, "tier", res2.message.tier);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+});
+
+
 frappe.ui.form.on('PUE Sponsor', {
     refresh: function(frm) {
         if (frm.is_new()) return;
@@ -266,3 +244,4 @@ frappe.ui.form.on('PUE Sponsor', {
         });
     }
 });
+
