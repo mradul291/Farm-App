@@ -60,22 +60,65 @@ class PUESponsor(Document):
 				}).insert(ignore_permissions=True)
  
 
+	# def on_update(self):
+	# 	for row in self.sponsored_equipments:
+	# 		if not row.equipment:
+	# 			continue
+
+	# 		try:
+	# 			web_item = frappe.get_doc("Website Item", row.equipment)
+
+	# 			# If remaining quantity is zero or less, reset discount to 0
+	# 			if row.remaining_quantity <= 0:
+	# 				web_item.pue_discount = 0
+	# 			else:
+	# 				web_item.pue_discount = row.discount or 0
+
+	# 			web_item.save(ignore_permissions=True)
+
+	# 		except frappe.DoesNotExistError:
+	# 			frappe.logger().warning(f"Website Item '{row.equipment}' not found.")
+	# 		except Exception as e:
+	# 			frappe.logger().error(f"Failed to update PUE discount for '{row.equipment}': {e}")
+    
+	def before_save(self):
+		# Store previous equipment items temporarily
+		old_items_raw = frappe.db.get_all(
+			"Sponsored Equipments Table",
+			filters={"parent": self.name, "parenttype": "PUE Sponsor"},
+			fields=["equipment"]
+		)
+		self._previous_equipment_items = {row.equipment for row in old_items_raw if row.equipment}
+
 	def on_update(self):
+		# Step 1: Get current items from the updated doc
+		current_items = {row.equipment for row in self.sponsored_equipments if row.equipment}
+
+		# Step 2: Get previously cached items from before_save
+		old_items = getattr(self, "_previous_equipment_items", set())
+
+		# Step 3: Detect deleted items
+		deleted_items = old_items - current_items
+
+		# Step 4: Reset PUE discount for deleted items
+		for item in deleted_items:
+			try:
+				web_item = frappe.get_doc("Website Item", item)
+				web_item.pue_discount = 0
+				web_item.save(ignore_permissions=True)
+			except frappe.DoesNotExistError:
+				frappe.logger().warning(f"Website Item '{item}' not found during deletion sync.")
+			except Exception as e:
+				frappe.logger().error(f"Failed to reset PUE discount for deleted item '{item}': {e}")
+
+		# Step 5: Keep your existing update logic untouched
 		for row in self.sponsored_equipments:
 			if not row.equipment:
 				continue
-
 			try:
 				web_item = frappe.get_doc("Website Item", row.equipment)
-
-				# If remaining quantity is zero or less, reset discount to 0
-				if row.remaining_quantity <= 0:
-					web_item.pue_discount = 0
-				else:
-					web_item.pue_discount = row.discount or 0
-
+				web_item.pue_discount = row.discount if row.remaining_quantity > 0 else 0
 				web_item.save(ignore_permissions=True)
-
 			except frappe.DoesNotExistError:
 				frappe.logger().warning(f"Website Item '{row.equipment}' not found.")
 			except Exception as e:
