@@ -53,8 +53,7 @@
   {
    "fieldname": "total_amount",
    "fieldtype": "Data",
-   "label": "Total Amount\t",
-   "read_only": 1
+   "label": "Total Amount\t"
   },
   {
    "fieldname": "loan_amount",
@@ -104,8 +103,7 @@
    "fieldname": "sales_order",
    "fieldtype": "Link",
    "label": "Sales Order",
-   "options": "Sales Order",
-   "read_only": 1
+   "options": "Sales Order"
   },
   {
    "fieldname": "column_break_knly",
@@ -197,8 +195,7 @@
    "fieldname": "sales_invoice",
    "fieldtype": "Link",
    "label": "Sales Invoice",
-   "options": "Sales Invoice",
-   "read_only": 1
+   "options": "Sales Invoice"
   },
   {
    "fieldname": "item_code",
@@ -207,10 +204,11 @@
    "options": "Item"
   },
   {
+   "fetch_from": "item_code.tier",
    "fieldname": "tier_name",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "label": "Tier Name",
-   "options": "Tier Master"
+   "read_only": 1
   },
   {
    "fieldname": "loan_installment",
@@ -242,7 +240,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-06-23 17:46:01.703313",
+ "modified": "2025-06-24 15:33:09.306347",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",
