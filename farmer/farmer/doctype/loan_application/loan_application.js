@@ -105,70 +105,7 @@ function calculate_total_amount_with_interest(frm) {
     }
 }
 
-
-frappe.ui.form.on('Loan Application', {
-    refresh: function (frm) {
-        if (frm.doc.tier_name) {
-            fetch_and_set_tier_details(frm);
-        }
-    },
-    repayment_period: function (frm) {
-        update_interest_rate(frm);
-    }
-});
-
-// Function to fetch Tier Details and set Repayment Period options
-function fetch_and_set_tier_details(frm) {
-    frappe.call({
-        method: "frappe.client.get",
-        args: {
-            doctype: "Tier Master",
-            name: frm.doc.tier_name
-        },
-        callback: function (tierResponse) {
-            if (tierResponse && tierResponse.message) {
-                let tierMaster = tierResponse.message;
-                let tierDetails = tierMaster.tier_details || [];
-
-                console.log("Fetched Tier Details (Child Table):", tierDetails);
-
-                frm.doc._tier_details = tierDetails; // temporarily store for later use
-
-                // Prepare Repayment Period options
-                let tenureOptions = tierDetails
-                    .map(entry => entry.tenure_months)
-                    .filter(months => months)
-                    .map(String);
-
-                tenureOptions = [...new Set(tenureOptions)]; // remove duplicates
-
-                console.log("Setting Repayment Period Options:", tenureOptions);
-
-                frm.set_df_property("repayment_period", "options", tenureOptions);
-                frm.refresh_field("repayment_period");
-            }
-        }
-    });
-}
-
-// Function to update Interest Rate based on selected Repayment Period
-function update_interest_rate(frm) {
-    if (frm.doc.repayment_period && frm.doc._tier_details) {
-        let selectedTenure = frm.doc.repayment_period;
-
-        // Find matching record
-        let match = frm.doc._tier_details.find(entry =>
-            String(entry.tenure_months) === String(selectedTenure)
-        );
-
-        if (match) {
-            frm.set_value("interest_rate", match.interest_rate || 0);
-        } else {
-            frm.set_value("interest_rate", 0);
-        }
-    }
-}
-
+//Added Button to Make Cash Downpayment
 frappe.ui.form.on('Loan Application', {
     refresh(frm) {
         add_cash_down_payment_button(frm);
@@ -178,8 +115,8 @@ frappe.ui.form.on('Loan Application', {
     }
 });
 
+//Added Button to Make Cash Downpayment
 function add_cash_down_payment_button(frm) {
-    frm.clear_custom_buttons();
 
     if(frm.doc.down_payment_check || frm.doc.status === "Rejected" ){
         return;
@@ -244,10 +181,7 @@ function add_cash_down_payment_button(frm) {
     });
 }
 
-
-
-//Test 
-
+//Fetching EMI's and Showing on the EMI Tab
 frappe.ui.form.on('Loan Application', {
     refresh: function(frm) {
         if (frm.doc.name) {
@@ -256,6 +190,7 @@ frappe.ui.form.on('Loan Application', {
     }
 });
 
+//Fetching EMI's and Showing on the EMI Tab
 async function fetch_installments_and_populate_emis(frm) {
     // Clear existing EMI rows
     frm.clear_table('emis');
@@ -298,7 +233,7 @@ async function fetch_installments_and_populate_emis(frm) {
     }
 }
 
-
+//Loan Status Under Review
 frappe.ui.form.on('Loan Application', {
     before_save: function(frm) {
         if (
@@ -310,3 +245,131 @@ frappe.ui.form.on('Loan Application', {
         }
     }
 });
+
+
+
+
+
+
+
+// Admin Loan Creation Flow
+
+//Fetch Repayment and Interest Dynamically on the basis of Tier
+frappe.ui.form.on('Loan Application', {
+    tier_name(frm) {
+        if (!frm.doc.tier_name) return;
+
+        frappe.call({
+            method: "frappe.client.get",
+            args: {
+                doctype: "Tier Master",
+                name: frm.doc.tier_name
+            },
+            callback: function (tierResponse) {
+                if (tierResponse && tierResponse.message) {
+                    let tierDetails = tierResponse.message.tier_details || [];
+                    frm.tier_details_map = tierDetails;
+
+                    // Extract tenure_months as string, remove duplicates
+                    let tenureOptions = [...new Set(
+                        tierDetails
+                            .map(entry => entry.tenure_months)
+                            .filter(Boolean)
+                            .map(String)
+                    )];
+
+                    // Set repayment_period options
+                    frm.set_df_property("repayment_period", "options", tenureOptions);
+                    frm.refresh_field("repayment_period");
+                }
+            }
+        });
+    },
+
+    repayment_period(frm) {
+        if (!frm.doc.repayment_period || !frm.tier_details_map) return;
+
+        let selected = frm.doc.repayment_period;
+
+        let matched = frm.tier_details_map.find(entry => String(entry.tenure_months) === String(selected));
+
+        if (matched) {
+            frm.set_value("interest_rate", matched.interest_rate || "");
+        } else {
+            frm.set_value("interest_rate", "");
+        }
+    }
+});
+
+//Fetching Item Price in the Total Amount field
+frappe.ui.form.on('Loan Application', {
+    item_code(frm) {
+        if (!frm.doc.item_code) return;
+
+        frappe.call({
+            method: "frappe.client.get_list",
+            args: {
+                doctype: "Item Price",
+                filters: {
+                    item_code: frm.doc.item_code,
+                    selling: 1
+                },
+                fields: ["price_list_rate"],
+                limit_page_length: 1
+            },
+            callback: function (res) {
+                if (res && res.message && res.message.length > 0) {
+                    const rate = res.message[0].price_list_rate || 0;
+                    frm.set_value("total_amount", rate);
+                    console.log("Fetched Item Price:", rate);
+                } else {
+                    frm.set_value("total_amount", 0);
+                    console.warn("No price found for item:", frm.doc.item_code);
+                }
+            }
+        });
+    }
+});
+
+//Create Sales Order from Loan Application 
+frappe.ui.form.on('Loan Application', {
+    refresh(frm) {
+        create_sales_order_button(frm);
+    },
+});
+
+function create_sales_order_button(frm) {
+    if (!frm.doc.sales_order && frm.doc.docstatus < 2) {
+        frm.add_custom_button("Create Sales Order", function () {
+            frappe.model.with_doctype('Sales Order', function () {
+                const new_so = frappe.model.get_new_doc('Sales Order');
+
+                // Set main fields
+                new_so.naming_series = "SAL-ORD-.YYYY.-";
+                new_so.customer = frm.doc.applicant || "Guest";
+                new_so.order_type = "Sales";
+                new_so.company = "Farmwarehouse";
+                new_so.selling_price_list = "Standard Selling";
+                new_so.loan_application_ref = frm.doc.name;
+
+                // Add item correctly using add_child
+                const item_row = frappe.model.add_child(new_so, "Sales Order Item", "items");
+                item_row.item_code = frm.doc.item_code;
+                item_row.item_name = frm.doc.product_name
+                item_row.qty = 1;
+                item_row.rate = frm.doc.total_amount || 0;
+
+                // Sync the doc to register child table properly
+                frappe.model.sync(new_so);
+
+                // Route to the Sales Order form
+                frappe.set_route('Form', 'Sales Order', new_so.name);
+            });
+        });
+    }
+}
+
+
+
+
+

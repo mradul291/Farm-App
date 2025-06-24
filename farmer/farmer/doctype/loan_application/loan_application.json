@@ -44,6 +44,7 @@
  ],
  "fields": [
   {
+   "fetch_from": "item_code.item_name",
    "fieldname": "product_name",
    "fieldtype": "Data",
    "label": "Product Name",
@@ -69,26 +70,24 @@
   {
    "fieldname": "interest_rate",
    "fieldtype": "Percent",
-   "label": "Interest Rate (%)\t"
+   "label": "Interest Rate (%)\t",
+   "read_only": 1
   },
   {
    "fieldname": "loan_purpose",
    "fieldtype": "Small Text",
-   "label": "Loan Purpose",
-   "read_only": 1
+   "label": "Loan Purpose"
   },
   {
    "fieldname": "annual_income",
    "fieldtype": "Currency",
-   "label": "Annual Income\t",
-   "read_only": 1
+   "label": "Annual Income\t"
   },
   {
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Under Review\nMake Down Payment\nPending\nApproved\nRejected\nLoan Sanctioned",
-   "read_only": 1
+   "options": "Under Review\nMake Down Payment\nPending\nApproved\nRejected\nLoan Sanctioned"
   },
   {
    "fieldname": "remarks",
@@ -148,14 +147,14 @@
    "fieldname": "applicant",
    "fieldtype": "Link",
    "label": "Applicant",
-   "options": "User",
-   "read_only": 1
+   "options": "User"
   },
   {
    "fetch_from": "applicant.full_name",
    "fieldname": "applicant_name",
    "fieldtype": "Data",
-   "label": "Applicant Name\t"
+   "label": "Applicant Name\t",
+   "read_only": 1
   },
   {
    "fieldname": "total_amount_after_interest",
@@ -203,16 +202,15 @@
   },
   {
    "fieldname": "item_code",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "Item Code",
-   "read_only": 1
+   "options": "Item"
   },
   {
    "fieldname": "tier_name",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "Tier Name",
-   "options": "Tier Master",
-   "read_only": 1
+   "options": "Tier Master"
   },
   {
    "fieldname": "loan_installment",
@@ -244,7 +242,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-06-03 15:22:12.344973",
+ "modified": "2025-06-23 17:46:01.703313",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",
