@@ -378,3 +378,25 @@ def refresh_loan_installments(loan_name):
     except Exception as e:
         return {"status": "Error", "message": str(e)}
     
+
+
+@frappe.whitelist()
+def create_invoice_and_sync_loan(sales_order, loan_application):
+    from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
+
+    # Get Sales Invoice from Sales Order
+    sales_invoice_doc = make_sales_invoice(sales_order)
+    sales_invoice_doc.insert(ignore_permissions=True)
+    sales_invoice_doc.submit()
+
+    # Fetch total from Sales Invoice
+    grand_total = sales_invoice_doc.grand_total
+
+    # Update Loan Application
+    loan = frappe.get_doc("Loan Application", loan_application)
+    loan.sales_order = sales_order
+    loan.sales_invoice = sales_invoice_doc.name
+    loan.total_amount = grand_total
+    loan.save(ignore_permissions=True)
+
+    return sales_invoice_doc.name
