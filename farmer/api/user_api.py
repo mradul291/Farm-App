@@ -741,8 +741,11 @@ def loan_application_permission_query_conditions(user):
     if "System Manager" in frappe.get_roles(user):
         return None  
       
-    # Regular users can only see their own Loan Applications
-    return f"`tabLoan Application`.owner = '{user}'"
+    # Match either owner or applicant field (if it's their email)
+    return (
+        f"(`tabLoan Application`.owner = '{user}' "
+        f"OR `tabLoan Application`.applicant = '{user}')"
+    )
 
 @frappe.whitelist(allow_guest=True)  # Requires user authentication
 def upload_profile_picture():
@@ -949,9 +952,13 @@ def user_specific_farms(user):
 def user_specific_loan_installments(user):
     if not user: user = frappe.session.user
     if "System Manager" in frappe.get_roles(user):
-        return None
-    else:
-        return f"`tabLoan Installments`.owner = '{user}'"
+        return None 
+    
+    # Match if user is the owner or their email is in applicant_id
+    return (
+        f"(`tabLoan Installments`.owner = '{user}' "
+        f"OR `tabLoan Installments`.applicant_id = '{user}')"
+    )
     
 # 12: Check for User Specific Sales Orders  
 
