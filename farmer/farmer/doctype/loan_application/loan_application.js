@@ -325,7 +325,6 @@ frappe.ui.form.on('Loan Application', {
 //         });
 //     }
 // });
-
 frappe.ui.form.on('Loan Application', {
     item_code(frm) {
         if (!frm.doc.item_code) return;
@@ -449,4 +448,5 @@ frappe.ui.form.on("Loan Application", {
         });
     }
 });
+
 

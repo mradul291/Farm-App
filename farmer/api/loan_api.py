@@ -386,7 +386,6 @@ def create_invoice_and_sync_loan(sales_order, loan_application):
     # Get Sales Invoice from Sales Order
     sales_invoice_doc = make_sales_invoice(sales_order)
     sales_invoice_doc.insert(ignore_permissions=True)
-    sales_invoice_doc.submit()
 
     # Fetch total from Sales Invoice
     grand_total = sales_invoice_doc.grand_total
@@ -402,6 +401,7 @@ def create_invoice_and_sync_loan(sales_order, loan_application):
         "sales_invoice": sales_invoice_doc.name,
         "loan_application": loan.name
     }
+
     
 #Fetch Only Financed Item list in Item_code field of Loan Application
 @frappe.whitelist()
