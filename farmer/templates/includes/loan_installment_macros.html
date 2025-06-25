@@ -1,6 +1,7 @@
 {% macro installment_row(installment) %}
-  {%- set loan_owner = frappe.db.get_value("Loan Application", installment.applicant, "owner") -%}
-  {% if installment.applicant and frappe.session.user == loan_owner %}
+  {%- set session_user = frappe.session.user -%}
+  {%- set loan_owner = frappe.db.get_value("Loan Application", installment.applicant_id, "owner") -%}
+  {% if (installment.applicant_id and session_user == installment.applicant_id) or (session_user == loan_owner) %}
     <div style="width: 100%; margin: auto; font-family: Arial, sans-serif;">
       <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #ddd;">
         

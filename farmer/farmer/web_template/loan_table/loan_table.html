@@ -5,7 +5,7 @@
   <div class="loan-list">
     {%- set session_user = frappe.session.user -%}
     {%- for loan in frappe.get_all("Loan Application", fields=["name", "applicant_name", "loan_amount", "status", "remarks", "route", "owner"]) -%}
-      {%- if loan.owner == session_user -%}
+      {%- if loan.owner == session_user or loan.applicant == session_user -%}
         {{ loan_row(loan) }}
       {%- endif -%}
     {%- endfor -%}
