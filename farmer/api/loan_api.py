@@ -378,6 +378,7 @@ def refresh_loan_installments(loan_name):
     except Exception as e:
         return {"status": "Error", "message": str(e)}
     
+#Function to Create Sales Invoive and Update Loan Application from the Sales Order Submit it was calling from Client script in Sales Order.
 @frappe.whitelist()
 def create_invoice_and_sync_loan(sales_order, loan_application):
     from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
@@ -397,4 +398,59 @@ def create_invoice_and_sync_loan(sales_order, loan_application):
     loan.total_amount = grand_total
     loan.save(ignore_permissions=True)
 
-    return sales_invoice_doc.name
+    return {
+        "sales_invoice": sales_invoice_doc.name,
+        "loan_application": loan.name
+    }
+    
+#Fetch Only Financed Item list in Item_code field of Loan Application
+@frappe.whitelist()
+@frappe.validate_and_sanitize_search_inputs
+def get_financing_enabled_items(doctype, txt, searchfield, start, page_len, filters):
+    return frappe.db.sql("""
+        SELECT i.name, i.item_name
+        FROM `tabItem` i
+        INNER JOIN `tabWebsite Item` wi ON wi.item_code = i.name
+        WHERE wi.financing_available = 1
+        AND (i.name LIKE %(txt)s OR i.item_name LIKE %(txt)s)
+        LIMIT %(start)s, %(page_len)s
+    """, {
+        "txt": f"%{txt}%",
+        "start": start,
+        "page_len": page_len
+    })
+
+#Fetching Item Price In Loan Application with Discount If Available.
+@frappe.whitelist()
+def get_discounted_item_price(item_code):
+    # Step 1: Get base price from Item Price (selling)
+    base_price = frappe.db.get_value("Item Price", {"item_code": item_code, "selling": 1}, "price_list_rate") or 0
+
+    # Step 2: Search PUE Sponsors with this item and valid discount
+    sponsored = frappe.db.sql("""
+        SELECT
+            se.discount, se.remaining_quantity
+        FROM `tabPUE Sponsor` ps
+        JOIN `tabSponsored Equipments Table` se ON se.parent = ps.name
+        WHERE
+            se.equipment_name = %(item_code)s
+            AND se.remaining_quantity > 0
+        ORDER BY se.discount DESC
+        LIMIT 1
+    """, {"item_code": item_code}, as_dict=True)
+
+    if sponsored:
+        discount_percent = sponsored[0].discount or 0
+        discounted_price = base_price * (1 - (discount_percent / 100))
+        return {
+            "base_price": base_price,
+            "discount_percent": discount_percent,
+            "discounted_price": round(discounted_price, 2)
+        }
+
+    # If not sponsored or no discount
+    return {
+        "base_price": base_price,
+        "discount_percent": 0,
+        "discounted_price": base_price
+    }

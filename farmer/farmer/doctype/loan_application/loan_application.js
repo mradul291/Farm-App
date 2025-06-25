@@ -247,11 +247,6 @@ frappe.ui.form.on('Loan Application', {
 });
 
 
-
-
-
-
-
 // Admin Loan Creation Flow
 
 //Fetch Repayment and Interest Dynamically on the basis of Tier
@@ -302,29 +297,52 @@ frappe.ui.form.on('Loan Application', {
 });
 
 //Fetching Item Price in the Total Amount field
+// frappe.ui.form.on('Loan Application', {
+//     item_code(frm) {
+//         if (!frm.doc.item_code) return;
+
+//         frappe.call({
+//             method: "frappe.client.get_list",
+//             args: {
+//                 doctype: "Item Price",
+//                 filters: {
+//                     item_code: frm.doc.item_code,
+//                     selling: 1
+//                 },
+//                 fields: ["price_list_rate"],
+//                 limit_page_length: 1
+//             },
+//             callback: function (res) {
+//                 if (res && res.message && res.message.length > 0) {
+//                     const rate = res.message[0].price_list_rate || 0;
+//                     frm.set_value("total_amount", rate);
+//                     console.log("Fetched Item Price:", rate);
+//                 } else {
+//                     frm.set_value("total_amount", 0);
+//                     console.warn("No price found for item:", frm.doc.item_code);
+//                 }
+//             }
+//         });
+//     }
+// });
+
 frappe.ui.form.on('Loan Application', {
     item_code(frm) {
         if (!frm.doc.item_code) return;
 
         frappe.call({
-            method: "frappe.client.get_list",
+            method: "farmer.api.loan_api.get_discounted_item_price",
             args: {
-                doctype: "Item Price",
-                filters: {
-                    item_code: frm.doc.item_code,
-                    selling: 1
-                },
-                fields: ["price_list_rate"],
-                limit_page_length: 1
+                item_code: frm.doc.item_code
             },
             callback: function (res) {
-                if (res && res.message && res.message.length > 0) {
-                    const rate = res.message[0].price_list_rate || 0;
+                if (res && res.message) {
+                    const rate = res.message.discounted_price || 0;
                     frm.set_value("total_amount", rate);
-                    console.log("Fetched Item Price:", rate);
+                    console.log("Final Price:", rate, " (Base:", res.message.base_price, ", Discount:", res.message.discount_percent, ")");
                 } else {
                     frm.set_value("total_amount", 0);
-                    console.warn("No price found for item:", frm.doc.item_code);
+                    console.warn("No price found.");
                 }
             }
         });
@@ -338,40 +356,97 @@ frappe.ui.form.on('Loan Application', {
     },
 });
 
+// function create_sales_order_button(frm) {
+//     if (!frm.doc.sales_order && frm.doc.docstatus < 2) {
+//         frm.add_custom_button("Create Sales Order", function () {
+//             frappe.model.with_doctype('Sales Order', function () {
+//                 const new_so = frappe.model.get_new_doc('Sales Order');
+
+//                 // Set main fields
+//                 new_so.naming_series = "SAL-ORD-.YYYY.-";
+//                 new_so.customer = frm.doc.applicant || "Guest"; 
+//                 new_so.order_type = "Sales";
+//                 new_so.company = "Farmwarehouse";
+//                 new_so.selling_price_list = "Standard Selling";
+//                 new_so.loan_application_ref = frm.doc.name;
+
+//                 // Add item correctly using add_child
+//                 const item_row = frappe.model.add_child(new_so, "Sales Order Item", "items");
+//                 item_row.item_code = frm.doc.item_code;
+//                 item_row.item_name = frm.doc.product_name
+//                 item_row.qty = 1;
+//                 item_row.rate = frm.doc.total_amount || 0;
+
+//                 // Sync the doc to register child table properly
+//                 frappe.model.sync(new_so);
+
+//                 // Route to the Sales Order form
+//                 frappe.set_route('Form', 'Sales Order', new_so.name);
+//             });
+//         });
+//     }
+// }   
 function create_sales_order_button(frm) {
     if (!frm.doc.sales_order && frm.doc.docstatus < 2) {
         frm.add_custom_button("Create Sales Order", function () {
-            frappe.model.with_doctype('Sales Order', function () {
-                const new_so = frappe.model.get_new_doc('Sales Order');
+            frappe.call({
+                method: "farmer.api.loan_api.get_discounted_item_price",
+                args: {
+                    item_code: frm.doc.item_code
+                },
+                callback: function (res) {
+                    const discount_info = res.message || {};
+                    const rate = discount_info.discounted_price || frm.doc.total_amount || 0;
+                    const discount = discount_info.discount_percent || 0;
 
-                // Set main fields
-                new_so.naming_series = "SAL-ORD-.YYYY.-";
-                new_so.customer = frm.doc.applicant || "Guest";
-                new_so.order_type = "Sales";
-                new_so.company = "Farmwarehouse";
-                new_so.selling_price_list = "Standard Selling";
-                new_so.loan_application_ref = frm.doc.name;
+                    frappe.model.with_doctype('Sales Order', function () {
+                        const new_so = frappe.model.get_new_doc('Sales Order');
 
-                // Add item correctly using add_child
-                const item_row = frappe.model.add_child(new_so, "Sales Order Item", "items");
-                item_row.item_code = frm.doc.item_code;
-                item_row.item_name = frm.doc.product_name
-                item_row.qty = 1;
-                item_row.rate = frm.doc.total_amount || 0;
+                        // Set header values
+                        new_so.naming_series = "SAL-ORD-.YYYY.-";
+                        new_so.customer = frm.doc.applicant || "Guest";
+                        new_so.order_type = "Sales";
+                        new_so.company = "Farmwarehouse";
+                        new_so.selling_price_list = "Standard Selling";
+                        new_so.loan_application_ref = frm.doc.name;
 
-                // Sync the doc to register child table properly
-                frappe.model.sync(new_so);
+                        // Add item row
+                        const item_row = frappe.model.add_child(new_so, "Sales Order Item", "items");
+                        item_row.item_code = frm.doc.item_code;
+                        item_row.item_name = frm.doc.product_name;
+                        item_row.qty = 1;
+                        item_row.rate = rate;
+                        item_row.discount_percentage = discount;
 
-                // Route to the Sales Order form
-                frappe.set_route('Form', 'Sales Order', new_so.name);
+                        // Sync and route
+                        frappe.model.sync(new_so);
+                        frappe.set_route('Form', 'Sales Order', new_so.name);
+                    });
+                }
             });
         });
     }
 }
 
+frappe.ui.form.on('Loan Application', {
+    onload(frm) {
+        const dirtyFlag = localStorage.getItem(`mark_dirty_${frm.doc.name}`);
+        if (dirtyFlag) {
+            localStorage.removeItem(`mark_dirty_${frm.doc.name}`);
+            setTimeout(() => {
+                frm.dirty();
+            }, 300); // delay to ensure form is fully loaded before marking
+        }
+    }
+});
 
-
-
-
-
+frappe.ui.form.on("Loan Application", {
+    onload: function(frm) {
+        frm.set_query("item_code", function() {
+            return {
+                query: "farmer.api.loan_api.get_financing_enabled_items"
+            };
+        });
+    }
+});
 
