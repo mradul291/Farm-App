@@ -1086,10 +1086,16 @@ def user_specific_user(user):
     return f"`tabUser`.owner = '{user}'"
 
 def user_specific_cases(user):
-    if not user or frappe.get_roles(user) == "System Manager":
+    if not user:
+        user = frappe.session.user
+
+    # Allow full access to System Manager (including Administrator)
+    if "System Manager" in frappe.get_roles(user):
         return None
 
+    # Restrict others to only their assigned cases
     return f"`tabCase`.`assigned_user_email` = '{user}'"
+
 
 @frappe.whitelist()
 def get_total_user_crops_card():
