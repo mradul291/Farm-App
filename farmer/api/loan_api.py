@@ -7,33 +7,83 @@ from datetime import datetime, timedelta
 from erpnext.accounts.doctype.payment_request import payment_request
 from frappe.utils import nowdate
 
+#Create Sales invoice on Apply for Loan Click using Sales Order
+# @frappe.whitelist(allow_guest=True)
+# def create_invoice_from_sales_order(sales_order):
+#     if not sales_order:
+#         frappe.throw("Sales Order ID is required.")
+
+#     # Import ERPNext utility to generate Sales Invoice                                                                              
+#     from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
+
+#     # Create and submit invoice
+#     si = make_sales_invoice(sales_order, ignore_permissions=True)
+#     si.allocate_advances_automatically = True
+#     si.insert(ignore_permissions=True)
+     
+#     loan_app = frappe.get_all("Loan Application", filters={"sales_order": sales_order}, fields=["name"], limit=1)
+
+#     if loan_app:
+#         loan_doc = frappe.get_doc("Loan Application", loan_app[0].name)
+#         loan_doc.sales_invoice = si.name
+#         loan_doc.save(ignore_permissions=True)
+#     frappe.db.commit()
+
+#     return {
+#         "status": "success",
+#         "invoice": si.name
+#     }
 
 @frappe.whitelist(allow_guest=True)
 def create_invoice_from_sales_order(sales_order):
     if not sales_order:
         frappe.throw("Sales Order ID is required.")
 
-    # Import ERPNext utility to generate Sales Invoice                                                                              
     from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
 
-    # Create and submit invoice
+    # Create Sales Invoice in Draft
     si = make_sales_invoice(sales_order, ignore_permissions=True)
+    si.flags.ignore_permissions = True
+    si.docstatus = 0
     si.allocate_advances_automatically = True
-    si.insert(ignore_permissions=True)
-     
-    loan_app = frappe.get_all("Loan Application", filters={"sales_order": sales_order}, fields=["name"], limit=1)
 
-    if loan_app:
-        loan_doc = frappe.get_doc("Loan Application", loan_app[0].name)
-        loan_doc.sales_invoice = si.name
-        loan_doc.save(ignore_permissions=True)
-    frappe.db.commit()
+    if not si.due_date:
+        si.due_date = frappe.utils.add_days(frappe.utils.nowdate(), 30)
+
+    si.insert()
+
+    # Confirm Draft Status
+    if si.docstatus != 0:
+        frappe.throw("Invoice was unexpectedly submitted!")
 
     return {
         "status": "success",
         "invoice": si.name
     }
 
+@frappe.whitelist()
+def update_loan_with_invoice(sales_invoice, loan_application):
+    if not sales_invoice or not loan_application:
+        frappe.throw("Sales Invoice and Loan Application are required.")
+
+    si = frappe.get_doc("Sales Invoice", sales_invoice)
+    loan_doc = frappe.get_doc("Loan Application", loan_application)
+
+    sales_order = None
+    for item in si.items:
+        if item.sales_order:
+            sales_order = item.sales_order
+            break
+
+    loan_doc.sales_order = sales_order
+    loan_doc.sales_invoice = si.name
+    loan_doc.total_amount = si.grand_total
+    loan_doc.save(ignore_permissions=True)
+
+    return {
+        "status": "updated",
+        "loan_application": loan_doc.name
+    }
 
 @frappe.whitelist(allow_guest=True)
 def get_payment_url(pr_name):
@@ -154,7 +204,6 @@ def loan_payment_update(doc, method):
                 if loan_doc.mode_of_down_payment != new_mode:
                     loan_doc.db_set("mode_of_down_payment", new_mode)
 
-#####################################################################################################
 
 def create_loan_installments(doc, method):
     """
@@ -378,31 +427,31 @@ def refresh_loan_installments(loan_name):
     except Exception as e:
         return {"status": "Error", "message": str(e)}
     
-#Function to Create Sales Invoive and Update Loan Application from the Sales Order Submit it was calling from Client script in Sales Order.
-@frappe.whitelist()
-def create_invoice_and_sync_loan(sales_order, loan_application):
-    from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
-
-    # Get Sales Invoice from Sales Order
-    sales_invoice_doc = make_sales_invoice(sales_order)
-    sales_invoice_doc.insert(ignore_permissions=True)
-
-    # Fetch total from Sales Invoice
-    grand_total = sales_invoice_doc.grand_total
-
-    # Update Loan Application
-    loan = frappe.get_doc("Loan Application", loan_application)
-    loan.sales_order = sales_order
-    loan.sales_invoice = sales_invoice_doc.name
-    loan.total_amount = grand_total
-    loan.save(ignore_permissions=True)
-
-    return {
-        "sales_invoice": sales_invoice_doc.name,
-        "loan_application": loan.name
-    }
-
     
+#Function to Create Sales Invoive and Update Loan Application from the Sales Order Submit it was calling from Client script in Sales Order.
+# @frappe.whitelist()
+# def create_invoice_and_sync_loan(sales_order, loan_application):
+#     from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
+
+#     # Get Sales Invoice from Sales Order
+#     sales_invoice_doc = make_sales_invoice(sales_order)
+#     sales_invoice_doc.insert(ignore_permissions=True)
+
+#     # Fetch total from Sales Invoice
+#     grand_total = sales_invoice_doc.grand_total
+
+#     # Update Loan Application
+#     loan = frappe.get_doc("Loan Application", loan_application)
+#     loan.sales_order = sales_order
+#     loan.sales_invoice = sales_invoice_doc.name
+#     loan.total_amount = grand_total
+#     loan.save(ignore_permissions=True)
+
+#     return {
+#         "sales_invoice": sales_invoice_doc.name,
+#         "loan_application": loan.name
+#     }
+ 
 #Fetch Only Financed Item list in Item_code field of Loan Application
 @frappe.whitelist()
 @frappe.validate_and_sanitize_search_inputs

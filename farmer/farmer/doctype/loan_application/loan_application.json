@@ -103,7 +103,8 @@
    "fieldname": "sales_order",
    "fieldtype": "Link",
    "label": "Sales Order",
-   "options": "Sales Order"
+   "options": "Sales Order",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_knly",
@@ -195,7 +196,8 @@
    "fieldname": "sales_invoice",
    "fieldtype": "Link",
    "label": "Sales Invoice",
-   "options": "Sales Invoice"
+   "options": "Sales Invoice",
+   "read_only": 1
   },
   {
    "fieldname": "item_code",
@@ -240,7 +242,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-06-24 15:33:09.306347",
+ "modified": "2025-06-26 18:14:33.616388",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",
