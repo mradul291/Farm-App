@@ -216,6 +216,7 @@ permission_query_conditions = {
     "Delivery Note": "farmer.api.user_api.user_specific_delivery_note",
     "Shipment": "farmer.api.user_api.user_specific_shipment",
     "User": "farmer.api.user_api.user_specific_user",
+    "Case": "farmer.api.user_api.user_specific_cases",
 }
 
 doc_events = {

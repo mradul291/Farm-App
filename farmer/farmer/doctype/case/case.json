@@ -1,0 +1,133 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "CASE-.#####",
+ "creation": "2025-06-25 19:12:36.162211",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "task_section",
+  "title",
+  "status",
+  "column_break_hnhb",
+  "priority",
+  "due_date",
+  "section_break_rgfx",
+  "description",
+  "section_break_1aiu",
+  "user_type",
+  "assigned_to",
+  "assigned_user_email",
+  "column_break_lmgp",
+  "assigned_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "task_section",
+   "fieldtype": "Section Break",
+   "label": "Task"
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "in_list_view": 1,
+   "label": "Description",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "\nOpen\nIn Progress\nCompleted\nOn Hold\nCancelled"
+  },
+  {
+   "fieldname": "column_break_hnhb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "label": "Priority",
+   "options": "\nLow\nMedium\nHigh"
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Date",
+   "label": "Due Date\t"
+  },
+  {
+   "fieldname": "section_break_rgfx",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "user_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "User Type\t",
+   "options": "DocType",
+   "reqd": 1
+  },
+  {
+   "fieldname": "assigned_to",
+   "fieldtype": "Dynamic Link",
+   "in_list_view": 1,
+   "label": "Assigned To\t",
+   "options": "user_type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_1aiu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_lmgp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "assigned_by",
+   "fieldtype": "Link",
+   "label": "Assigned By\t",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "assigned_user_email",
+   "fieldtype": "Link",
+   "label": "Assigned User Email",
+   "options": "User",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-26 11:49:55.046382",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Case",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
