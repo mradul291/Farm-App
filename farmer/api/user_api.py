@@ -170,6 +170,7 @@ def create_vendor_user(data):
         })
         supplier.insert(ignore_permissions=True)
         frappe.db.set_value("Supplier", supplier.name, "owner", email)
+        frappe.db.set_value("Supplier", supplier.name, "supplier", email)
         frappe.db.commit()
         # Create Business
         business_data = {
@@ -1044,17 +1045,12 @@ def user_specific_delivery_note(user):
 
     return incoming_condition
 
-
-
-
 # def user_specific_shipment(user):
 #     if not user:
 #         user = frappe.session.user
 #     if "System Manager" in frappe.get_roles(user):
 #         return None
 #     return f"`tabShipment`.owner = '{user}'"
-
-
 
 def user_specific_shipment(user=None):
     if not user:
@@ -1082,8 +1078,6 @@ def user_specific_shipment(user=None):
     return f"`tabShipment`.owner = '{user}'"
 
 
-
-
 def user_specific_user(user):
     if not user:
         user = frappe.session.user
@@ -1091,8 +1085,11 @@ def user_specific_user(user):
         return None
     return f"`tabUser`.owner = '{user}'"
 
+def user_specific_cases(user):
+    if not user or frappe.get_roles(user) == "System Manager":
+        return None
 
-
+    return f"`tabCase`.`assigned_user_email` = '{user}'"
 
 @frappe.whitelist()
 def get_total_user_crops_card():
