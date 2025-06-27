@@ -745,7 +745,7 @@ def loan_application_permission_query_conditions(user):
     # Match either owner or applicant field (if it's their email)
     return (
         f"(`tabLoan Application`.owner = '{user}' "
-        f"OR `tabLoan Application`.applicant = '{user}')"
+        f"OR `tabLoan Application`.applicant_email = '{user}')"
     )
 
 @frappe.whitelist(allow_guest=True)  # Requires user authentication
