@@ -67,23 +67,30 @@ def update_loan_with_invoice(sales_invoice, loan_application):
         frappe.throw("Sales Invoice and Loan Application are required.")
 
     si = frappe.get_doc("Sales Invoice", sales_invoice)
-    loan_doc = frappe.get_doc("Loan Application", loan_application)
 
-    sales_order = None
-    for item in si.items:
-        if item.sales_order:
-            sales_order = item.sales_order
-            break
+    # Safety: Ensure invoice is not submitted
+    if si.docstatus != 0:
+        frappe.throw("Sales Invoice must remain in Draft while linking.")
 
-    loan_doc.sales_order = sales_order
-    loan_doc.sales_invoice = si.name
-    loan_doc.total_amount = si.grand_total
-    loan_doc.save(ignore_permissions=True)
+    # Find Sales Order from Invoice Items
+    sales_order = next((item.sales_order for item in si.items if item.sales_order), None)
 
+    # Update fields directly in DB without calling .save()
+    frappe.db.set_value("Loan Application", loan_application, {
+        "sales_order": sales_order,
+        "sales_invoice": si.name,
+        "total_amount": si.grand_total
+    })
+
+    # Set "unsaved" flag in localStorage so client script can handle UI alert
     return {
         "status": "updated",
-        "loan_application": loan_doc.name
+        "loan_application": loan_application
     }
+
+
+
+
 
 @frappe.whitelist(allow_guest=True)
 def get_payment_url(pr_name):

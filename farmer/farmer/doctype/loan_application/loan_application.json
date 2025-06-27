@@ -8,6 +8,7 @@
  "engine": "InnoDB",
  "field_order": [
   "applicant",
+  "applicant_email",
   "applicant_name",
   "loan_installment",
   "product_name",
@@ -236,13 +237,19 @@
    "fieldtype": "Table",
    "label": "EMIs",
    "options": "Loan EMIs"
+  },
+  {
+   "fetch_from": "applicant.email",
+   "fieldname": "applicant_email",
+   "fieldtype": "Data",
+   "label": "Applicant Email"
   }
  ],
  "has_web_view": 1,
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2025-06-26 18:14:33.616388",
+ "modified": "2025-06-27 11:00:55.141847",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Loan Application",
