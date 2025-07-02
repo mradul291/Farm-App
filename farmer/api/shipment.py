@@ -17,8 +17,11 @@ class CustomShipment(ERPNextShipment):
                 frappe.log_error(frappe.get_traceback(), "Shipment.validate → Pincode Fetch Failed")
 
     def auto_assign_delivery_agent(self):
-        if self.custom_agent or not self.delivery_pincode:
+        if self.custom_agent or self.custom_delivery_status == "Assigned to Agent":
             return  
+        
+        if not self.delivery_pincode:
+            return
 
         matching_agents = frappe.get_all(
             "Delivery Agent",
@@ -30,11 +33,15 @@ class CustomShipment(ERPNextShipment):
         )
 
         if matching_agents:
-            # Select the first available agent (you can enhance this later)
             selected_agent = frappe.get_doc("Delivery Agent", matching_agents[0].name)
-            self.custom_delivery_agent = selected_agent.name
+            
+            self.custom_agent = selected_agent.name
             self.custom_agent_email = selected_agent.email
             self.custom_agent_name = selected_agent.full_name
-            frappe.msgprint(f"Auto-assigned Delivery Agent: {selected_agent.full_name}")
+            self.custom_delivery_status = "Assigned to Agent"
+            
+            if self.flags.in_insert:
+                frappe.msgprint(f"Auto-assigned Delivery Agent: {selected_agent.full_name}")
         else:
-            frappe.msgprint("No active delivery agent available for this PIN code.")
+            if self.flags.in_insert:
+                frappe.msgprint("No active delivery agent available for this PIN code.")
