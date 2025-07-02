@@ -174,20 +174,23 @@
   {
    "fieldname": "vendor",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Vendor",
-   "options": "Supplier"
+   "options": "Supplier",
+   "read_only": 1
   },
   {
    "fetch_from": "vendor.supplier_name",
    "fieldname": "vendor_name",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Vendor Name",
    "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-27 12:48:57.365985",
+ "modified": "2025-07-01 12:51:45.912977",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Site",

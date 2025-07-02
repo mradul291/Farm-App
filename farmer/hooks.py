@@ -280,6 +280,11 @@ override_whitelisted_methods = {
      "farmer.api.sponsor_api.get_qualified_loan_applications": "farmer.api.sponsor_api.get_qualified_loan_applications"
 }
 
+
+override_doctype_class = {
+    "Shipment": "farmer.api.shipment.CustomShipment"
+}
+
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
 # along with any modifications made in other Frappe apps

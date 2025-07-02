@@ -12,6 +12,7 @@
   "phone_number",
   "email",
   "address",
+  "service_pincode",
   "column_break_kaqk",
   "identification_type",
   "identification_number",
@@ -206,11 +207,16 @@
    "fieldname": "performance_rating",
    "fieldtype": "Rating",
    "label": "Performance Rating"
+  },
+  {
+   "fieldname": "service_pincode",
+   "fieldtype": "Data",
+   "label": "Service Pincode"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-10 16:30:51.321550",
+ "modified": "2025-07-02 11:47:30.431916",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Delivery Agent",
