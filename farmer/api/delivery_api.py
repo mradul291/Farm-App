@@ -62,16 +62,14 @@ def on_submit(self, method=None):
 
 
 def notify_agent_on_assignment(doc, method):
-    # Skip if custom_delivery_status is not Assigned to Agent
+
     if doc.custom_delivery_status != "Assigned to Agent":
         return
 
-    # Ensure email is only sent when status transitions to "Assigned to Agent"
     old_doc = doc.get_doc_before_save()
     if old_doc and old_doc.custom_delivery_status == "Assigned to Agent":
-        return  # Status didn't change, skip
+        return 
 
-    # Proceed if agent email is available
     if not doc.custom_agent_email:
         return
 
