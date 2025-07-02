@@ -35,7 +35,7 @@ def get_shipments_by_agent(agent_name):
 
 def before_submit(self, method):
     if self.custom_delivery_status != "In Transit":
-        frappe.throw("Shipment must be picked up / In Transit before submission.")
+        frappe.throw("Shipment Delivery Status must be picked up / In Transit before submission.")
     
     if not self.custom_proof_of_delivery:
         frappe. throw("Proof of Delivery is required.")

@@ -449,4 +449,3 @@ frappe.ui.form.on("Loan Application", {
     }
 });
 
-
