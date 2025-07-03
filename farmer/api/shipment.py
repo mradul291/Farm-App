@@ -18,42 +18,42 @@ class CustomShipment(ERPNextShipment):
 
            
     # def auto_assign_delivery_agent(self):
-        if self.custom_agent or self.custom_delivery_status == "Assigned to Agent":
-            return
+    #     if self.custom_agent or self.custom_delivery_status == "Assigned to Agent":
+    #         return
 
-        if not self.delivery_pincode:
-            return
+    #     if not self.delivery_pincode:
+    #         return
 
-        # Get all active delivery agents
-        matching_agents = frappe.get_all(
-            "Delivery Agent",
-            filters={"status": "Active"},
-            fields=["name", "service_pincode", "email", "full_name"]
-        )
+    #     # Get all active delivery agents
+    #     matching_agents = frappe.get_all(
+    #         "Delivery Agent",
+    #         filters={"status": "Active"},
+    #         fields=["name", "service_pincode", "email", "full_name"]
+    #     )
 
-        selected_agent = None
+    #     selected_agent = None
 
-        for agent in matching_agents:
-            if not agent.service_pincode:
-                continue
+    #     for agent in matching_agents:
+    #         if not agent.service_pincode:
+    #             continue
 
-            # Split and clean pincode list
-            pincodes = [p.strip() for p in agent.service_pincode.split(",") if p.strip()]
-            if self.delivery_pincode in pincodes:
-                selected_agent = agent
-                break
+    #         # Split and clean pincode list
+    #         pincodes = [p.strip() for p in agent.service_pincode.split(",") if p.strip()]
+    #         if self.delivery_pincode in pincodes:
+    #             selected_agent = agent
+    #             break
 
-        if selected_agent:
-            self.custom_agent = selected_agent.name
-            self.custom_agent_email = selected_agent.email
-            self.custom_agent_name = selected_agent.full_name
-            self.custom_delivery_status = "Assigned to Agent"
+    #     if selected_agent:
+    #         self.custom_agent = selected_agent.name
+    #         self.custom_agent_email = selected_agent.email
+    #         self.custom_agent_name = selected_agent.full_name
+    #         self.custom_delivery_status = "Assigned to Agent"
 
-            if self.flags.in_insert:
-                frappe.msgprint(f"Auto-assigned Delivery Agent: {selected_agent.full_name}")
-        else:
-            if self.flags.in_insert:
-                frappe.msgprint("No active delivery agent available for this PIN code.")
+    #         if self.flags.in_insert:
+    #             frappe.msgprint(f"Auto-assigned Delivery Agent: {selected_agent.full_name}")
+    #     else:
+    #         if self.flags.in_insert:
+    #             frappe.msgprint("No active delivery agent available for this PIN code.")
              
     def auto_assign_delivery_agent(self):
         if self.custom_agent or self.custom_delivery_status == "Assigned to Agent":
