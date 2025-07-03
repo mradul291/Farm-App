@@ -449,3 +449,14 @@ frappe.ui.form.on("Loan Application", {
     }
 });
 
+frappe.ui.form.on('Loan Application', {
+    down_payment_percentage: function(frm) {
+        const value = frm.doc.down_payment_percentage;
+
+        if (value < 1 || value > 100) {
+            frappe.msgprint(__('Down Payment Percentage must be between 1 and 100.'));
+            frm.set_value('down_payment_percentage', null);
+        }
+    }
+});
+
