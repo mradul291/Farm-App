@@ -147,3 +147,27 @@ setInterval(function () {
         }
     }
 }, 10); 
+
+frappe.ready(() => {
+    // Wait until the input field is available in the DOM
+    const waitForField = setInterval(() => {
+        const dpField = document.querySelector('[data-fieldname="down_payment_percentage"] input');
+
+        if (dpField) {
+            clearInterval(waitForField);
+
+            dpField.addEventListener("input", function () {
+                let value = parseFloat(this.value);
+
+                if (isNaN(value)) return;
+
+                if (value < 1 || value > 100) {
+                    frappe.msgprint('Down Payment Percentage must be between 1 and 100.');
+                    this.value = '';
+                    frappe.web_form.set_value("down_payment_percentage", '');
+                }
+            });
+        }
+    }, 300);
+});
+
