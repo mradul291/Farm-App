@@ -61,3 +61,10 @@ def link_warehouse_to_business(doc, method):
         })
         business_doc.save(ignore_permissions=True)
         frappe.db.commit()
+        
+        
+        
+@frappe.whitelist()
+def get_default_warehouse_for_item(item):
+    default_warehouse = frappe.db.get_value("Item Default", {"parent": item}, "default_warehouse")
+    return default_warehouse or ""   
