@@ -30,6 +30,7 @@ class StoreTransfer(Document):
         stock_entry.insert(ignore_permissions=True)
         stock_entry.submit()
 
-        self.stock_entry = stock_entry.name
-        self.status = "Moved"
+        self.db_set("stock_entry", stock_entry.name)
+        self.db_set("status", "Moved")
+
         frappe.msgprint(f"Stock Entry <b>{stock_entry.name}</b> created and submitted successfully.")
