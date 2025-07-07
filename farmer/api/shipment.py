@@ -102,6 +102,4 @@ class CustomShipment(ERPNextShipment):
         else:
             if self.flags.in_insert:
                 frappe.msgprint("No active delivery agent found for this PIN code.")
-             
-                
-                
+         
