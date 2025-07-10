@@ -1,0 +1,202 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "TECHNICIAN-.####",
+ "creation": "2025-07-08 13:10:30.091767",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "details_section",
+  "technician_id",
+  "user",
+  "email",
+  "full_name",
+  "contact_number",
+  "column_break_zswq",
+  "identification_type",
+  "identification_number",
+  "work_and_classification_tab",
+  "technician_type",
+  "status",
+  "column_break_vgf2",
+  "skill_rating",
+  "associated_sites",
+  "vehicle_info_section",
+  "vehicle_type",
+  "plate_number",
+  "capacity",
+  "logistics_and_availability_tab",
+  "work_zones",
+  "availability_schedule",
+  "performance_tab",
+  "current_assignments",
+  "completed_jobs",
+  "performance_rating"
+ ],
+ "fields": [
+  {
+   "fieldname": "technician_id",
+   "fieldtype": "Data",
+   "label": "Technician ID",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "user.full_name",
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "label": "Technician Name\t"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Email\t"
+  },
+  {
+   "fetch_from": "user.mobile_no",
+   "fieldname": "contact_number",
+   "fieldtype": "Data",
+   "label": "Contact Number\t"
+  },
+  {
+   "fieldname": "column_break_zswq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "identification_type",
+   "fieldtype": "Select",
+   "label": "Identification Type",
+   "options": "Select\nNational ID\nDriver\u2019s License\nCooperative ID"
+  },
+  {
+   "fieldname": "identification_number",
+   "fieldtype": "Data",
+   "label": "Identification Number\t"
+  },
+  {
+   "fieldname": "work_and_classification_tab",
+   "fieldtype": "Section Break",
+   "label": "Technician Info"
+  },
+  {
+   "fieldname": "technician_type",
+   "fieldtype": "Select",
+   "label": "Technician Type",
+   "options": "Select\nElectrical\nMechanical\nSolar\nIrrigation\nStorage"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status\t",
+   "options": "Active\nInactive\nSuspended"
+  },
+  {
+   "fieldname": "skill_rating",
+   "fieldtype": "Rating",
+   "label": "Skill Rating\t"
+  },
+  {
+   "fieldname": "associated_sites",
+   "fieldtype": "Link",
+   "label": "Associated Site(s)",
+   "options": "Site"
+  },
+  {
+   "fieldname": "column_break_vgf2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "logistics_and_availability_tab",
+   "fieldtype": "Tab Break",
+   "label": "Availability"
+  },
+  {
+   "fieldname": "vehicle_type",
+   "fieldtype": "Select",
+   "label": "Vehicle Type",
+   "options": "Select\nMotorcycle\nTricycle\nVan\nTruck"
+  },
+  {
+   "fieldname": "plate_number",
+   "fieldtype": "Data",
+   "label": "Vehicle Plate Number\t"
+  },
+  {
+   "fieldname": "capacity",
+   "fieldtype": "Float",
+   "label": "Vehicle Capacity\t"
+  },
+  {
+   "fieldname": "work_zones",
+   "fieldtype": "Data",
+   "label": "Work Zones"
+  },
+  {
+   "fieldname": "availability_schedule",
+   "fieldtype": "Table",
+   "label": "Availability Schedule",
+   "options": "Technician Availability"
+  },
+  {
+   "fieldname": "performance_tab",
+   "fieldtype": "Tab Break",
+   "label": "Performance"
+  },
+  {
+   "fieldname": "current_assignments",
+   "fieldtype": "Int",
+   "label": "Current Assignments"
+  },
+  {
+   "fieldname": "completed_jobs",
+   "fieldtype": "Int",
+   "label": "Completed Jobs"
+  },
+  {
+   "fieldname": "performance_rating",
+   "fieldtype": "Percent",
+   "label": "Performance Rating"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "Technician",
+   "options": "User"
+  },
+  {
+   "fieldname": "vehicle_info_section",
+   "fieldtype": "Section Break",
+   "label": "Vehicle Info"
+  },
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-09 16:01:06.277227",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Technician",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

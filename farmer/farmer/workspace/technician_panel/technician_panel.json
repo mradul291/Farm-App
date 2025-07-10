@@ -1,0 +1,63 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"H05xf_Y21u\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Technician Panel</span>\",\"col\":12}},{\"id\":\"7qmyne1cVY\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Assigned Tasks\",\"col\":4}},{\"id\":\"CBEXwSJ3Tt\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Pending Tasks\",\"col\":4}},{\"id\":\"sj-Adh5Hxj\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Completed Tasks\",\"col\":4}},{\"id\":\"BuJoh529l8\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"zWu4bjmvY7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Technician\",\"col\":3}},{\"id\":\"4Cls27uOcj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"My Tickets\",\"col\":3}}]",
+ "creation": "2025-07-09 13:07:13.114275",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "getting-started",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Technician Panel",
+ "links": [],
+ "modified": "2025-07-10 10:55:47.570625",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Technician Panel",
+ "number_cards": [
+  {
+   "label": "Assigned Tasks",
+   "number_card_name": "Assigned Technician Tasks"
+  },
+  {
+   "label": "Pending Tasks",
+   "number_card_name": "Pending Technician Tasks"
+  },
+  {
+   "label": "Completed Tasks",
+   "number_card_name": "Completed Technician Tasks"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "Technician"
+  }
+ ],
+ "sequence_id": 30.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "My Tickets",
+   "link_to": "Technician Task",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Technician",
+   "link_to": "Technician",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Technician Panel"
+}

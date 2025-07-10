@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Crops",
  "links": [],
- "modified": "2025-05-16 16:23:40.455951",
+ "modified": "2025-07-09 13:39:50.055207",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Crops",
@@ -32,7 +32,7 @@
    "role": "Administrator"
   }
  ],
- "sequence_id": 24.0,
+ "sequence_id": 23.0,
  "shortcuts": [
   {
    "color": "Grey",

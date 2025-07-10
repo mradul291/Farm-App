@@ -1123,3 +1123,75 @@ def get_total_user_crops_card():
         "value": len(unique_crops),
         "fieldtype": "Int"
     }
+
+
+def task_query_condition(user):
+    if not user:
+        user = frappe.session.user
+
+    roles = frappe.get_roles(user)
+
+    # System Manager or Administrator can see all tasks
+    if "System Manager" in roles or user == "Administrator":
+        return ""
+
+    # If Technician, show only their tasks
+    if "Technician" in roles:
+        return f"`tabTechnician Task`.`technician_email` = '{user}'"
+
+    # Farmers and Suppliers can see tasks they created
+    if "Farmer" in roles or "Supplier" in roles:
+        return f"`tabTechnician Task`.`owner` = '{user}'"
+
+    return "1=0"  # No access for other roles
+
+
+def task_has_permission(doc, user):
+    if not user:
+        user = frappe.session.user
+
+    roles = frappe.get_roles(user)
+
+    # Full access for Admins
+    if "System Manager" in roles or user == "Administrator":
+        return True
+
+    # Technicians can only see tasks assigned to them
+    if "Technician" in roles:
+        return doc.technician_email == user
+
+    # Farmers and Suppliers can access tasks they created
+    if "Farmer" in roles or "Supplier" in roles:
+        return doc.owner == user
+
+    return False
+
+
+
+def technician_query_condition(user):
+    if not user:
+        user = frappe.session.user
+
+    roles = frappe.get_roles(user)
+
+    # Allow full access for admin roles or task assigners
+    if "System Manager" in roles or user == "Administrator" or \
+       "Admin" in roles or "Farmer" in roles or "Supplier" in roles:
+        return ""
+
+    # Otherwise restrict technician to own profile
+    return f"`tabTechnician`.`user` = '{user}'"
+
+
+def technician_has_permission(doc, user):
+    if not user:
+        user = frappe.session.user
+
+    roles = frappe.get_roles(user)
+
+    if "System Manager" in roles or user == "Administrator" or \
+       "Admin" in roles or "Farmer" in roles or "Supplier" in roles:
+        return True
+
+    return doc.user == user
+

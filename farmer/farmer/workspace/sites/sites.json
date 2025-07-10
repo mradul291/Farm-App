@@ -22,7 +22,7 @@
  "is_hidden": 0,
  "label": "Sites",
  "links": [],
- "modified": "2025-05-16 16:23:40.662411",
+ "modified": "2025-07-09 13:39:50.271178",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Sites",
@@ -36,7 +36,7 @@
    "role": "Administrator"
   }
  ],
- "sequence_id": 27.0,
+ "sequence_id": 26.0,
  "shortcuts": [
   {
    "color": "Grey",
