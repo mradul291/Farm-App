@@ -217,6 +217,13 @@ permission_query_conditions = {
     "Shipment": "farmer.api.user_api.user_specific_shipment",
     "User": "farmer.api.user_api.user_specific_user",
     "Case": "farmer.api.user_api.user_specific_cases",
+    "Technician Task": "farmer.api.user_api.task_query_condition",
+    "Technician": "farmer.api.user_api.technician_query_condition",
+}
+
+has_permission = {
+    "Technician Task": "farmer.api.user_api.task_has_permission",
+    "Technician": "farmer.api.user_api.technician_has_permission",
 }
 
 doc_events = {
@@ -247,6 +254,13 @@ doc_events = {
     "Sales Invoice": {
         "on_submit": "farmer.api.sponsor_api.update_sponsor_quantities_on_invoice_submit",
         "on_cancel": "farmer.api.sponsor_api.reverse_sponsor_usage_on_invoice_cancel"
+    },
+    "User": {
+        "after_insert": "farmer.api.technician_api.create_technician_from_user",
+        "on_update":  "farmer.api.technician_api.sync_technician_from_user"
+    },
+    "Technician Task": {
+        "on_update": "farmer.api.technician_api.send_assignment_email"
     }
 }                                                                                                                                                                                                        
 

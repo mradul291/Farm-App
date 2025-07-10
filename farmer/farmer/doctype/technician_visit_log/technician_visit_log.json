@@ -1,0 +1,71 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-08 17:12:03.138861",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "visit_date",
+  "notes",
+  "parts_used",
+  "action_taken",
+  "photo_before",
+  "photo_after",
+  "next_followup"
+ ],
+ "fields": [
+  {
+   "fieldname": "visit_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Visit Date\t"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Notes"
+  },
+  {
+   "fieldname": "parts_used",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Parts Used\t"
+  },
+  {
+   "fieldname": "action_taken",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Action Taken\t"
+  },
+  {
+   "fieldname": "photo_before",
+   "fieldtype": "Attach Image",
+   "label": "Photo Before\t"
+  },
+  {
+   "fieldname": "photo_after",
+   "fieldtype": "Attach Image",
+   "label": "Photo After\t"
+  },
+  {
+   "fieldname": "next_followup",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Next Follow-up Date\t"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-10 11:23:33.565190",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Technician Visit Log",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

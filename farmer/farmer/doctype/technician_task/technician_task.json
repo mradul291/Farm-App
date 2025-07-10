@@ -1,0 +1,172 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "TECH-TASK-.#####",
+ "creation": "2025-07-08 16:53:35.144200",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "task_type",
+  "status",
+  "scheduled_date",
+  "assigned_technician",
+  "technician_email",
+  "column_break_bba5",
+  "site",
+  "priority",
+  "issue_description",
+  "visit_and_resolution_log_tab",
+  "visit_log",
+  "completion_and_feedback_tab",
+  "completion_confirmation",
+  "completion_confirmed",
+  "completion_date",
+  "amended_from",
+  "column_break_fd3l",
+  "feedback_rating",
+  "feedback_comment"
+ ],
+ "fields": [
+  {
+   "fieldname": "task_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Task Type\t",
+   "options": "\nInstallation\nRepair\nMaintenance\nInspection\nDemo",
+   "reqd": 1
+  },
+  {
+   "fieldname": "scheduled_date",
+   "fieldtype": "Date",
+   "label": "Scheduled Visit Date\t"
+  },
+  {
+   "fieldname": "assigned_technician",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Assigned Technician",
+   "options": "Technician",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "assigned_technician.user",
+   "fieldname": "technician_email",
+   "fieldtype": "Data",
+   "label": "Technician Email",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_bba5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "site",
+   "fieldtype": "Link",
+   "label": "Site",
+   "options": "Site",
+   "reqd": 1
+  },
+  {
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "label": "Priority",
+   "options": "Low\nMedium\nHigh"
+  },
+  {
+   "fieldname": "issue_description",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Issue Description\t",
+   "reqd": 1
+  },
+  {
+   "fieldname": "visit_and_resolution_log_tab",
+   "fieldtype": "Tab Break",
+   "label": "Visit Log"
+  },
+  {
+   "fieldname": "visit_log",
+   "fieldtype": "Table",
+   "label": "Visit Log",
+   "options": "Technician Visit Log"
+  },
+  {
+   "fieldname": "completion_and_feedback_tab",
+   "fieldtype": "Tab Break",
+   "label": "Completion"
+  },
+  {
+   "fieldname": "completion_confirmation",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Completion Confirmation"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Open\nIn Progress\nCompleted\nEscalated"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Technician Task",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "completion_confirmed",
+   "fieldtype": "Check",
+   "label": "Completion Confirmed"
+  },
+  {
+   "fieldname": "completion_date",
+   "fieldtype": "Date",
+   "label": "Completion Date"
+  },
+  {
+   "fieldname": "column_break_fd3l",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "feedback_rating",
+   "fieldtype": "Rating",
+   "label": "Feedback Rating"
+  },
+  {
+   "fieldname": "feedback_comment",
+   "fieldtype": "Small Text",
+   "label": "Feedback Comment"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-10 11:59:05.063653",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Technician Task",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
