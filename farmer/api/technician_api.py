@@ -100,3 +100,30 @@ def send_assignment_email(doc, method=None):
                 )
             except Exception as e:
                 frappe.log_error(str(e), "Realtime Notification Failed")
+                
+        # After sending email, update stats if technician exists
+        if doc.assigned_technician:
+            update_technician_task_stats(doc.assigned_technician)
+
+
+def update_technician_task_stats(technician_name):
+    if not technician_name:
+        return
+
+    # Count current active assignments
+    assigned_count = frappe.db.count("Technician Task", {
+        "assigned_technician": technician_name,
+        "status": ["!=", "Completed"]
+    })
+
+    # Count completed tasks
+    completed_count = frappe.db.count("Technician Task", {
+        "assigned_technician": technician_name,
+        "status": "Completed"
+    })
+
+    # Update values in Technician Doc
+    frappe.db.set_value("Technician", technician_name, {
+        "current_assignments": assigned_count,
+        "completed_jobs": completed_count
+    })
