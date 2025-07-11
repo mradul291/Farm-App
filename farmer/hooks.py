@@ -261,6 +261,9 @@ doc_events = {
     },
     "Technician Task": {
         "on_update": "farmer.api.technician_api.send_assignment_email"
+    },
+    "Store Transfer": {
+        "on_submit": "farmer.api.store_api.on_submit_store_transfer"
     }
 }                                                                                                                                                                                                        
 
