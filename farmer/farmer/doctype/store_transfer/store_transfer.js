@@ -22,7 +22,7 @@ frappe.ui.form.on('Store Transfer', {
         if (frm.doc.docstatus === 1 && frm.doc.status === "Moved") {
             frm.add_custom_button('Return Stock', () => {
                 frappe.call({
-                    method: 'your_app.path.to.store_transfer.make_return',
+                    method: 'farmer.farmer.doctype.store_transfer.store_transfer.make_return',
                     args: { docname: frm.doc.name },
                     callback(r) {
                         if (!r.exc && r.message) {
