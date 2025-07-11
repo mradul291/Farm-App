@@ -106,7 +106,8 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Open\nIn Progress\nWork Done\nCompleted\nEscalated"
+   "options": "Open\nIn Progress\nWork Done\nCompleted\nEscalated",
+   "read_only": 1
   },
   {
    "fieldname": "amended_from",
@@ -153,7 +154,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-11 11:16:32.811694",
+ "modified": "2025-07-11 13:06:25.405985",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Technician Task",
