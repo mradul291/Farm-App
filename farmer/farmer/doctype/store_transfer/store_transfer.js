@@ -16,18 +16,19 @@ frappe.ui.form.on('Store Transfer', {
     }
 });
 
+
+
 frappe.ui.form.on('Store Transfer', {
     refresh(frm) {
-        // show button only after first move and not yet returned
         if (frm.doc.docstatus === 1 && frm.doc.status === "Moved") {
             frm.add_custom_button('Return Stock', () => {
                 frappe.call({
-                    method: 'farmer.farmer.doctype.store_transfer.store_transfer.make_return',
+                    method: 'farmer.api.store_api.make_return',
                     args: { docname: frm.doc.name },
                     callback(r) {
                         if (!r.exc && r.message) {
-                            frm.reload_doc();                       // refresh Store Transfer
-                            frappe.set_route('Form', 'Stock Entry', r.message); // open the return entry
+                            frm.reload_doc();
+                            frappe.set_route('Form', 'Stock Entry', r.message);
                         }
                     }
                 });
@@ -35,4 +36,3 @@ frappe.ui.form.on('Store Transfer', {
         }
     }
 });
-

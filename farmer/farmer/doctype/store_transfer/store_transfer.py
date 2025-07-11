@@ -1,7 +1,8 @@
 # import frappe
-# from frappe.model.document import Document
+from frappe.model.document import Document
 
-# class StoreTransfer(Document):
+class StoreTransfer(Document):
+    pass
 
 #     def on_submit(self):
 #         self.create_stock_entry()
@@ -37,83 +38,3 @@
 
 
 
-import frappe
-from frappe.model.document import Document
-from frappe.utils import get_link_to_form
-
-class StoreTransfer(Document):
-
-    # 1️⃣ Initial MOVE (on Submit)
-    def on_submit(self):
-        self.create_stock_entry()
-
-    def create_stock_entry(self):
-        self._validate_fields()
-
-        se = self._build_stock_entry(
-            source=self.from_warehouse,
-            target=self.to_warehouse
-        )
-
-        # link & status
-        self.db_set("stock_entry", se.name)
-        self.db_set("status", "Moved")
-
-        # ✅ toast for the user
-        frappe.msgprint(
-            f"Stock moved: {get_link_to_form('Stock Entry', se.name)}",
-            alert=True, indicator="green"
-        )
-
-    # 2️⃣ REVERSE move (Return button)
-    @frappe.whitelist()
-    def make_return(docname):
-        doc = frappe.get_doc("Store Transfer", docname)
-        return doc.create_return_stock_entry()
-
-    def create_return_stock_entry(self):
-        if self.status != "Moved":
-            frappe.throw("Return is allowed only after the first move.")
-
-        se = self._build_stock_entry(
-            source=self.to_warehouse,      # swapped
-            target=self.from_warehouse     # swapped
-        )
-
-        self.db_set("return_stock_entry", se.name)
-        self.db_set("status", "Returned")
-
-        # ✅ toast for the user
-        frappe.msgprint(
-            f"Stock returned: {get_link_to_form('Stock Entry', se.name)}",
-            alert=True, indicator="blue"
-        )
-
-        return se.name   # so the client script can open it
-
-    # --- helpers -------------------------------------------------
-    def _validate_fields(self):
-        if not (self.item and self.from_warehouse and self.to_warehouse and self.qty):
-            frappe.throw("Item, Source, Target and Quantity are mandatory.")
-
-    def _build_stock_entry(self, source, target):
-        se = frappe.new_doc("Stock Entry")
-        se.stock_entry_type = se.purpose = "Material Transfer"
-        se.company = frappe.db.get_value("Warehouse", source, "company")
-        se.from_warehouse = source
-        se.to_warehouse = target
-
-        uom = frappe.db.get_value("Item", self.item, "stock_uom")
-        se.append("items", {
-            "item_code": self.item,
-            "s_warehouse": source,
-            "t_warehouse": target,
-            "qty": self.qty,
-            "uom": uom,
-            "stock_uom": uom,
-            "conversion_factor": 1
-        })
-
-        se.insert(ignore_permissions=True)
-        se.submit()
-        return se
