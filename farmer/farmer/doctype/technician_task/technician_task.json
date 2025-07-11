@@ -13,6 +13,7 @@
   "technician_email",
   "column_break_bba5",
   "site",
+  "site_name",
   "priority",
   "issue_description",
   "visit_and_resolution_log_tab",
@@ -105,7 +106,7 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Open\nIn Progress\nCompleted\nEscalated"
+   "options": "Open\nIn Progress\nWork Done\nCompleted\nEscalated"
   },
   {
    "fieldname": "amended_from",
@@ -141,11 +142,18 @@
    "fieldname": "feedback_comment",
    "fieldtype": "Small Text",
    "label": "Feedback Comment"
+  },
+  {
+   "fetch_from": "site.site_name",
+   "fieldname": "site_name",
+   "fieldtype": "Data",
+   "label": "Site Name",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-10 11:59:05.063653",
+ "modified": "2025-07-11 11:16:32.811694",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Technician Task",
@@ -168,5 +176,10 @@
  "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [
+  {
+   "color": "Blue",
+   "title": "Work Done"
+  }
+ ]
 }

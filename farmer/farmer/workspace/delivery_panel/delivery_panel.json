@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"bpJa55Vl6O\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Delivery Panel</span>\",\"col\":12}},{\"id\":\"ndS4p-5zH-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Agent\",\"col\":3}},{\"id\":\"gUX16mlcAm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shipments\",\"col\":3}}]",
+ "content": "[{\"id\":\"bpJa55Vl6O\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Delivery Panel</span>\",\"col\":12}},{\"id\":\"awmyjNZ4_Y\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Pending Deliveries\",\"col\":4}},{\"id\":\"3Dt_2S3XOu\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"In Transit Deliveries\",\"col\":4}},{\"id\":\"wFOT8FCJur\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Completed Deliveries\",\"col\":4}},{\"id\":\"BkiTzCuloN\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ndS4p-5zH-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Agent\",\"col\":3}},{\"id\":\"gUX16mlcAm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shipments\",\"col\":3}}]",
  "creation": "2025-07-09 13:39:39.792514",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,11 +13,24 @@
  "is_hidden": 0,
  "label": "Delivery Panel",
  "links": [],
- "modified": "2025-07-09 13:41:35.384510",
+ "modified": "2025-07-11 12:29:20.814559",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Delivery Panel",
- "number_cards": [],
+ "number_cards": [
+  {
+   "label": "Pending Deliveries",
+   "number_card_name": "Pending Deliveries"
+  },
+  {
+   "label": "In Transit Deliveries",
+   "number_card_name": "In Transit Deliveries"
+  },
+  {
+   "label": "Completed Deliveries",
+   "number_card_name": "Delivered Shipments"
+  }
+ ],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
