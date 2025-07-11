@@ -15,7 +15,8 @@
   "remarks",
   "status",
   "stock_entry",
-  "amended_from"
+  "amended_from",
+  "return_stock_entry"
  ],
  "fields": [
   {
@@ -79,12 +80,19 @@
    "fieldtype": "Select",
    "label": "Status",
    "options": "Draft\nMoved\nReturned"
+  },
+  {
+   "fieldname": "return_stock_entry",
+   "fieldtype": "Link",
+   "label": "Return Stock Entry",
+   "options": "Stock Entry",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-07-11 18:46:10.877959",
+ "modified": "2025-07-11 19:44:19.361871",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Store Transfer",
