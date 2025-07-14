@@ -1195,3 +1195,34 @@ def technician_has_permission(doc, user):
 
     return doc.user == user
 
+
+def _is_restricted_farmer(user: str) -> bool:
+    roles = set(frappe.get_roles(user))
+    return (
+        "Farmer" in roles
+        and "System Manager" not in roles
+        and "Administrator" not in roles
+    )
+
+def _sites_linked_to_user(user: str) -> list[str]:
+    return frappe.get_all(
+        "Farmer Master",
+        filters={"farmer": user},
+        pluck="site"
+    )
+
+def get_site_permission_query(user: str) -> str | None:
+    if not _is_restricted_farmer(user):
+        return None
+
+    site_names = _sites_linked_to_user(user)
+    if not site_names:
+        return "1 = 0"
+
+    placeholders = ", ".join(frappe.db.escape(s) for s in site_names)
+    return f"`tabSite`.`name` IN ({placeholders})"
+
+def site_has_permission(doc, ptype: str, user: str) -> bool:
+    if not _is_restricted_farmer(user):
+        return True
+    return doc.name in _sites_linked_to_user(user)

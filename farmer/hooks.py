@@ -219,11 +219,13 @@ permission_query_conditions = {
     "Case": "farmer.api.user_api.user_specific_cases",
     "Technician Task": "farmer.api.user_api.task_query_condition",
     "Technician": "farmer.api.user_api.technician_query_condition",
+    "Site": "farmer.api.user_api.get_site_permission_query",
 }
 
 has_permission = {
     "Technician Task": "farmer.api.user_api.task_has_permission",
     "Technician": "farmer.api.user_api.technician_has_permission",
+    "Site": "farmer.api.user_api.site_has_permission"
 }
 
 doc_events = {
