@@ -9,12 +9,14 @@
   "task_type",
   "status",
   "scheduled_date",
+  "priority",
   "assigned_technician",
   "technician_email",
   "column_break_bba5",
   "site",
   "site_name",
-  "priority",
+  "equipment",
+  "equipment_name",
   "issue_description",
   "visit_and_resolution_log_tab",
   "visit_log",
@@ -150,11 +152,24 @@
    "fieldtype": "Data",
    "label": "Site Name",
    "read_only": 1
+  },
+  {
+   "fieldname": "equipment",
+   "fieldtype": "Link",
+   "label": "Equipment ",
+   "options": "Website Item"
+  },
+  {
+   "fetch_from": "equipment.item_name",
+   "fieldname": "equipment_name",
+   "fieldtype": "Data",
+   "label": "Equipment Name",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-11 13:06:25.405985",
+ "modified": "2025-07-14 11:51:17.568361",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Technician Task",

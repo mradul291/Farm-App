@@ -72,7 +72,7 @@ def send_assignment_email(doc, method=None):
 
         <b>Task Type:</b> {doc.task_type or 'Not Specified'}<br>
         <b>Scheduled Visit Date:</b> {doc.scheduled_date or 'Not Scheduled'}<br>
-        <b>Site:</b> {doc.site or 'Not Provided'}<br>
+        <b>Site:</b> {doc.site_name or 'Not Provided'}<br>
         <b>Priority:</b> {doc.priority or 'Not Marked'}<br>
         <b>Description:</b> {doc.issue_description or 'N/A'}<br><br>
 
