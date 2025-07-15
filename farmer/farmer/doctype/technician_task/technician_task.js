@@ -1,8 +1,14 @@
 frappe.ui.form.on('Technician Task', {
     refresh(frm) {
         const user = frappe.session.user;
+        const roles = frappe.user_roles;
         const isCreator = frm.doc.owner === user;
-        const isTechnician = frappe.user_roles.includes("Technician");
+        const isTechnician = roles.includes("Technician");
+        const isSysMgr = roles.includes("System Manager") || user === "Administrator";
+        const lockFields = isTechnician && !isSysMgr;
+
+        frm.set_df_property('site', 'read_only', lockFields ? 1 : 0);
+        frm.set_df_property('equipment', 'read_only', lockFields ? 1 : 0);
 
         if (isTechnician && frm.doc.status === "Open") {
             frm.add_custom_button("Start Task", () => {
@@ -24,14 +30,6 @@ frappe.ui.form.on('Technician Task', {
 
         if (isCreator && frm.doc.status === "Work Done") {
             frm.add_custom_button("Confirm Completion", () => {
-                if (!frm.doc.completion_confirmed) {
-                    frappe.msgprint({
-                        title: __("Action Required"),
-                        message: __("Tick <b>Completion Confirmed</b> before completing the task."),
-                        indicator: "orange"
-                    });
-                    return;
-                }
                 frm.set_value("status", "Completed");
                 if (!frm.doc.completion_date) {
                     frm.set_value("completion_date", frappe.datetime.get_today());
@@ -40,7 +38,7 @@ frappe.ui.form.on('Technician Task', {
             });
         }
 
-        const feedbackFields = ['completion_confirmed', 'feedback_rating', 'feedback_comment'];
+        const feedbackFields = ['feedback_rating', 'feedback_comment'];
         const showFeedback = ['Work Done', 'Completed'].includes(frm.doc.status);
 
         feedbackFields.forEach(f => frm.set_df_property(f, 'hidden', !showFeedback));
@@ -57,23 +55,15 @@ frappe.ui.form.on('Technician Task', {
         if (frm.doc.status === "Completed") {
             const allFields = [...feedbackFields, 'completion_date'];
             allFields.forEach(f => {
-                const readOnly = isCreator ? (f === 'completion_date') : 1;
-                frm.set_df_property(f, 'read_only', readOnly);
+                const ro = isCreator ? (f === 'completion_date') : 1;
+                frm.set_df_property(f, 'read_only', ro);
             });
         }
     },
 
     validate(frm) {
-        if (frm.doc.status === "Completed" && !frm.doc.completion_confirmed) {
-            frappe.throw(__("Completion cannot be set to <b>Completed</b> unless <b>Completion Confirmed</b> is ticked."));
-        }
-    },
-
-    completion_confirmed(frm) {
-        if (frm.doc.completion_confirmed && !frm.doc.completion_date) {
+        if (frm.doc.status === "Completed" && !frm.doc.completion_date) {
             frm.set_value('completion_date', frappe.datetime.get_today());
-        } else if (!frm.doc.completion_confirmed) {
-            frm.set_value('completion_date', null);
         }
     }
 });
