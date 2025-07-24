@@ -205,10 +205,8 @@ permission_query_conditions = {
     "Website Item": "farmer.api.user_api.user_specific_website_item",
     "Farm Master": "farmer.api.user_api.user_specific_farms",
     "Loan Installments": "farmer.api.user_api.user_specific_loan_installments",
-    # "Crops Master": "farmer.api.user_api.user_specific_crops",
     "Sales Order": "farmer.api.user_api.user_specific_sales_order",
     "Farmer Master": "farmer.api.user_api.user_specific_farmer",
-    # "Sales Invoice": "farmer.api.user_api.user_specific_sales_invoice",
     "Business": "farmer.api.user_api.user_specific_business",
     "Warehouse": "farmer.api.user_api.user_specific_warehouse",
     "Sales Order": "farmer.api.user_api.get_permission_query_conditions",
@@ -258,15 +256,25 @@ doc_events = {
         "on_cancel": "farmer.api.sponsor_api.reverse_sponsor_usage_on_invoice_cancel"
     },
     "User": {
-        "after_insert": "farmer.api.technician_api.create_technician_from_user",
-        "on_update":  "farmer.api.technician_api.sync_technician_from_user"
+        "after_insert": [
+            "farmer.api.technician_api.create_technician_from_user",
+            "farmer.api.financier_api.create_financier_from_user",
+        ],
+        "on_update": [
+            "farmer.api.technician_api.sync_technician_from_user",
+            "farmer.api.financier_api.sync_financier_from_user",
+        ],
     },
     "Technician Task": {
         "on_update": "farmer.api.technician_api.send_assignment_email"
     },
     "Store Transfer": {
         "on_submit": "farmer.api.store_api.on_submit_store_transfer"
+    },
+    "Website Item": {
+        "on_update": "farmer.api.financier_api.sync_financier_loan_catalog"
     }
+
 }                                                                                                                                                                                                        
 
 

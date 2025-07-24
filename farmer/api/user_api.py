@@ -738,15 +738,32 @@ def loan_application_permission_query_conditions(user):
     if not user:
         user = frappe.session.user
 
-    # Admin users can see all loan applications
-    if "System Manager" in frappe.get_roles(user):
-        return None  
-      
-    # Match either owner or applicant field (if it's their email)
+    roles = frappe.get_roles(user)
+
+    if "System Manager" in roles:
+        return None
+
+    if "Financier" in roles:
+        financier_name = frappe.db.get_value("Financier", {"user": user}, "name")
+        if not financier_name:
+            return "1=0"
+
+        return f"""
+            `tabLoan Application`.item_code IN (
+                SELECT product_code
+                FROM `tabLoan Product Item`
+                WHERE parent = '{financier_name}'
+            )
+        """
+
     return (
         f"(`tabLoan Application`.owner = '{user}' "
         f"OR `tabLoan Application`.applicant_email = '{user}')"
     )
+
+
+
+
 
 @frappe.whitelist(allow_guest=True)  # Requires user authentication
 def upload_profile_picture():
@@ -932,12 +949,18 @@ def upload_profile_picture():
                 }
 # API 9: Check for User Specific Website Item View
 
-def user_specific_website_item(user):
-    if not user: user = frappe.session.user
-    if "System Manager" in frappe.get_roles(user):
+def user_specific_website_item(user=None):
+    if not user:
+        user = frappe.session.user
+
+    roles = frappe.get_roles(user)
+
+    # Allow full access to System Manager and Financier
+    if "System Manager" in roles or "Financier" in roles:
         return None
     else:
         return f"`tabWebsite Item`.owner = '{user}'"
+
     
 # API 9: Check for User Specific Farms 
 
@@ -951,15 +974,35 @@ def user_specific_farms(user):
 # 10: Check for User Specific Loan Installments 
 
 def user_specific_loan_installments(user):
-    if not user: user = frappe.session.user
-    if "System Manager" in frappe.get_roles(user):
-        return None 
-    
-    # Match if user is the owner or their email is in applicant_id
+    if not user:
+        user = frappe.session.user
+
+    roles = frappe.get_roles(user)
+
+    if "System Manager" in roles:
+        return None
+
+    if "Financier" in roles:
+        financier_name = frappe.db.get_value("Financier", {"user": user}, "name")
+        if not financier_name:
+            return "1=0"
+
+        return f"""
+            `tabLoan Installments`.applicant IN (
+                SELECT name FROM `tabLoan Application`
+                WHERE item_code IN (
+                    SELECT product_code FROM `tabLoan Product Item`
+                    WHERE parent = '{financier_name}'
+                )
+            )
+        """
+
+    # For Applicants
     return (
         f"(`tabLoan Installments`.owner = '{user}' "
         f"OR `tabLoan Installments`.applicant_id = '{user}')"
     )
+
     
 # 12: Check for User Specific Sales Orders  
 
@@ -1044,13 +1087,6 @@ def user_specific_delivery_note(user):
     """
 
     return incoming_condition
-
-# def user_specific_shipment(user):
-#     if not user:
-#         user = frappe.session.user
-#     if "System Manager" in frappe.get_roles(user):
-#         return None
-#     return f"`tabShipment`.owner = '{user}'"
 
 def user_specific_shipment(user=None):
     if not user:
