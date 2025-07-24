@@ -1,0 +1,115 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "Insurer-.####",
+ "creation": "2025-07-21 13:21:57.112508",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "identity_section",
+  "insurer_id",
+  "insurer_name",
+  "contact_email",
+  "contact_phone",
+  "column_break_sfhj",
+  "insurer_type",
+  "registration_number",
+  "address",
+  "operational_scope_section",
+  "regions_of_operation",
+  "column_break_jxdb",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "insurer_id",
+   "fieldtype": "Read Only",
+   "label": "Insurer ID\t"
+  },
+  {
+   "fieldname": "insurer_name",
+   "fieldtype": "Data",
+   "label": "Insurer Name"
+  },
+  {
+   "fieldname": "contact_email",
+   "fieldtype": "Data",
+   "label": "Contact Email\t"
+  },
+  {
+   "fieldname": "contact_phone",
+   "fieldtype": "Data",
+   "label": "Contact Phone\t"
+  },
+  {
+   "fieldname": "column_break_sfhj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "insurer_type",
+   "fieldtype": "Select",
+   "label": "Insurer Type\t",
+   "options": "\nPrivate\nCo-operative\nGovernment-backed"
+  },
+  {
+   "fieldname": "registration_number",
+   "fieldtype": "Data",
+   "label": "Registration Number\t"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address\t"
+  },
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Identity"
+  },
+  {
+   "fieldname": "operational_scope_section",
+   "fieldtype": "Section Break",
+   "label": "Operational Scope"
+  },
+  {
+   "fieldname": "regions_of_operation",
+   "fieldtype": "Data",
+   "label": "Regions of Operation\t"
+  },
+  {
+   "fieldname": "column_break_jxdb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status\t",
+   "options": "Active\nInactive"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-21 14:14:55.936549",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Insurer",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

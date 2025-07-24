@@ -1,0 +1,100 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-22 18:47:51.936578",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "loan_product_name",
+  "product_code",
+  "product_name",
+  "interest_rate",
+  "grace_period",
+  "min_amount",
+  "max_amount",
+  "tenure",
+  "repayment_method",
+  "bundle_with_insurance"
+ ],
+ "fields": [
+  {
+   "fieldname": "loan_product_name",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Loan Product\t",
+   "options": "Website Item"
+  },
+  {
+   "fieldname": "interest_rate",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "Interest Rate (%)\t"
+  },
+  {
+   "fieldname": "grace_period",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Grace Period (Months)\t"
+  },
+  {
+   "fieldname": "min_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Minimum Loan Amount\t"
+  },
+  {
+   "fieldname": "max_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Maximum Loan Amount\t"
+  },
+  {
+   "fieldname": "tenure",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Repayment Tenure (Months)\t"
+  },
+  {
+   "fieldname": "repayment_method",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Repayment Method\t",
+   "options": "Wallet\nAgent\nBank"
+  },
+  {
+   "default": "0",
+   "fieldname": "bundle_with_insurance",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Bundle with Insurance?\t"
+  },
+  {
+   "fetch_from": "loan_product_name.item_name",
+   "fieldname": "product_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Product Name"
+  },
+  {
+   "fetch_from": "loan_product_name.item_code",
+   "fieldname": "product_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Product Code",
+   "options": "Item"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-24 15:38:47.865380",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Loan Product Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,173 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "FINANCIER-.####",
+ "creation": "2025-07-21 12:59:02.883010",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "identity_section",
+  "financier_id",
+  "institution_name",
+  "institution_type",
+  "column_break_jmae",
+  "registration_number",
+  "user",
+  "contact_email",
+  "contact_phone",
+  "operational_scope_section",
+  "regions_covered",
+  "finance_type",
+  "column_break_wkss",
+  "interest_structure",
+  "status",
+  "operations_tab",
+  "loan_products_section",
+  "loan_product_catalog",
+  "loan_tracking_section",
+  "active_loans",
+  "recovered_loans",
+  "defaulted_loans"
+ ],
+ "fields": [
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Identity"
+  },
+  {
+   "fieldname": "financier_id",
+   "fieldtype": "Read Only",
+   "label": "Financier ID\t"
+  },
+  {
+   "fieldname": "institution_name",
+   "fieldtype": "Data",
+   "label": "Institution Name\t"
+  },
+  {
+   "fieldname": "column_break_jmae",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "registration_number",
+   "fieldtype": "Data",
+   "label": "Registration Number\t"
+  },
+  {
+   "fieldname": "institution_type",
+   "fieldtype": "Select",
+   "label": "Institution Type\t",
+   "options": "\nBank\nMFI\nCo-operative\nNGO\nOther"
+  },
+  {
+   "fieldname": "contact_email",
+   "fieldtype": "Data",
+   "label": "Contact Email\t"
+  },
+  {
+   "fieldname": "contact_phone",
+   "fieldtype": "Data",
+   "label": "Contact Phone\t"
+  },
+  {
+   "fieldname": "operational_scope_section",
+   "fieldtype": "Section Break",
+   "label": "Operational Scope"
+  },
+  {
+   "fieldname": "regions_covered",
+   "fieldtype": "Data",
+   "label": "Regions Covered\t"
+  },
+  {
+   "fieldname": "finance_type",
+   "fieldtype": "Select",
+   "label": "Finance Type\t",
+   "options": "\nCash Loan\nEquipment Lease\nGrant"
+  },
+  {
+   "fieldname": "column_break_wkss",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "interest_structure",
+   "fieldtype": "Select",
+   "label": "Interest Structures\t",
+   "options": "\nFlat\nReducing Balance\nTiered"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nInactive"
+  },
+  {
+   "fieldname": "operations_tab",
+   "fieldtype": "Tab Break",
+   "label": "Operations"
+  },
+  {
+   "fieldname": "loan_products_section",
+   "fieldtype": "Section Break",
+   "label": "Loan Products"
+  },
+  {
+   "fieldname": "loan_product_catalog",
+   "fieldtype": "Table",
+   "label": "Loan Product Catalog",
+   "options": "Loan Product Item"
+  },
+  {
+   "fieldname": "loan_tracking_section",
+   "fieldtype": "Section Break",
+   "label": "Loan Tracking"
+  },
+  {
+   "fieldname": "active_loans",
+   "fieldtype": "Data",
+   "label": "Active Loans"
+  },
+  {
+   "fieldname": "recovered_loans",
+   "fieldtype": "Data",
+   "label": "Recovered Loans"
+  },
+  {
+   "fieldname": "defaulted_loans",
+   "fieldtype": "Data",
+   "label": "Defaulted Loans"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-24 16:31:48.826907",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Financier",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
