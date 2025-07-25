@@ -23,11 +23,7 @@
   "status",
   "operations_tab",
   "loan_products_section",
-  "loan_product_catalog",
-  "loan_tracking_section",
-  "active_loans",
-  "recovered_loans",
-  "defaulted_loans"
+  "loan_product_catalog"
  ],
  "fields": [
   {
@@ -63,6 +59,7 @@
   {
    "fieldname": "contact_email",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Contact Email\t"
   },
   {
@@ -77,8 +74,9 @@
   },
   {
    "fieldname": "regions_covered",
-   "fieldtype": "Data",
-   "label": "Regions Covered\t"
+   "fieldtype": "Link",
+   "label": "Regions Covered\t",
+   "options": "Site"
   },
   {
    "fieldname": "finance_type",
@@ -116,27 +114,8 @@
    "fieldname": "loan_product_catalog",
    "fieldtype": "Table",
    "label": "Loan Product Catalog",
-   "options": "Loan Product Item"
-  },
-  {
-   "fieldname": "loan_tracking_section",
-   "fieldtype": "Section Break",
-   "label": "Loan Tracking"
-  },
-  {
-   "fieldname": "active_loans",
-   "fieldtype": "Data",
-   "label": "Active Loans"
-  },
-  {
-   "fieldname": "recovered_loans",
-   "fieldtype": "Data",
-   "label": "Recovered Loans"
-  },
-  {
-   "fieldname": "defaulted_loans",
-   "fieldtype": "Data",
-   "label": "Defaulted Loans"
+   "options": "Loan Product Item",
+   "read_only": 1
   },
   {
    "fieldname": "user",
@@ -147,7 +126,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-24 16:31:48.826907",
+ "modified": "2025-07-25 16:38:31.841930",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Financier",

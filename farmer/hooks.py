@@ -304,7 +304,10 @@ override_whitelisted_methods = {
      "farmer.api.otp_api.verify_otp": "farmer.api.otp_api.verify_otp",
      
     # Sponsor Api's
-     "farmer.api.sponsor_api.get_qualified_loan_applications": "farmer.api.sponsor_api.get_qualified_loan_applications"
+     "farmer.api.sponsor_api.get_qualified_loan_applications": "farmer.api.sponsor_api.get_qualified_loan_applications",
+     
+    # Financier Api's
+     "farmer.api.financier_api.get_total_recovered_amount": "farmer.api.financier_api.get_total_recovered_amount"
 }
 
 

@@ -66,4 +66,15 @@ def sync_financier_loan_catalog(doc, method=None):
             fin_doc.save(ignore_permissions=True)
             frappe.db.commit()
 
+@frappe.whitelist()
+def get_total_recovered_amount():
+    total = frappe.db.sql("""
+        SELECT SUM(loan_amount_after_interest)
+        FROM `tabLoan Installments`
+        WHERE status = 'Completed'
+    """, as_dict=0)[0][0] or 0
 
+    return {
+        "value": total,
+        "fieldtype": "Currency"
+    }

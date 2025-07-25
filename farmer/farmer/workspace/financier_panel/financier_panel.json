@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"gyKiz-1Z8e\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Financier Panel</span>\",\"col\":12}},{\"id\":\"Z-yeWfjQC6\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Loans\",\"col\":4}},{\"id\":\"kHUe_dBP_t\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Loan Approved\",\"col\":4}},{\"id\":\"JtVqo1W8J7\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Loan Rejected\",\"col\":4}},{\"id\":\"4uKLpPruBb\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"GB-wGjzGmY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Financier\",\"col\":3}},{\"id\":\"DXeXl9n2na\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Products\",\"col\":3}},{\"id\":\"78kjFjAOLe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loan Applications\",\"col\":3}},{\"id\":\"0bX5FgVP3i\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loan Installments\",\"col\":3}}]",
+ "content": "[{\"id\":\"gyKiz-1Z8e\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Financier Panel</span>\",\"col\":12}},{\"id\":\"Z-yeWfjQC6\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Loans\",\"col\":4}},{\"id\":\"kHUe_dBP_t\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Loan Approved\",\"col\":4}},{\"id\":\"JtVqo1W8J7\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Loan Rejected\",\"col\":4}},{\"id\":\"lMIwZXdO3z\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Active Installments\",\"col\":4}},{\"id\":\"vxqI-brGAr\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Completed Installments\",\"col\":4}},{\"id\":\"BSsRn6TfVA\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Recovered Amount\",\"col\":4}},{\"id\":\"4uKLpPruBb\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"GB-wGjzGmY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Financier\",\"col\":3}},{\"id\":\"DXeXl9n2na\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Products\",\"col\":3}},{\"id\":\"78kjFjAOLe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loan Applications\",\"col\":3}},{\"id\":\"0bX5FgVP3i\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loan Installments\",\"col\":3}}]",
  "creation": "2025-07-23 10:44:13.398523",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,18 +13,30 @@
  "is_hidden": 0,
  "label": "Financier Panel",
  "links": [],
- "modified": "2025-07-24 17:41:38.492542",
+ "modified": "2025-07-25 16:21:03.399503",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Financier Panel",
  "number_cards": [
   {
+   "label": "Active Installments",
+   "number_card_name": "Active Installments"
+  },
+  {
    "label": "Total Loans",
    "number_card_name": "Total Loan Applied"
   },
   {
+   "label": "Completed Installments",
+   "number_card_name": "Completed Installments"
+  },
+  {
    "label": "Loan Approved",
    "number_card_name": "Total Loan Approved"
+  },
+  {
+   "label": "Total Recovered Amount",
+   "number_card_name": "Total Recovered Amount"
   },
   {
    "label": "Loan Rejected",
