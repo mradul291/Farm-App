@@ -218,6 +218,7 @@ permission_query_conditions = {
     "Technician Task": "farmer.api.user_api.task_query_condition",
     "Technician": "farmer.api.user_api.technician_query_condition",
     "Site": "farmer.api.user_api.get_site_permission_query",
+    "Financier": "farmer.api.user_api.financier_permission_query"
 }
 
 has_permission = {
