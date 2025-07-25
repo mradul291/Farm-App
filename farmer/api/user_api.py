@@ -1262,3 +1262,9 @@ def site_has_permission(doc, ptype: str, user: str) -> bool:
     if not _is_restricted_farmer(user):
         return True
     return doc.name in _sites_linked_to_user(user)
+
+def financier_permission_query(user):
+    if "System Manager" in frappe.get_roles(user):
+        return ""  # No filtering for System Managers
+
+    return """(`tabFinancier`.`user` = '{user}')""".format(user=user)

@@ -41,30 +41,70 @@ def sync_financier_from_user(user_doc, method=None):
     fin.save(ignore_permissions=True)
     frappe.db.commit()
 
-def sync_financier_loan_catalog(doc, method=None):
-    # Only act if checkbox is ticked
-    if not doc.financing_available:
-        return
+# def sync_financier_loan_catalog(doc, method=None):
+#     # Only act if checkbox is ticked
+#     if not doc.financing_available:
+#         return
 
-    # Get all Financiers
-    financiers = frappe.get_all("Financier", filters={"status": "Active"}, pluck="name")
+#     # Get all Financiers
+#     financiers = frappe.get_all("Financier", filters={"status": "Active"}, pluck="name")
+
+#     for fin_name in financiers:
+#         fin_doc = frappe.get_doc("Financier", fin_name)
+
+#         # Check if Website Item already exists in loan_product_catalog
+#         already_added = any(
+#             item.loan_product_name == doc.name for item in fin_doc.loan_product_catalog
+#         )
+
+#         if not already_added:
+#             # Append new row to child table
+#             fin_doc.append("loan_product_catalog", {
+#                 "loan_product_name": doc.name
+#             })
+
+#             fin_doc.save(ignore_permissions=True)
+#             frappe.db.commit()
+
+def sync_financier_loan_catalog(doc, method=None):
+    # Get current user
+    current_user = frappe.session.user
+
+    # Get Financiers linked to this user only
+    financiers = frappe.get_all(
+        "Financier",
+        filters={
+            "status": "Active",
+            "user": current_user
+        },
+        pluck="name"
+    )
 
     for fin_name in financiers:
         fin_doc = frappe.get_doc("Financier", fin_name)
 
-        # Check if Website Item already exists in loan_product_catalog
-        already_added = any(
-            item.loan_product_name == doc.name for item in fin_doc.loan_product_catalog
-        )
+        # Check if Website Item exists in child table
+        matched_rows = [
+            item for item in fin_doc.loan_product_catalog
+            if item.loan_product_name == doc.name
+        ]
 
-        if not already_added:
-            # Append new row to child table
-            fin_doc.append("loan_product_catalog", {
-                "loan_product_name": doc.name
-            })
+        if doc.financing_available:
+            if not matched_rows:
+                fin_doc.append("loan_product_catalog", {
+                    "loan_product_name": doc.name
+                })
+        else:
+            for row in matched_rows:
+                fin_doc.remove(row)
 
+        if doc.financing_available or matched_rows:
             fin_doc.save(ignore_permissions=True)
-            frappe.db.commit()
+
+    frappe.db.commit()
+
+
+
 
 @frappe.whitelist()
 def get_total_recovered_amount():
