@@ -69,6 +69,20 @@ class LoanInstallments(WebsiteGenerator):
 
 		return context
 	
+	def validate(self):
+		all_paid = True
+		any_defaulted = False
+		today = nowdate()
 
+		for row in self.installments:  # Replace with your actual child table fieldname
+			if row.paid_status != "Paid":
+				all_paid = False
+				if row.due_date or row.due_date < today:
+					any_defaulted = True
 
-	
+		if all_paid:
+			self.status = "Completed"
+		elif any_defaulted:
+			self.status = "Defaulted"
+		else:
+			self.status = "Active"

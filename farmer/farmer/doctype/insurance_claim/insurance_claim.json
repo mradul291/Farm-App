@@ -1,0 +1,148 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "INS-CLM-.####",
+ "creation": "2025-08-05 18:36:44.079500",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "claim_id",
+  "enrollment",
+  "insured_user",
+  "insurance_product",
+  "insurer",
+  "insurer_email",
+  "column_break_xwdx",
+  "claim_type",
+  "claim_method",
+  "claim_status",
+  "submitted_on",
+  "settled_on",
+  "payout_amount",
+  "section_break_dowv",
+  "required_documents",
+  "column_break_qgai",
+  "remark"
+ ],
+ "fields": [
+  {
+   "fieldname": "claim_id",
+   "fieldtype": "Read Only",
+   "label": "Claim ID\t"
+  },
+  {
+   "fieldname": "enrollment",
+   "fieldtype": "Link",
+   "label": "Insurance Enrollment\t",
+   "options": "Insurance Enrollment"
+  },
+  {
+   "fetch_from": "enrollment.insurance_product",
+   "fieldname": "insurance_product",
+   "fieldtype": "Link",
+   "label": "Insurance Product\t",
+   "options": "Website Item"
+  },
+  {
+   "fetch_from": "enrollment.insurer",
+   "fieldname": "insurer",
+   "fieldtype": "Link",
+   "label": "Insurer\t",
+   "options": "Insurer"
+  },
+  {
+   "fieldname": "column_break_xwdx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "claim_type",
+   "fieldtype": "Select",
+   "label": "Claim Type\t",
+   "options": "\nYield Loss\nWeather Trigger\nEquipment Damage\nDeath\nTheft"
+  },
+  {
+   "fieldname": "claim_method",
+   "fieldtype": "Select",
+   "label": "Claim Method\t",
+   "options": "\nManual\nParametric"
+  },
+  {
+   "fieldname": "claim_status",
+   "fieldtype": "Select",
+   "label": "Claim Status",
+   "options": "\nDraft\nPending Review\nApproved\nSettled\nRejected"
+  },
+  {
+   "fieldname": "submitted_on",
+   "fieldtype": "Date",
+   "label": "Submitted On\t"
+  },
+  {
+   "fieldname": "settled_on",
+   "fieldtype": "Date",
+   "label": "Settled On\t"
+  },
+  {
+   "fieldname": "payout_amount",
+   "fieldtype": "Currency",
+   "label": "Payout Amount"
+  },
+  {
+   "fieldname": "section_break_dowv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "required_documents",
+   "fieldtype": "Attach",
+   "label": "Required Documents\t"
+  },
+  {
+   "fieldname": "column_break_qgai",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "remark",
+   "fieldtype": "Small Text",
+   "label": "Remark"
+  },
+  {
+   "fetch_from": "enrollment.insured_user",
+   "fieldname": "insured_user",
+   "fieldtype": "Link",
+   "label": "Insured User\t",
+   "options": "User"
+  },
+  {
+   "fetch_from": "insurer.user",
+   "fieldname": "insurer_email",
+   "fieldtype": "Link",
+   "label": "Insurer Email",
+   "options": "User"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-08-07 16:06:13.690649",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Insurance Claim",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

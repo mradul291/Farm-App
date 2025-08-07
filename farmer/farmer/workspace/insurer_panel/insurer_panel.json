@@ -1,0 +1,87 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"rwwQd5d_07\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Insurer Panel</span>\",\"col\":12}},{\"id\":\"swz_aQgmXE\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Active Insurance Policies\",\"col\":4}},{\"id\":\"wCKPG8vy8D\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Pending Claims\",\"col\":4}},{\"id\":\"fFVdUBtQLP\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Rejected Claims\",\"col\":4}},{\"id\":\"fH2comhFty\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"VE4c53utW0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Insurer\",\"col\":3}},{\"id\":\"XkvLJJNj3k\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Enrollments\",\"col\":3}},{\"id\":\"iTashJLBEi\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Products\\t\",\"col\":3}},{\"id\":\"j2gMgVPYrU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Policies\\t\",\"col\":3}},{\"id\":\"7-0j5MGgWg\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Claims\",\"col\":3}}]",
+ "creation": "2025-08-07 12:16:52.021695",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "income",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Insurer Panel",
+ "links": [],
+ "modified": "2025-08-07 13:31:59.674593",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Insurer Panel",
+ "number_cards": [
+  {
+   "label": "Active Insurance Policies",
+   "number_card_name": "Active Insurance Policies"
+  },
+  {
+   "label": "Pending Claims",
+   "number_card_name": "Pending Claims"
+  },
+  {
+   "label": "Rejected Claims",
+   "number_card_name": "Rejected Claims"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "Insurer"
+  }
+ ],
+ "sequence_id": 33.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Insurer",
+   "link_to": "Insurer",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Enrollments",
+   "link_to": "Insurance Enrollment",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Products\t",
+   "link_to": "Insurance Product",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Policies\t",
+   "link_to": "Insurance Policy",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Claims",
+   "link_to": "Insurance Claim",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Insurer Panel"
+}

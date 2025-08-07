@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "Insurer-.####",
+ "autoname": "INSURER-.####",
  "creation": "2025-07-21 13:21:57.112508",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -9,6 +9,7 @@
   "identity_section",
   "insurer_id",
   "insurer_name",
+  "user",
   "contact_email",
   "contact_phone",
   "column_break_sfhj",
@@ -34,7 +35,8 @@
   {
    "fieldname": "contact_email",
    "fieldtype": "Data",
-   "label": "Contact Email\t"
+   "label": "Contact Email\t",
+   "read_only": 1
   },
   {
    "fieldname": "contact_phone",
@@ -73,8 +75,9 @@
   },
   {
    "fieldname": "regions_of_operation",
-   "fieldtype": "Data",
-   "label": "Regions of Operation\t"
+   "fieldtype": "Link",
+   "label": "Regions of Operation\t",
+   "options": "Site"
   },
   {
    "fieldname": "column_break_jxdb",
@@ -85,11 +88,17 @@
    "fieldtype": "Select",
    "label": "Status\t",
    "options": "Active\nInactive"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-21 14:14:55.936549",
+ "modified": "2025-08-05 18:53:04.112486",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Insurer",

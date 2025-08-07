@@ -762,9 +762,6 @@ def loan_application_permission_query_conditions(user):
     )
 
 
-
-
-
 @frappe.whitelist(allow_guest=True)  # Requires user authentication
 def upload_profile_picture():
     print("***********************************UPload File Called*****************************************")
@@ -956,7 +953,7 @@ def user_specific_website_item(user=None):
     roles = frappe.get_roles(user)
 
     # Allow full access to System Manager and Financier
-    if "System Manager" in roles or "Financier" in roles:
+    if "System Manager" in roles or "Financier" in roles or "Insurer" in roles:
         return None
     else:
         return f"`tabWebsite Item`.owner = '{user}'"
@@ -1268,3 +1265,100 @@ def financier_permission_query(user):
         return ""  # No filtering for System Managers
 
     return """(`tabFinancier`.`user` = '{user}')""".format(user=user)
+
+def insurer_permission_query(user):
+    if "System Manager" in frappe.get_roles(user):
+        return ""
+
+    return """(`tabInsurer`.`user` = '{user}')""".format(user=user)
+
+def insurer_has_permission(doc, user):
+    if "System Manager" in frappe.get_roles(user):
+        return True
+    return doc.user == user
+
+def insurance_product_permission(user):
+    if not user:
+        user = frappe.session.user
+
+    roles = frappe.get_roles(user)
+
+    # Allow full access to System Manager
+    if "System Manager" in roles:
+        return None
+
+    # For all other users, show only records where insurer = logged-in user
+    return f"`tabInsurance Product`.insurer = '{user}'"
+
+def has_insurance_product_permission(doc, ptype, user):
+    if "System Manager" in frappe.get_roles(user):
+        return True
+
+    return doc.insurer == user
+
+
+def insurance_permission_conditions_for_related_users(user):
+    if not user:
+        user = frappe.session.user
+
+    roles = frappe.get_roles(user)
+
+    if "System Manager" in roles:
+        return None
+
+    return (
+        f"(`tabInsurance Enrollment`.insurer_email = '{user}' "
+        f"OR `tabInsurance Enrollment`.insured_user = '{user}')"
+    )
+
+
+def insurance_has_permission_for_related_users(doc, ptype, user):
+    if "System Manager" in frappe.get_roles(user):
+        return True
+
+    return doc.insurer_email == user or doc.insured_user == user
+
+
+# ------------------- Insurance Policy -------------------
+
+def insurance_policy_permission_query(user):
+    if not user:
+        user = frappe.session.user
+
+    roles = frappe.get_roles(user)
+    if "System Manager" in roles:
+        return None
+
+    return (
+        f"(`tabInsurance Policy`.insurer_email = '{user}' "
+        f"OR `tabInsurance Policy`.insured_user = '{user}')"
+    )
+
+
+def insurance_policy_has_permission(doc, ptype, user):
+    if "System Manager" in frappe.get_roles(user):
+        return True
+
+    return doc.insurer_email == user or doc.insured_user == user
+
+# ------------------- Insurance Claim -------------------
+
+def insurance_claim_permission_query(user):
+    if not user:
+        user = frappe.session.user
+
+    roles = frappe.get_roles(user)
+    if "System Manager" in roles:
+        return None
+
+    return (
+        f"(`tabInsurance Claim`.insurer_email = '{user}' "
+        f"OR `tabInsurance Claim`.insured_user = '{user}')"
+    )
+
+
+def insurance_claim_has_permission(doc, ptype, user):
+    if "System Manager" in frappe.get_roles(user):
+        return True
+
+    return doc.insurer_email == user or doc.insured_user == user

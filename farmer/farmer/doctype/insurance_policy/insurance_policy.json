@@ -1,0 +1,128 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "INS-POL-.####",
+ "creation": "2025-08-07 11:00:53.098845",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "policy_id",
+  "enrollment",
+  "insured_user",
+  "insurer",
+  "insurer_email",
+  "insurance_product",
+  "issue_date",
+  "column_break_ncue",
+  "coverage_start_date",
+  "coverage_end_date",
+  "sum_insured",
+  "premium_paid",
+  "policy_status"
+ ],
+ "fields": [
+  {
+   "fieldname": "policy_id",
+   "fieldtype": "Read Only",
+   "label": "Policy ID\t"
+  },
+  {
+   "fieldname": "enrollment",
+   "fieldtype": "Link",
+   "label": "Enrollment\t",
+   "options": "Insurance Enrollment"
+  },
+  {
+   "fetch_from": "enrollment.insurer",
+   "fieldname": "insurer",
+   "fieldtype": "Link",
+   "label": "Insurer\t",
+   "options": "Insurer"
+  },
+  {
+   "fetch_from": "enrollment.insurance_product",
+   "fieldname": "insurance_product",
+   "fieldtype": "Link",
+   "label": "Product",
+   "options": "Website Item"
+  },
+  {
+   "fieldname": "issue_date",
+   "fieldtype": "Date",
+   "label": "Issue Date\t"
+  },
+  {
+   "fieldname": "column_break_ncue",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "enrollment.coverage_start_date",
+   "fieldname": "coverage_start_date",
+   "fieldtype": "Date",
+   "label": "Coverage Start Date\t"
+  },
+  {
+   "fetch_from": "enrollment.coverage_end_date",
+   "fieldname": "coverage_end_date",
+   "fieldtype": "Date",
+   "label": "Coverage End Date\t"
+  },
+  {
+   "fetch_from": "enrollment.sum_insured",
+   "fieldname": "sum_insured",
+   "fieldtype": "Currency",
+   "label": "Sum Insured\t"
+  },
+  {
+   "fetch_from": "enrollment.premium_paid",
+   "fieldname": "premium_paid",
+   "fieldtype": "Currency",
+   "label": "Premium Paid\t"
+  },
+  {
+   "fieldname": "policy_status",
+   "fieldtype": "Select",
+   "label": "Policy Status\t",
+   "options": "\nActive\nExpired\nCancelled\nClaimed"
+  },
+  {
+   "fetch_from": "enrollment.insured_user",
+   "fieldname": "insured_user",
+   "fieldtype": "Link",
+   "label": "Insured User\t",
+   "options": "User"
+  },
+  {
+   "fetch_from": "insurer.user",
+   "fieldname": "insurer_email",
+   "fieldtype": "Link",
+   "label": "Insurer Email",
+   "options": "User"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-08-07 16:05:12.210170",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Insurance Policy",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
