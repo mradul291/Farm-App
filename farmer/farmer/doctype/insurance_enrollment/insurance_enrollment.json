@@ -1,0 +1,131 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "INS-ENR-.####",
+ "creation": "2025-08-05 18:16:22.437051",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "enrollment_id",
+  "insured_user",
+  "insurance_product",
+  "insurer",
+  "insurer_email",
+  "status",
+  "column_break_zivq",
+  "enrollment_date",
+  "coverage_start_date",
+  "coverage_end_date",
+  "premium_paid",
+  "sum_insured",
+  "enrollment_documents",
+  "section_break_bpgo",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "enrollment_id",
+   "fieldtype": "Read Only",
+   "label": "Enrollment ID"
+  },
+  {
+   "fieldname": "insurance_product",
+   "fieldtype": "Link",
+   "label": "Insurance Product\t",
+   "options": "Website Item"
+  },
+  {
+   "fieldname": "insurer",
+   "fieldtype": "Link",
+   "label": "Insurer",
+   "options": "Insurer"
+  },
+  {
+   "fieldname": "column_break_zivq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "enrollment_date",
+   "fieldtype": "Date",
+   "label": "Enrollment Date"
+  },
+  {
+   "fieldname": "coverage_start_date",
+   "fieldtype": "Date",
+   "label": "Coverage Start Date\t"
+  },
+  {
+   "fieldname": "coverage_end_date",
+   "fieldtype": "Date",
+   "label": "Coverage End Date\t"
+  },
+  {
+   "fieldname": "premium_paid",
+   "fieldtype": "Currency",
+   "label": "Premium Paid\t"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nActive\nExpired\nClaimed\nCancelled"
+  },
+  {
+   "fieldname": "sum_insured",
+   "fieldtype": "Currency",
+   "label": "Sum Insured\t"
+  },
+  {
+   "fieldname": "enrollment_documents",
+   "fieldtype": "Attach",
+   "label": "Enrollment Documents\t"
+  },
+  {
+   "fieldname": "section_break_bpgo",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "insured_user",
+   "fieldtype": "Link",
+   "label": "Insured User",
+   "options": "User"
+  },
+  {
+   "fetch_from": "insurer.user",
+   "fieldname": "insurer_email",
+   "fieldtype": "Link",
+   "label": "Insurer Email",
+   "options": "User"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-08-07 16:02:25.326866",
+ "modified_by": "Administrator",
+ "module": "Farmer",
+ "name": "Insurance Enrollment",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"zioVV4ePzv\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Dash Board</span>\",\"col\":12}},{\"id\":\"AMW2KSnhqG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sites\",\"col\":3}},{\"id\":\"8rr0TJWQGi\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Crops\",\"col\":3}},{\"id\":\"Zw4MS28SLP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Farms\",\"col\":3}},{\"id\":\"CflaUDiAsj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Farmers\",\"col\":3}},{\"id\":\"4EBqlYMWVW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Products\",\"col\":3}},{\"id\":\"4iWyDaLBZ_\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loan Applications\",\"col\":3}},{\"id\":\"k2Y19nwD92\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loan Installments\",\"col\":3}},{\"id\":\"vlBJXm7leb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cases\",\"col\":3}}]",
+ "content": "[{\"id\":\"3KxEvlot-S\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Accounts</b></span>\",\"col\":12}},{\"id\":\"3TWZJ819zO\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"d_vJqThY-a\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Buying</b></span>\",\"col\":12}},{\"id\":\"_0qETAIL_H\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"7LhHvmTba4\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Selling</b></span>\",\"col\":12}},{\"id\":\"0Op2Gj_V9I\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"sE-4yj4Cq9\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>CRM</b></span>\",\"col\":12}},{\"id\":\"g5LOkVFInq\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"cmSzAweRn9\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Asset</b></span>\",\"col\":12}},{\"id\":\"dLt3a2BUag\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"1Da6GJ0bW6\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Manufacturing</b></span>\",\"col\":12}},{\"id\":\"JA4lKrcvKn\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"PQwxqpt-vF\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Stock</b></span>\",\"col\":12}},{\"id\":\"B6SqN7i5Si\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"eMTfKjO9QQ\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Human Resource</b></span>\",\"col\":12}},{\"id\":\"IRL0EjbelT\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"hiTfRkP0tQ\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ty8cxVVrNb\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\" style=\\\"\\\">Projects</span>\",\"col\":12}},{\"id\":\"seYhalde1s\",\"type\":\"spacer\",\"data\":{\"col\":12}}]",
  "creation": "2025-03-19 14:10:49.476722",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Dash Board",
  "links": [],
- "modified": "2025-07-23 10:46:17.843507",
+ "modified": "2025-08-07 12:32:44.100137",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Dash Board",
@@ -28,71 +28,6 @@
   }
  ],
  "sequence_id": 22.0,
- "shortcuts": [
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Cases",
-   "link_to": "Case",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Sites",
-   "link_to": "Site",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Farmers",
-   "link_to": "Farmer Master",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Loan Applications",
-   "link_to": "Loan Application",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Farms",
-   "link_to": "Farm Master",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Loan Installments",
-   "link_to": "Loan Installments",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Products",
-   "link_to": "Item",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Crops",
-   "link_to": "Crops Master",
-   "stats_filter": "[]",
-   "type": "DocType"
-  }
- ],
+ "shortcuts": [],
  "title": "Dash Board"
 }

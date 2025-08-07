@@ -218,13 +218,23 @@ permission_query_conditions = {
     "Technician Task": "farmer.api.user_api.task_query_condition",
     "Technician": "farmer.api.user_api.technician_query_condition",
     "Site": "farmer.api.user_api.get_site_permission_query",
-    "Financier": "farmer.api.user_api.financier_permission_query"
+    "Financier": "farmer.api.user_api.financier_permission_query",
+    "Insurer": "farmer.api.user_api.insurer_permission_query",
+    "Insurance Product": "farmer.api.user_api.insurance_product_permission",
+    "Insurance Enrollment": "farmer.api.user_api.insurance_permission_conditions_for_related_users",
+    "Insurance Policy": "farmer.api.user_api.insurance_policy_permission_query",
+    "Insurance Claim": "farmer.api.user_api.insurance_claim_permission_query",
 }
 
 has_permission = {
     "Technician Task": "farmer.api.user_api.task_has_permission",
     "Technician": "farmer.api.user_api.technician_has_permission",
-    "Site": "farmer.api.user_api.site_has_permission"
+    "Site": "farmer.api.user_api.site_has_permission",
+    "Insurer": "farmer.api.user_api.insurer_has_permission",
+    "Insurance Product": "farmer.api.user_api.has_insurance_product_permission",
+    "Insurance Enrollment": "farmer.api.user_api.insurance_has_permission_for_related_users",
+    "Insurance Policy": "farmer.api.user_api.insurance_policy_has_permission",
+    "Insurance Claim": "farmer.api.user_api.insurance_claim_has_permission",
 }
 
 doc_events = {
@@ -260,10 +270,12 @@ doc_events = {
         "after_insert": [
             "farmer.api.technician_api.create_technician_from_user",
             "farmer.api.financier_api.create_financier_from_user",
+            "farmer.api.insurer_api.create_insurer_from_user",
         ],
         "on_update": [
             "farmer.api.technician_api.sync_technician_from_user",
             "farmer.api.financier_api.sync_financier_from_user",
+            "farmer.api.insurer_api.sync_insurer_from_user",
         ],
     },
     "Technician Task": {
