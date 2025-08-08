@@ -53,17 +53,18 @@ def send_email(recipients, subject, message):
     )
 
 # --- Insurance Enrollment ---
-def enrollment_submitted(doc, method):
-    """Notify insured user and insurer when enrollment is confirmed."""
-    if doc.docstatus != 1:
+def enrollment_status_changed(doc, method):
+    """Notify insured user and insurer when enrollment becomes Active."""
+    if not doc.has_value_changed("status"):
         return
-    subject = f"Insurance Enrollment Confirmed - {doc.name}"
-    message = f"""
-    Dear User,<br><br>
-    Your insurance enrollment <b>{doc.name}</b> has been successfully confirmed.<br>
-    Thank you.
-    """
-    send_email([doc.insured_user, doc.insurer_email], subject, message)
+    if doc.status == "Active":
+        subject = f"Insurance Enrollment Activated - {doc.name}"
+        message = f"""
+        Dear User,<br><br>
+        Your insurance enrollment <b>{doc.name}</b> is now <b>Active</b>.<br>
+        Thank you.
+        """
+        send_email([doc.insured_user, doc.insurer_email], subject, message)
 
 # --- Insurance Claim ---
 def claim_status_changed(doc, method):

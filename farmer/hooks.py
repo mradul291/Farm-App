@@ -288,7 +288,7 @@ doc_events = {
         "on_update": "farmer.api.financier_api.sync_financier_loan_catalog"
     },
     "Insurance Enrollment": {
-        "on_submit": "farmer.api.insurer_api.enrollment_submitted"
+        "on_update": "farmer.api.insurer_api.enrollment_status_changed"
     },
     "Insurance Claim": {
         "on_update": "farmer.api.insurer_api.claim_status_changed"
