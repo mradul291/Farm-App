@@ -10,6 +10,7 @@
   "enrollment",
   "insured_user",
   "insurance_product",
+  "product_name",
   "insurer",
   "insurer_email",
   "column_break_xwdx",
@@ -117,12 +118,20 @@
    "fieldname": "insurer_email",
    "fieldtype": "Link",
    "label": "Insurer Email",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "enrollment.product_name",
+   "fieldname": "product_name",
+   "fieldtype": "Data",
+   "label": "Product Name",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-07 16:06:13.690649",
+ "modified": "2025-08-08 11:43:41.265538",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Insurance Claim",

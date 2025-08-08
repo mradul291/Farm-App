@@ -4,4 +4,4 @@ frappe.ui.form.on('Insurance Product', {
             frm.set_value('insurer', frappe.session.user);
         }
     }
-});
+}); 

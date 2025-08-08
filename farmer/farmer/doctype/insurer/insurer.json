@@ -18,6 +18,7 @@
   "address",
   "operational_scope_section",
   "regions_of_operation",
+  "region",
   "column_break_jxdb",
   "status"
  ],
@@ -94,11 +95,17 @@
    "fieldtype": "Link",
    "label": "User",
    "options": "User"
+  },
+  {
+   "fetch_from": "regions_of_operation.site_name",
+   "fieldname": "region",
+   "fieldtype": "Data",
+   "label": "Region"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-05 18:53:04.112486",
+ "modified": "2025-08-07 18:19:20.901380",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Insurer",

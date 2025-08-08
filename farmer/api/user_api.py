@@ -1114,9 +1114,14 @@ def user_specific_shipment(user=None):
 def user_specific_user(user):
     if not user:
         user = frappe.session.user
-    if "System Manager" in frappe.get_roles(user):
+    
+    roles = frappe.get_roles(user)
+    
+    if "System Manager" in roles or "Insurer" in roles:
         return None
+    
     return f"`tabUser`.owner = '{user}'"
+
 
 def user_specific_cases(user):
     if not user:
