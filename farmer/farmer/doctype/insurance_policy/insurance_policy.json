@@ -12,12 +12,13 @@
   "insurer",
   "insurer_email",
   "insurance_product",
-  "issue_date",
+  "product_name",
   "column_break_ncue",
   "coverage_start_date",
   "coverage_end_date",
   "sum_insured",
   "premium_paid",
+  "issue_date",
   "policy_status"
  ],
  "fields": [
@@ -97,12 +98,20 @@
    "fieldname": "insurer_email",
    "fieldtype": "Link",
    "label": "Insurer Email",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "enrollment.product_name",
+   "fieldname": "product_name",
+   "fieldtype": "Data",
+   "label": "Product Name",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-07 16:05:12.210170",
+ "modified": "2025-08-08 11:43:15.996735",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Insurance Policy",

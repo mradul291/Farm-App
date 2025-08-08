@@ -38,3 +38,42 @@ def sync_insurer_from_user(user_doc, method=None):
     insurer.update(map_user_to_insurer_fields(user_doc))
     insurer.save(ignore_permissions=True)
     frappe.db.commit()
+
+
+# Notifications
+
+def send_email(recipients, subject, message):
+    """Utility function to send emails."""
+    if not recipients:
+        return
+    frappe.sendmail(
+        recipients=recipients,
+        subject=subject,
+        message=message
+    )
+
+# --- Insurance Enrollment ---
+def enrollment_submitted(doc, method):
+    """Notify insured user and insurer when enrollment is confirmed."""
+    if doc.docstatus != 1:
+        return
+    subject = f"Insurance Enrollment Confirmed - {doc.name}"
+    message = f"""
+    Dear User,<br><br>
+    Your insurance enrollment <b>{doc.name}</b> has been successfully confirmed.<br>
+    Thank you.
+    """
+    send_email([doc.insured_user, doc.insurer_email], subject, message)
+
+# --- Insurance Claim ---
+def claim_status_changed(doc, method):
+    """Notify insured user when claim status changes to Approved/Rejected."""
+    if not doc.has_value_changed("claim_status"):
+        return
+    if doc.claim_status in ["Approved", "Rejected"]:
+        subject = f"Your Insurance Claim {doc.name} has been {doc.claim_status}"
+        message = f"""
+        Dear User,<br><br>
+        Your claim <b>{doc.name}</b> has been {doc.claim_status.lower()}.
+        """
+        send_email([doc.insured_user], subject, message)
