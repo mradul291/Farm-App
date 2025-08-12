@@ -34,7 +34,7 @@
    "fieldname": "insurance_product",
    "fieldtype": "Link",
    "label": "Insurance Product\t",
-   "options": "Website Item"
+   "options": "Insurance Product"
   },
   {
    "fieldname": "insurer",
@@ -106,7 +106,7 @@
    "read_only": 1
   },
   {
-   "fetch_from": "insurance_product.item_name",
+   "fetch_from": "insurance_product.product_name",
    "fieldname": "product_name",
    "fieldtype": "Data",
    "label": "Product Name",
@@ -125,7 +125,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-08 13:08:41.850188",
+ "modified": "2025-08-12 10:44:06.469701",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Insurance Enrollment",
