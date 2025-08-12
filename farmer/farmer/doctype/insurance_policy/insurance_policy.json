@@ -19,7 +19,10 @@
   "sum_insured",
   "premium_paid",
   "issue_date",
-  "policy_status"
+  "policy_status",
+  "policy_document",
+  "section_break_nvag",
+  "remark"
  ],
  "fields": [
   {
@@ -45,7 +48,7 @@
    "fieldname": "insurance_product",
    "fieldtype": "Link",
    "label": "Product",
-   "options": "Website Item"
+   "options": "Insurance Product"
   },
   {
    "fieldname": "issue_date",
@@ -107,11 +110,25 @@
    "fieldtype": "Data",
    "label": "Product Name",
    "read_only": 1
+  },
+  {
+   "fieldname": "policy_document",
+   "fieldtype": "Attach",
+   "label": "Policy Document\t"
+  },
+  {
+   "fieldname": "section_break_nvag",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "remark",
+   "fieldtype": "Small Text",
+   "label": "Remark"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-08 11:43:15.996735",
+ "modified": "2025-08-12 11:12:18.126224",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Insurance Policy",

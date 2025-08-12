@@ -42,7 +42,7 @@
    "fieldname": "insurance_product",
    "fieldtype": "Link",
    "label": "Insurance Product\t",
-   "options": "Website Item"
+   "options": "Insurance Product"
   },
   {
    "fetch_from": "enrollment.insurer",
@@ -131,7 +131,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-08 11:43:41.265538",
+ "modified": "2025-08-12 11:01:37.965777",
  "modified_by": "Administrator",
  "module": "Farmer",
  "name": "Insurance Claim",
